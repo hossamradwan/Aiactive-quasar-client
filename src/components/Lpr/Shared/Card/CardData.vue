@@ -68,6 +68,11 @@ export default {
   props: ["lprData", "moduleName", "deviceNumber"],
   data() {
     return {
+      lprModules: [
+        'generic-lpr-module',
+        'match-module',
+        'toll-gates-module'
+      ],
       lprType: 'lpr',
       cardData: {
         device_name: "",
@@ -79,8 +84,7 @@ export default {
   },
   mounted() {
     if (
-      this.moduleName == "generic-lpr-module" ||
-      this.moduleName == "match-module"
+      this.lprModules.includes(this.moduleName)
     ) {
       this.cardData.device_name = this.lprData.device_name;
       this.cardData.speed = this.lprData.speed;

@@ -17,7 +17,7 @@ const mutations = {
 const actions = {
 	getServerStatus({ dispatch }) {
 		setTimeout(() => {
-			const host = config.API_URL + '/srvMgm'
+			const host = config.API_URL + '/srv_pingPong'
 			const userToken = LocalStorage.getItem('loggedInUserToken')
             const headers = {
               'Content-Type': 'application/json',

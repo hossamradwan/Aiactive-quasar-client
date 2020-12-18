@@ -5,16 +5,16 @@ import store from '../store'
 import VueSocketIO from 'vue-socket.io'
 
 
-// Vue.use(new VueSocketIO({
-//   debug: false,
-//   connection: config.API_URL + '/client-server' ,
+Vue.use(new VueSocketIO({
+  debug: false,
+  connection: config.API_URL + '/client-server' ,
 
-//   vuex: {
-//     store,
-//     options: {
-//       useConnectionNamespace: true
-//     }
-//     // actionPrefix: 'SOCKET_',
-//     // mutationPrefix: 'SOCKET_'
-//   }
-// }))
+  vuex: {
+    store,
+    options: {
+      useConnectionNamespace: true
+    }
+    // actionPrefix: 'SOCKET_',
+    // mutationPrefix: 'SOCKET_'
+  }
+}))

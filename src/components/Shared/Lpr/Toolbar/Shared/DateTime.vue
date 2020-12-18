@@ -44,6 +44,10 @@ export default {
   props: ['moduleName'],
   data () {
     return {
+      lprModules: [
+        'generic-lpr-module',
+        'toll-gates-module'
+      ],
       dateTimeFormat: 'YYYY-MM-DD HH:mm',
       date: '2019-02-01 12:44',
       events: [ '2019/07/01' ],
@@ -91,7 +95,7 @@ export default {
       if(this.moduleName == 'average-speed-module')
         this.setAverageSpeedActiveDateTime(data);
 
-      else if(this.moduleName == 'generic-lpr-module')
+      else if(this.lprModules.includes(this.moduleName))
         this.setActiveDateTime(data);
 
       else if(this.moduleName == 'reporting-module')
@@ -117,7 +121,7 @@ export default {
       if(this.moduleName == 'average-speed-module')
         return this.distinctAverageSpeedDates;
 
-      else if(this.moduleName == 'generic-lpr-module')
+      else if(this.lprModules.includes(this.moduleName))
         return this.distinctDates
 
       else if(this.moduleName == 'reporting-module')

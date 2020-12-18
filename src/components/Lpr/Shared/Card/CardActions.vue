@@ -93,6 +93,11 @@ export default {
   props: ["moduleName", "lprData"],
   data() {
     return {
+      lprModules: [
+        'generic-lpr-module',
+        'match-module',
+        'toll-gates-module'
+      ],
       expanded: false,
       showEditPlateNumberDialog: false,
       editPlateNumber: '',
@@ -120,7 +125,7 @@ export default {
       if(this.moduleName == 'average-speed-module')
         this.confirmAverageSpeedLprPlate(payload);
 
-      if(this.moduleName == 'generic-lpr-module')
+      if(this.lprModules.includes(this.moduleName))
         this.confirmLprPlate(payload);
     },
     showEditPlateNumber() {
@@ -132,7 +137,7 @@ export default {
         id: this.lprData.id,
         plate_number: this.correctedPlateNumber
       }
-      if(this.moduleName == 'generic-lpr-module')
+      if(this.lprModules.includes(this.moduleName))
         this.editLprPlateNumber(payload);
       
       this.showEditPlateNumberDialog = false;
@@ -150,7 +155,7 @@ export default {
   },
   computed: {
     showModuleName() {
-      if(this.moduleName == 'generic-lpr-module')
+      if(this.lprModules.includes(this.moduleName))
         return true;
 
       return false;

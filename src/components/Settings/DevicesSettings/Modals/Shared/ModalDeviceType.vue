@@ -38,6 +38,14 @@
 					{
 						label: 'ARH Generic LPR',
 						value: 'arh-generic-LPR'
+					},
+					{
+						label: 'Vaxtor LPR',
+						value: 'vaxtor-LPR'
+					},
+					{
+						label: 'Hanwha Face Detection',
+						value: 'hanwha-face-detection'
 					}
 				]
 			}

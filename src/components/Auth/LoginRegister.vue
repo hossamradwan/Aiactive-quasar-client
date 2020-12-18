@@ -23,7 +23,7 @@
 		<div class="row q-mb-md">
 			<q-input
 				v-model="formData.password"
-				:rules="[ val => val.length >= 4 || 'Please enter at least 6 characters.']"
+				:rules="[ val => val.length >= 6 || 'Please enter at least 6 characters.']"
 				ref="password"
 				lazy-rules
 				type="password"

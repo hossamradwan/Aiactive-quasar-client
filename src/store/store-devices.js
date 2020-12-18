@@ -22,6 +22,11 @@ const state = {
       label: 'Average Speed Module',
       value : 'average-speed-module',
       devices: []
+    },
+    {
+      label: 'Toll Gates Module',
+      value : 'toll-gates-module',
+      devices: []
     }
   ],
   showAddDeviceModal: false,

@@ -40,7 +40,8 @@ export default {
       toggelUpdate: [
         'generic-lpr-module',
         'average-speed-module',
-        'reporting-module'
+        'reporting-module',
+        'toll-gates-module'
       ],
 
       selectReportingModule: [
@@ -50,17 +51,20 @@ export default {
       dateTime: [
         'generic-lpr-module',
         'average-speed-module',
-        'reporting-module'
+        'reporting-module',
+        'toll-gates-module'
       ],
 
       search: [
         'generic-lpr-module',
-        'average-speed-module'
+        'average-speed-module',
+        'toll-gates-module'
       ],
 
       filters: [
         'generic-lpr-module',
-        'average-speed-module'
+        'average-speed-module',
+        'toll-gates-module'
       ],
     };
   },

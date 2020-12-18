@@ -16,7 +16,12 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   props: ['moduleName'],
   data() {
-    return {};
+    return {
+      lprModules: [
+        'generic-lpr-module',
+        'toll-gates-module'
+      ]
+    };
   },
   methods: {
     ...mapActions("lpr", ["setUpdateTransits"]),
@@ -33,7 +38,7 @@ export default {
 
         } 
         
-        else if(this.moduleName == 'generic-lpr-module') {
+        else if(this.lprModules.includes(this.moduleName)) {
 
           return this.updateTransits;
         }
@@ -44,7 +49,7 @@ export default {
           this.setUpdateAverageSpeedTransits(value);
 
         } 
-        else if(this.moduleName == 'generic-lpr-module') {
+        else if(this.lprModules.includes(this.moduleName)) {
 
           this.setUpdateTransits(value);
 

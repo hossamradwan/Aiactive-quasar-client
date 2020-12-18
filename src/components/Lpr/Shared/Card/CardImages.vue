@@ -109,7 +109,8 @@ export default {
   mounted() {
     if (
       this.moduleName == "generic-lpr-module" ||
-      this.moduleName == "match-module"
+      this.moduleName == "match-module" ||
+      this.moduleName == 'toll-gates-module'
     ) {
       this.sourceData.path = this.lprImages.path;
       this.sourceData.source1 = this.lprImages.source1;

@@ -21,12 +21,16 @@ const routes = [
         component: () => import('pages/PageSettings.vue') 
       },
       {
-        path: '/genericLprModule', 
-        component: () => import('pages/PageGenericLprModule.vue') 
+        path: '/freeFlowLprModule', 
+        component: () => import('pages/PageFreeFlowLprModule.vue') 
       },
       {
         path: '/averageSpeedModule', 
         component: () => import('pages/PageAverageSpeedModule.vue') 
+      },
+      {
+        path: '/tollGatesModule', 
+        component: () => import('pages/PageTollGatesModule.vue') 
       },
       {
         path: '/reportingModule', 

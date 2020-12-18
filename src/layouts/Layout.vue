@@ -109,14 +109,19 @@
             to: '/'
           },
           {
-            label: 'Generic LPR',
+            label: 'Free Flow',
             icon: 'time_to_leave',
-            to: '/genericLprModule'
+            to: '/freeFlowLprModule'
           },
           {
-            label: 'AverageSpeed',
+            label: 'Average Speed',
             icon: 'speed',
             to: '/averageSpeedModule'
+          },
+          {
+            label: 'Toll Gates',
+            icon: 'policy',
+            to: '/tollGatesModule'
           },
           {
             label: 'Reporting',

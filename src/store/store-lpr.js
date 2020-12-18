@@ -5,6 +5,8 @@ import { LocalStorage, Loading, Notify } from "quasar";
 import { showErrorMessage } from "src/functions/function-show-error-message";
 
 const state = {
+  moduleName: ' ',
+
   lprData: [],
 
   searchedData: [],
@@ -74,6 +76,15 @@ const mutations = {
     if(payload.hasOwnProperty('confirmed'))
       state.lprData[lprIndex].confirmed = payload.confirmed;
   }, 
+  updateLprFields(state, payload) {
+    const fields = payload.fields;
+    const lprData = payload.lprData;
+    const lprIndex = state.lprData.findIndex(x => x.id == lprData.id);
+
+    if(lprData.hasOwnProperty(fields))
+      state.lprData[lprIndex][fields] = lprData[fields];
+
+  }, 
   addSearchedLpr(state, payload) {
     state.searchedData.push(payload);
   },
@@ -100,6 +111,9 @@ const mutations = {
     payload.forEach(date => {
       state.distinctDates.push(date.date);
     });
+  },
+  setModuleName(state, moduleName) {
+    state.moduleName = moduleName;
   },
   setActiveDateTime(state, payload) {
     Object.assign(state.activeDateTime, payload);
@@ -384,7 +398,7 @@ const actions = {
   },
 
   setActiveDateTime({ commit, dispatch }, payload) {
-    //console.log('date time', payload);
+    // console.log('date time', payload);
     commit('setActiveDateTime', payload);
 
     dispatch('setUpdateTransits', false);
@@ -395,6 +409,7 @@ const actions = {
   },
 
   setPagination({ commit, dispatch }, payload) {
+    // console.log('pagination');
     let activeDateTime = payload.activeDateTime || false;
     let componentTrigger = true;                      // Fix issue of trigger from component
     let payloadKeys = Object.keys(payload);
@@ -446,11 +461,34 @@ const actions = {
     commit("setSorter", payload);
   },
 
+  setModuleName({ commit }, moduleName) {
+    commit('setModuleName', moduleName);
+  },
+
   handleStateLprData({ commit, dispatch, getters }, payload) {
     payload.forEach(lpr => {
       // Commit only non-existing user with id
       if (!getters.lpr_id.includes(lpr.id)) {
         commit("addLpr", lpr);
+      }
+
+      // if exists check module name to ge fields to update
+      else if (getters.lpr_id.includes(lpr.id)) {
+        if(state.moduleName == 'toll-gates-module') {
+          // Fields to update
+          const fieldsToUpdate = 'source2';
+
+          // Find index
+          const lprIndex = state.lprData.findIndex(x => x.id == lpr.id);
+
+          // Check ##### To do validation has own property
+          if(state.lprData[lprIndex][fieldsToUpdate] != lpr[fieldsToUpdate]) {
+            commit('updateLprFields', {
+              fields: fieldsToUpdate,
+              lprData: lpr
+            });
+          }
+        }
       }
     });
     
