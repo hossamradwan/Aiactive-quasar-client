@@ -22,7 +22,7 @@ const state = {
   pagination: {
     limit: 10,
     page: 1,
-    totalPages: 2
+    totalPages: 3
   },
 
   filters: {
