@@ -4,7 +4,7 @@
       <!-- Person Image -->
       <q-img
         class="col"
-        :src="activeCarousel.image"
+        :src="activeCarousel.path + '/' + activeCarousel.source2"
         transition="slide-right"
         style="height: 400px; max-width: 500px"
       >
@@ -19,7 +19,7 @@
       <!-- Plate Image -->
       <q-img
         class="col"
-        :src="activeCarousel.plate_image"
+        :src="activeCarousel.path + '/' + activeCarousel.source1"
         transition="slide-left"
         style="width: 500px; max-height: 500px"
       >

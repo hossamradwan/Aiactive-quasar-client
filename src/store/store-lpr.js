@@ -20,7 +20,7 @@ const state = {
   },
 
   pagination: {
-    limit: 3,
+    limit: 10,
     page: 1,
     totalPages: 2
   },

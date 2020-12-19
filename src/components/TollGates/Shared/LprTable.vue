@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-table
       :data="lprData"
-      :pagination.sync="paginationRename"
+      :pagination.sync="pagination"
       :columns="columns"
       row-key="name"
       @request="onRequest"
@@ -91,6 +91,13 @@ export default {
     return {
       carousel: false,
       activeCarousel: [],
+      pagination: {
+        sortBy: 'ID',
+        descending: false,
+        page: 1,
+        rowsPerPage: 3,
+        rowsNumber: 10
+      },
       columns: [
         {
           name: "ID",
@@ -159,6 +166,12 @@ export default {
     popupModal: require("./TablePopupModal").default
   },
 
+  mounted() {
+    // get initial data from server (1st page)
+      this.pagination = this.paginationRename;
+
+  },
+
   methods: {
     ...mapActions("lpr", ["setPagination"]),
 
@@ -170,10 +183,13 @@ export default {
     onRequest(props) {
       console.log("table triggered", props);
       const { page, rowsPerPage, sortBy, descending } = props.pagination;
+
       this.setPagination({
         page: page,
         limit: rowsPerPage
       });
+
+      this.pagination = props.pagination;
     },
 
     exportTable() {
@@ -208,9 +224,13 @@ export default {
   },
 
   computed: {
-    ...mapState("lpr", ["lprData"]),
+    //...mapState("lpr", ["sortedTransits"]),
 
-    ...mapGetters("lpr", ["paginationRename"])
+    ...mapGetters("lpr", ["sortedTransits", "paginationRename"]),
+
+    lprData() {
+      return this.sortedTransits;
+    }
   }
 };
 </script>
