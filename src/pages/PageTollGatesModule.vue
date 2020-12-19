@@ -1,29 +1,28 @@
 <template>
-  <q-page class="q-pa-md" >
-    
-    <tool-bar :moduleName='moduleName' />
-    
+  <q-page class="q-pa-md">
+    <tool-bar :moduleName="moduleName" />
+
     <!-- <no-data v-if="!updateTransits || lprData.length==0 " /> -->
 
     <!-- <loading v-if="!lprDataDownloaded && updateTransits" /> -->
-    
+
     <q-scroll-area
       class="q-scroll-area-matching"
-      :style="lprData.length>0 ? 'background-color:#e5e5e5' : ''">
-
-      <lpr-card
+      :style="lprData.length > 0 ? 'background-color:#e5e5e5' : ''"
+    >
+      <!-- <lpr-card
         v-if="lprData.length"
         :moduleName="moduleName"
         :lprData="lprData"
-        class="matching-card  q-mt-md q-gutter-lg" />
-
+        class="matching-card  q-mt-md q-gutter-lg"
+      /> -->
+      <lpr-table />
     </q-scroll-area>
 
-
-    <pagination
-      :paginationData='paginationData'
-      @updateCurrentPage='setPagination' />
-
+    <!-- <pagination
+      :paginationData="paginationData"
+      @updateCurrentPage="setPagination"
+    /> -->
   </q-page>
 </template>
 
@@ -32,87 +31,92 @@ import { mapState, mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      moduleName: 'toll-gates-module'
-    }
+      moduleName: "toll-gates-module"
+    };
   },
   components: {
     "tool-bar": require("components/Shared/Lpr/Toolbar/Toolbar").default,
-    "lpr-card": require("components/Lpr/LprCard").default,
+    "lpr-table": require("components/TollGates/Shared/LprTable").default,
     "no-data": require("components/Lpr/NoData").default,
-    "loading": require("components/Lpr/Loading").default,
-    "pagination": require("components/Lpr/Pagination").default
+    loading: require("components/Lpr/Loading").default,
+    pagination: require("components/Lpr/Pagination").default
   },
   watch: {
-    'autoUpdateTransits': function(newVal, oldVal) {
-      if(newVal) {
+    autoUpdateTransits: function(newVal, oldVal) {
+      if (newVal) {
         // send join message to the server
-        this.$socket.emit('join', 'generic-lpr-module');
+        this.$socket.emit("join", "generic-lpr-module");
         this.sendMetaData(true);
         this.listenToLprHub();
       }
-      if(!newVal) {
+      if (!newVal) {
         // send Leave message to the server
-        this.$socket.emit('leave', 'generic-lpr-module');
+        this.$socket.emit("leave", "generic-lpr-module");
         this.stopListenToLprHub();
       }
     },
 
-    'paginationLimit': function(newVal, oldVal) {
+    paginationLimit: function(newVal, oldVal) {
       // check if auto-update turned on
-      if(newVal && this.updateTransits) {
+      if (newVal && this.updateTransits) {
         this.sendMetaData();
       }
     },
 
-    'paginationPage': function(newVal, oldVal) {
+    paginationPage: function(newVal, oldVal) {
       // check if auto-update turned on
 
-      if(newVal && this.updateTransits) {
+      if (newVal && this.updateTransits) {
         this.sendMetaData();
       }
     },
 
-    'confidenceLimit': function(newVal, oldVal) {
-      if(newVal && this.updateTransits) {
-        console.log('confidence limit changed', this.filters)
+    confidenceLimit: function(newVal, oldVal) {
+      if (newVal && this.updateTransits) {
+        console.log("confidence limit changed", this.filters);
         this.sendMetaData();
       }
     },
 
-    'speedLimit': function(newVal, oldVal) {
-      
-      console.log('speed limit changed', newVal, oldVal);
-      if(newVal && this.updateTransits) {
-        console.log('speed limit changed', newVal);
+    speedLimit: function(newVal, oldVal) {
+      console.log("speed limit changed", newVal, oldVal);
+      if (newVal && this.updateTransits) {
+        console.log("speed limit changed", newVal);
         this.sendMetaData();
       }
     },
 
-    'confirmed': function(newVal, oldVal) {
-      if(newVal && this.updateTransits) {
-        console.log('confirmed filter changed', this.filters);
+    confirmed: function(newVal, oldVal) {
+      if (newVal && this.updateTransits) {
+        console.log("confirmed filter changed", this.filters);
         this.sendMetaData();
       }
     }
   },
   methods: {
-    ...mapActions('devices', ['getDevices']),
-    ...mapActions('lpr', ['getLprData', 'setModuleName', 'setPagination', 'updateLprData', 'setDeviceFilter', 'getDistinctDates']),
+    ...mapActions("devices", ["getDevices"]),
+    ...mapActions("lpr", [
+      "getLprData",
+      "setModuleName",
+      "setPagination",
+      "updateLprData",
+      "setDeviceFilter",
+      "getDistinctDates"
+    ]),
 
     sendMetaData(autoUpdate) {
-        let metaPagination = { ...this.pagination };
-        
-        if(autoUpdate)
-          metaPagination.page = 1;
+      let metaPagination = { ...this.pagination };
 
-        this.$socket.emit('meta_update', {
-          pagination: metaPagination,
-          filters: {
-            confidenceFilter: parseInt(this.confidenceLimit),
-            speedFilter: parseInt(this.speedLimit),
-            confirmedFilter: this.confirmed
-          }
-        });
+      if (autoUpdate) metaPagination.page = 1;
+
+      this.$socket.emit("meta_update", {
+        pagination: metaPagination,
+        filters: {
+          confidenceFilter: parseInt(this.confidenceLimit),
+          speedFilter: parseInt(this.speedLimit),
+          confirmedFilter: this.confirmed
+        }
+      });
     },
 
     listenToLprHub() {
@@ -121,7 +125,7 @@ export default {
         this.updateLprData(data);
       });
     },
-    
+
     stopListenToLprHub() {
       this.sockets.unsubscribe("lpr_transits");
       console.log("Stop listning to lpr_transits channel");
@@ -144,14 +148,19 @@ export default {
   },
   destroyed() {
     // Clear Module Name
-    this.setModuleName(' ');
+    this.setModuleName(" ");
 
-    this.$socket.emit('leave', 'generic-lpr-module')
+    this.$socket.emit("leave", "generic-lpr-module");
   },
   computed: {
-    ...mapState("lpr", ['pagination', 'filters', 'updateTransits', 'lprDataDownloaded']),
-    ...mapGetters("lpr", ['sortedTransits', 'paginationData']),
-    ...mapGetters('devices', ['getModuleActiveDevices']),
+    ...mapState("lpr", [
+      "pagination",
+      "filters",
+      "updateTransits",
+      "lprDataDownloaded"
+    ]),
+    ...mapGetters("lpr", ["sortedTransits", "paginationData"]),
+    ...mapGetters("devices", ["getModuleActiveDevices"]),
 
     autoUpdateTransits: {
       get() {
@@ -159,15 +168,15 @@ export default {
         //console.log('auto update')
       },
       set(value) {
-        this.setUpdateTransits(value)
+        this.setUpdateTransits(value);
       }
     },
 
     lprData() {
-      return this.sortedTransits
+      return this.sortedTransits;
     },
 
-    moduleActiveDevices() {    
+    moduleActiveDevices() {
       return this.getModuleActiveDevices(this.moduleName);
     },
 
@@ -180,24 +189,22 @@ export default {
     },
 
     confidenceLimit() {
-      if(this.filters.confidence_number.isActive)
+      if (this.filters.confidence_number.isActive)
         return this.filters.confidence_number.data;
-      
-      return '0';
+
+      return "0";
     },
 
     speedLimit() {
-      if(this.filters.speed.isActive)
-        return this.filters.speed.data;
-      
-      return '0';
+      if (this.filters.speed.isActive) return this.filters.speed.data;
+
+      return "0";
     },
 
     confirmed() {
-      if(this.filters.confirmed.isActive)
-        return 'true';
-      
-      return 'false';    
+      if (this.filters.confirmed.isActive) return "true";
+
+      return "false";
     }
   }
 };
@@ -225,5 +232,4 @@ export default {
   justify-content: center;
   //justify-center
 }
-
 </style>

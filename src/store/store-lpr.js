@@ -5,8 +5,7 @@ import { LocalStorage, Loading, Notify } from "quasar";
 import { showErrorMessage } from "src/functions/function-show-error-message";
 
 const state = {
-  moduleName: ' ',
-
+  moduleName: " ",
   lprData: [],
 
   searchedData: [],
@@ -16,14 +15,14 @@ const state = {
   distinctDates: [],
 
   activeDateTime: {
-    startDate: '',
-    endDate: ''
+    startDate: "",
+    endDate: ""
   },
 
   pagination: {
-    limit: 4,
+    limit: 3,
     page: 1,
-    totalPages: 1
+    totalPages: 2
   },
 
   filters: {
@@ -40,7 +39,7 @@ const state = {
       data: 10
     },
     confirmed: {
-      isActive: true,
+      isActive: true
     }
   },
 
@@ -70,21 +69,20 @@ const mutations = {
   },
   updateLpr(state, payload) {
     const lprIndex = state.lprData.findIndex(x => x.id == payload.id);
-    if(payload.hasOwnProperty('plate_number'))
+    if (payload.hasOwnProperty("plate_number"))
       state.lprData[lprIndex].plate_number = payload.plate_number;
 
-    if(payload.hasOwnProperty('confirmed'))
+    if (payload.hasOwnProperty("confirmed"))
       state.lprData[lprIndex].confirmed = payload.confirmed;
-  }, 
+  },
   updateLprFields(state, payload) {
     const fields = payload.fields;
     const lprData = payload.lprData;
     const lprIndex = state.lprData.findIndex(x => x.id == lprData.id);
 
-    if(lprData.hasOwnProperty(fields))
+    if (lprData.hasOwnProperty(fields))
       state.lprData[lprIndex][fields] = lprData[fields];
-
-  }, 
+  },
   addSearchedLpr(state, payload) {
     state.searchedData.push(payload);
   },
@@ -98,9 +96,9 @@ const mutations = {
     state.distinctDates.splice(0, state.distinctDates.length);
   },
   fixArrayLength(state) {
-    console.log('removing first element');
+    console.log("removing first element");
 
-    state.lprData.sort(function(a, b) { 
+    state.lprData.sort(function(a, b) {
       return a.id - b.id;
     });
 
@@ -119,11 +117,13 @@ const mutations = {
     Object.assign(state.activeDateTime, payload);
   },
   setPagination(state, payload) {
-    Object.assign(state.pagination, payload)
+    Object.assign(state.pagination, payload);
   },
   setDeviceFilter(state, payload) {
-    state.activeDevices.splice(0, state.activeDevices.length)
-    payload.forEach(device => { state.activeDevices.push(device) })
+    state.activeDevices.splice(0, state.activeDevices.length);
+    payload.forEach(device => {
+      state.activeDevices.push(device);
+    });
   },
   setFilter(state, payload) {
     let filterName = payload.filterName;
@@ -136,11 +136,11 @@ const mutations = {
      */
     let activeSorter = payload.activeSorter;
 
-    if (typeof activeSorter !== 'undefined') {
+    if (typeof activeSorter !== "undefined") {
       //console.log("deactivate sorter", activeSorter);
       state.sorters[activeSorter].isActive = false;
     }
-    
+
     let sorterName = payload.sorterName;
     Object.assign(state.sorters[sorterName], payload.sorterData);
   },
@@ -157,23 +157,30 @@ const mutations = {
 
 const actions = {
   getLprData({ commit, dispatch, getters }) {
-    dispatch('setLprDataDownloaded', false);
+    dispatch("setLprDataDownloaded", false);
 
-    const confidenceFilter = getters.getActiveFilter.hasOwnProperty('confidence_number') ?
-                             state.filters.confidence_number.data : 0;
-    
-    const speedFilter = getters.getActiveFilter.hasOwnProperty('speed') ?
-                        state.filters.speed.data : 0;
+    const confidenceFilter = getters.getActiveFilter.hasOwnProperty(
+      "confidence_number"
+    )
+      ? state.filters.confidence_number.data
+      : 0;
 
-    const confirmedFilter = getters.getActiveFilter.hasOwnProperty('confirmed') ?
-                        state.filters.confirmed.isActive : '';
+    const speedFilter = getters.getActiveFilter.hasOwnProperty("speed")
+      ? state.filters.speed.data
+      : 0;
+
+    const confirmedFilter = getters.getActiveFilter.hasOwnProperty("confirmed")
+      ? state.filters.confirmed.isActive
+      : "";
 
     //console.log('active filters', confidenceFilter, speedFilter);
-    commit('clearLprData');
+    commit("clearLprData");
 
     setTimeout(() => {
-      const host = config.API_URL + "/lpr" +
-                   `?npp=${state.pagination.limit}&page=${state.pagination.page}
+      const host =
+        config.API_URL +
+        "/lpr" +
+        `?npp=${state.pagination.limit}&page=${state.pagination.page}
                    &startDate=${state.activeDateTime.startDate}&endDate=${state.activeDateTime.endDate}
                    &confidenceFilter=${confidenceFilter}&speedFilter=${speedFilter}
                    &confirmedFilter=${confirmedFilter}`;
@@ -183,25 +190,24 @@ const actions = {
         Authorization: `Bearer ${userToken}`
       };
 
-
       Axios.get(host, {
         headers: headers
       })
         .then(response => {
           console.log(`success --`, response.data);
-                    let paginationData = response.data.pagination;
-                    let lprResults = response.data.results;
+          let paginationData = response.data.pagination;
+          let lprResults = response.data.results;
 
-                    dispatch('setLprDataDownloaded', true);
-                    dispatch("handleStateLprData", lprResults);
-                    
-                    if(!(lprResults.length > 0)) return;
+          dispatch("setLprDataDownloaded", true);
+          dispatch("handleStateLprData", lprResults);
 
-                    commit("setPagination", {
-                      limit: paginationData.perPage,
-                      page: paginationData.current,
-                      totalPages: paginationData.numPages
-                    });
+          if (!(lprResults.length > 0)) return;
+
+          commit("setPagination", {
+            limit: paginationData.perPage,
+            page: paginationData.current,
+            totalPages: paginationData.numPages
+          });
         })
         .catch(error => {
           showErrorMessage(error.message);
@@ -209,19 +215,20 @@ const actions = {
     }, 300);
   },
 
-  updateLprData({ commit, dispatch, getters }, payload) {        
+  updateLprData({ commit, dispatch, getters }, payload) {
     dispatch("handleStateLprData", payload.results);
 
-    if(!(payload.results.length > 0)) return; // need to disable loading
+    if (!(payload.results.length > 0)) return; // need to disable loading
 
-    commit("setPagination", { 
-                                totalPages: payload.pagination.numPages,
-                                limit: payload.pagination.perPage,
-                                page: payload.pagination.current
-                            });
+    commit("setPagination", {
+      totalPages: payload.pagination.numPages,
+      limit: payload.pagination.perPage,
+      page: payload.pagination.current
+    });
 
-    if(state.lprData.length > state.pagination.limit) // fix element added over page limit
-      commit('fixArrayLength');
+    if (state.lprData.length > state.pagination.limit)
+      // fix element added over page limit
+      commit("fixArrayLength");
   },
 
   getDistinctDates({ commit }) {
@@ -238,24 +245,23 @@ const actions = {
       })
         .then(response => {
           let results = response.data;
-          commit('clearDistinctDates');
-          commit('addDistinctDates', results);
+          commit("clearDistinctDates");
+          commit("addDistinctDates", results);
         })
         .catch(error => {
           if (error.hasOwnProperty("response"))
-          showErrorMessage(error.response.data.message);
-          
+            showErrorMessage(error.response.data.message);
           else showErrorMessage(error.message);
         });
-      }, 500);
+    }, 500);
   },
 
-  searchLprData({ dispatch, commit }, payload) {   
-    commit("clearLprData");            // clear lpr data
-    commit("clearSearchedData");       // clear searched result
-    
-    dispatch('setSearchFlag', true);
-    dispatch('setUpdateTransits', false);
+  searchLprData({ dispatch, commit }, payload) {
+    commit("clearLprData"); // clear lpr data
+    commit("clearSearchedData"); // clear searched result
+
+    dispatch("setSearchFlag", true);
+    dispatch("setUpdateTransits", false);
 
     setTimeout(() => {
       const host = config.API_URL + "/lpr_search";
@@ -284,19 +290,16 @@ const actions = {
         })
         .catch(error => {
           if (error.hasOwnProperty("response"))
-          showErrorMessage(error.response.data.message);
-          
+            showErrorMessage(error.response.data.message);
           else showErrorMessage(error.message);
         });
-      }, 500);
-
+    }, 500);
   },
 
   editLprPlateNumber({ commit, dispatch }, payload) {
-    dispatch('setLprDataDownloaded', false);
+    dispatch("setLprDataDownloaded", false);
 
     setTimeout(() => {
-
       const host = config.API_URL + "/lpr/" + payload.id;
       const userToken = LocalStorage.getItem("loggedInUserToken");
       const headers = {
@@ -304,17 +307,16 @@ const actions = {
         Authorization: `Bearer ${userToken}`
       };
 
-
       Axios.put(host, payload, {
         headers: headers
       })
         .then(response => {
-          console.log('Edit Plate success..');
+          console.log("Edit Plate success..");
           const result = response.data;
 
-          dispatch('setLprDataDownloaded', true);
+          dispatch("setLprDataDownloaded", true);
 
-          if(result.affectedRows == 0) {
+          if (result.affectedRows == 0) {
             Notify.create(
               `Sorry Can't Update ( ${payload.plate_number} ) Right Now..`
             );
@@ -326,23 +328,20 @@ const actions = {
             `Updated Plate Number to ( ${payload.plate_number} )Success..`
           );
 
-          commit('updateLpr', payload);
-          
+          commit("updateLpr", payload);
         })
         .catch(error => {
           if (error.hasOwnProperty("response"))
-          showErrorMessage(error.response.data.message);
-          
+            showErrorMessage(error.response.data.message);
           else showErrorMessage(error.message);
         });
-      }, 500);
+    }, 500);
   },
 
   confirmLprPlate({ commit, dispatch }, payload) {
-    dispatch('setLprDataDownloaded', false);
+    dispatch("setLprDataDownloaded", false);
 
     setTimeout(() => {
-
       const host = config.API_URL + "/lpr/" + payload.id;
       const userToken = LocalStorage.getItem("loggedInUserToken");
       const headers = {
@@ -350,59 +349,56 @@ const actions = {
         Authorization: `Bearer ${userToken}`
       };
 
-
       Axios.put(host, payload, {
         headers: headers
       })
         .then(response => {
-          console.log('Confirm success..');
+          console.log("Confirm success..");
           const result = response.data;
 
-          dispatch('setLprDataDownloaded', true);
+          dispatch("setLprDataDownloaded", true);
 
-          if(result.affectedRows == 0) {
-            Notify.create(
-              `Sorry Can't Confirm ( ${payload.id} ) Right Now..`
-            );
+          if (result.affectedRows == 0) {
+            Notify.create(`Sorry Can't Confirm ( ${payload.id} ) Right Now..`);
 
             return;
           }
 
-          Notify.create(
-            `( ${payload.id} ) Confirmation Success..`
-          );
+          Notify.create(`( ${payload.id} ) Confirmation Success..`);
 
           //commit('updateLpr', payload);
-          dispatch('getLprData');
-          
+          dispatch("getLprData");
         })
         .catch(error => {
           if (error.hasOwnProperty("response"))
-          showErrorMessage(error.response.data.message);
-          
+            showErrorMessage(error.response.data.message);
           else showErrorMessage(error.message);
         });
-      }, 100);
+    }, 100);
   },
 
   printLprData({ commit }, payload) {
-    console.log('printing record', payload);
+    console.log("printing record", payload);
 
     setTimeout(() => {
       const host = config.API_URL + "/lpr_print?recordData";
       const dataRecord = encodeURIComponent(JSON.stringify(payload));
       const url = host + dataRecord;
 
-      window.open(url, 'popUpWindow', 'height=800, width=650, left=300, top=100, resizable=yes, scrollbars=yes, toolbar=yes, menubar=no, location=no, directories=no, status=yes');
+      window.open(
+        url,
+        "popUpWindow",
+        "height=800, width=650, left=300, top=100, resizable=yes, scrollbars=yes, toolbar=yes, menubar=no, location=no, directories=no, status=yes"
+      );
     }, 500);
   },
 
   setActiveDateTime({ commit, dispatch }, payload) {
     // console.log('date time', payload);
-    commit('setActiveDateTime', payload);
+    commit("setActiveDateTime", payload);
 
-    dispatch('setUpdateTransits', false);
-    dispatch("setPagination", { 
+    dispatch("setUpdateTransits", false);
+    dispatch("setPagination", {
       activeDateTime: true,
       page: 1
     });
@@ -411,61 +407,64 @@ const actions = {
   setPagination({ commit, dispatch }, payload) {
     // console.log('pagination');
     let activeDateTime = payload.activeDateTime || false;
-    let componentTrigger = true;                      // Fix issue of trigger from component
+    let componentTrigger = true; // Fix issue of trigger from component
     let payloadKeys = Object.keys(payload);
-    
+
     payloadKeys.forEach(key => {
-      if(!(payload[key] == state.pagination[key]))
-      componentTrigger = false;
+      if (!(payload[key] == state.pagination[key])) componentTrigger = false;
     });
-    
-    if(componentTrigger & !activeDateTime)        // make is not date time selection 
-      return
-    
-      
-    if(state.pagination.page != payload.page)         // clear data of current page if page changed
-      commit('clearLprData');
-    
-    commit('setPagination', payload);
-    
-    if(!state.updateTransits & !state.searchFlag) {
-      dispatch('getLprData');    
+
+    if (componentTrigger & !activeDateTime)
+      // make is not date time selection
+      return;
+
+    if (state.pagination.page != payload.page)
+      // clear data of current page if page changed
+      commit("clearLprData");
+
+    console.log("pagination", payload);
+    commit("setPagination", payload);
+
+    if (!state.updateTransits & !state.searchFlag) {
+      dispatch("getLprData");
     }
-      
-    if(state.searchFlag)                            // if search flag is raised do local pagination         
-      dispatch('handleStateSearchedData', []);
+
+    if (state.searchFlag)
+      // if search flag is raised do local pagination
+      dispatch("handleStateSearchedData", []);
   },
 
   setFilter({ commit, dispatch }, payload) {
-    dispatch('setLprDataDownloaded', false);
-    commit('clearLprData');
+    dispatch("setLprDataDownloaded", false);
+    commit("clearLprData");
     commit("setFilter", payload);
 
-    if(!state.updateTransits & !state.searchFlag)
-      dispatch('getLprData');
+    if (!state.updateTransits & !state.searchFlag) dispatch("getLprData");
 
-    if(state.searchFlag)                            // if search flag is raised do local pagination         
-      dispatch('handleStateSearchedData', []);
+    if (state.searchFlag)
+      // if search flag is raised do local pagination
+      dispatch("handleStateSearchedData", []);
   },
 
   setDeviceFilter({ commit }, payload) {
-    commit('setDeviceFilter', payload)
+    commit("setDeviceFilter", payload);
   },
 
   setSorter({ commit, getters }, payload) {
     let activeSorter = getters.getActiveSorter;
     let activeSorterKey = Object.keys(activeSorter);
-    
+
     payload.activeSorter = activeSorterKey[0];
 
     commit("setSorter", payload);
   },
 
   setModuleName({ commit }, moduleName) {
-    commit('setModuleName', moduleName);
+    commit("setModuleName", moduleName);
   },
 
   handleStateLprData({ commit, dispatch, getters }, payload) {
+    console.log("payload", payload);
     payload.forEach(lpr => {
       // Commit only non-existing user with id
       if (!getters.lpr_id.includes(lpr.id)) {
@@ -474,16 +473,17 @@ const actions = {
 
       // if exists check module name to ge fields to update
       else if (getters.lpr_id.includes(lpr.id)) {
-        if(state.moduleName == 'toll-gates-module') {
+        if (state.moduleName == "toll-gates-module") {
           // Fields to update
-          const fieldsToUpdate = 'source2';
+          const fieldsToUpdate = "source2";
 
           // Find index
           const lprIndex = state.lprData.findIndex(x => x.id == lpr.id);
 
           // Check ##### To do validation has own property
-          if(state.lprData[lprIndex][fieldsToUpdate] != lpr[fieldsToUpdate]) {
-            commit('updateLprFields', {
+          if (state.lprData[lprIndex][fieldsToUpdate] != lpr[fieldsToUpdate]) {
+            console.log("personImageUpdated", lpr[fieldsToUpdate]);
+            commit("updateLprFields", {
               fields: fieldsToUpdate,
               lprData: lpr
             });
@@ -491,31 +491,30 @@ const actions = {
         }
       }
     });
-    
-    dispatch('setLprDataDownloaded', true);
+
+    dispatch("setLprDataDownloaded", true);
   },
 
   handleStateSearchedData({ commit, dispatch, getters }, payload) {
-
-    payload.forEach(lpr => {  
-        commit("addSearchedLpr", lpr);
+    payload.forEach(lpr => {
+      commit("addSearchedLpr", lpr);
     });
 
-    commit("setPagination", { 
+    commit("setPagination", {
       totalPages: Math.ceil(state.searchedData.length / state.pagination.limit)
     });
     // Get paginated data and push it lpr data array
     let paginatedTransits = getters.paginatedTransits(state.searchedData);
 
-    dispatch('handleStateLprData', paginatedTransits);    
-    dispatch('setLprDataDownloaded', true);
+    dispatch("handleStateLprData", paginatedTransits);
+    dispatch("setLprDataDownloaded", true);
   },
 
   setUpdateTransits({ commit, dispatch }, value) {
-     if(value) {
-       commit('clearLprData');
-       dispatch("setLprDataDownloaded", false);
-     }
+    if (value) {
+      commit("clearLprData");
+      dispatch("setLprDataDownloaded", false);
+    }
 
     commit("setUpdateTransits", value);
   },
@@ -523,19 +522,18 @@ const actions = {
   setLprDataDownloaded({ commit }, value) {
     //console.log('hiding elem');
     Loading.hide();
-    
-    if(!value)
-      Loading.show();
+
+    if (!value) Loading.show();
     commit("setLprDataDownloaded", value);
   },
 
-  setSearchFlag({ commit, dispatch }, value) {   
-    if(!value){
+  setSearchFlag({ commit, dispatch }, value) {
+    if (!value) {
       commit("setPagination", {
         page: 1
-      }); 
+      });
 
-      dispatch('getLprData');
+      dispatch("getLprData");
     }
 
     commit("setSearchFlag", value);
@@ -565,7 +563,7 @@ const getters = {
 
   getActiveFilter: state => {
     let filtersKeys = Object.keys(state.filters),
-        activeFilters = {};
+      activeFilters = {};
 
     // getting active filters
     filtersKeys.forEach(key => {
@@ -581,16 +579,14 @@ const getters = {
     //console.log(getters.paginatedTransits);
 
     let filteredTransits = state.lprData,
-      activeDevices = state.activeDevices
+      activeDevices = state.activeDevices;
 
-    filteredTransits = filteredTransits.filter((el) => {
-
-      return activeDevices.some((f) => {
-        return f === el.device_name
+    filteredTransits = filteredTransits.filter(el => {
+      return activeDevices.some(f => {
+        return f === el.device_name;
       });
-
     });
-    return filteredTransits
+    return filteredTransits;
   },
 
   filteredTransits: (state, getters) => {
@@ -601,26 +597,22 @@ const getters = {
     // let filteredTransits = getters.filteredTransitsByDevices,
     //   filtersKeys = Object.keys(state.filters),
     //   activeFilters = {};
-
     // // getting active filters
     // filtersKeys.forEach(key => {
     //   if (state.filters[key].isActive) {
     //     activeFilters[key] = state.filters[key];
     //   }
     // });
-
     // // filter function
     // filteredTransits = filteredTransits.filter(item => {
     //   for (var key in activeFilters) {
     //     let filterData = parseInt(activeFilters[key].data);
     //     let itemData = parseInt(item[key]);
-
     //     if (key == "speed") itemData = itemData / 100;
     //     if (itemData < filterData) return false;
     //   }
     //   return true;
     // });
-
     // return filteredTransits;
   },
 
@@ -657,9 +649,8 @@ const getters = {
     return sortedTransits;
   },
 
-  paginatedTransits: (state) => payload => {
-
-    const paginate = function (array, index, size) {
+  paginatedTransits: state => payload => {
+    const paginate = function(array, index, size) {
       // transform values
       index = Math.abs(parseInt(index));
       index = index > 0 ? index - 1 : index;
@@ -667,19 +658,31 @@ const getters = {
       size = size < 1 ? 1 : size;
 
       // filter
-      return [...(array.filter((value, n) => {
-        return (n >= (index * size)) && (n < ((index + 1) * size))
-      }))]
-    }
+      return [
+        ...array.filter((value, n) => {
+          return n >= index * size && n < (index + 1) * size;
+        })
+      ];
+    };
 
     let array = payload,
-      paginationOption = state.pagination
+      paginationOption = state.pagination;
 
+    let paginatedTransits = paginate(
+      array,
+      paginationOption.page,
+      paginationOption.limit
+    ); // params(array, pageNumber, limit)
 
-    let paginatedTransits = paginate(array, paginationOption.page, paginationOption.limit); // params(array, pageNumber, limit)
-
-    return paginatedTransits
-
+    return paginatedTransits;
+  },
+  paginationRename: state => {
+    let pagination = {
+      page: state.pagination.page,
+      rowsPerPage: state.pagination.limit,
+      rowsNumber: state.pagination.totalPages * state.pagination.limit
+    };
+    return pagination;
   }
 };
 
