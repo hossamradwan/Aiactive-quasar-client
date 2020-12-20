@@ -22,7 +22,12 @@
       <template v-slot:header="props">
         <q-tr :props="props">
           <!-- loop over data columns -->
-          <q-th v-for="col in props.cols" :key="col.name" :props="props">
+          <q-th
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size: 1.1vw"
+          >
             {{ col.label }}
           </q-th>
         </q-tr>
@@ -36,7 +41,12 @@
           @click="setCarousel(props.row)"
         >
           <!-- Assigne the value of each record if it matches the column name -->
-          <q-td v-for="col in props.cols" :key="col.name" :props="props">
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size: 1.1vw"
+          >
             <span v-if="col.name != 'Image' && col.name != 'Plate_Image'">
               {{ col.value }}</span
             >
@@ -60,7 +70,11 @@
     </q-table>
 
     <!-- Popup Dialoge -->
-    <q-dialog v-model="carousel" class=" q-pa-md items-start q-gutter-md ">
+    <q-dialog
+      v-model="carousel"
+      class=" q-pa-md items-start q-gutter-md "
+      style="width: 2560px; max-width: 80vw;"
+    >
       <popupModal :activeCarousel="activeCarousel" />
     </q-dialog>
   </div>
@@ -92,7 +106,7 @@ export default {
       carousel: false,
       activeCarousel: [],
       pagination: {
-        sortBy: 'ID',
+        sortBy: "ID",
         descending: false,
         page: 1,
         rowsPerPage: 3,
@@ -113,9 +127,10 @@ export default {
           required: true,
           label: "Plate No.",
           field: row => row.plate_number,
-          align: "left",
+          align: "center",
           format: val => `${val}`,
-          sortable: true
+          sortable: true,
+          style: "background-color:#ddd ; font-weight: bold;"
         },
         {
           name: "Plate_Image",
@@ -168,8 +183,7 @@ export default {
 
   mounted() {
     // get initial data from server (1st page)
-      this.pagination = this.paginationRename;
-
+    this.pagination = this.paginationRename;
   },
 
   methods: {

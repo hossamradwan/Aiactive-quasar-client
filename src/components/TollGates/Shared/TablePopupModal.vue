@@ -6,7 +6,7 @@
         class="col"
         :src="activeCarousel.path + '/' + activeCarousel.source2"
         transition="slide-right"
-        style="height: 400px; max-width: 500px"
+        style="height: 400px; max-width: 1280px"
       >
         <!-- Date_Time -->
         <div class="absolute-top  text-weight-bold  ">
@@ -21,7 +21,7 @@
         class="col"
         :src="activeCarousel.path + '/' + activeCarousel.source1"
         transition="slide-left"
-        style="width: 500px; max-height: 500px"
+        style="width: 500px; max-height: 720px"
       >
         <!-- Car Details -->
         <div class="absolute-bottom text-subtitle2 text-center">
@@ -46,6 +46,7 @@ export default {
 </script>
 <style>
 .ExpandableCard {
-  width: 100%;
+  width: 2560px;
+  height: 720px;
 }
 </style>

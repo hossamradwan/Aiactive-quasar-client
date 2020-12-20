@@ -118,6 +118,9 @@ const mutations = {
   },
   setPagination(state, payload) {
     Object.assign(state.pagination, payload);
+    console.log("state.pagination.totalPages", state.pagination.totalPages);
+    console.log("state.pagination.limit", state.pagination.limit);
+    console.log("state.pagination.page", state.pagination.page);
   },
   setDeviceFilter(state, payload) {
     state.activeDevices.splice(0, state.activeDevices.length);
