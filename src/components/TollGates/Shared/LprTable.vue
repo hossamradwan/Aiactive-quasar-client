@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-table
       :data="lprData"
-      :pagination.sync="pagination"
+      :pagination.sync="paginationRename"
       :columns="columns"
       row-key="name"
       @request="onRequest"
@@ -70,11 +70,7 @@
     </q-table>
 
     <!-- Popup Dialoge -->
-    <q-dialog
-      v-model="carousel"
-      class=" q-pa-md items-start q-gutter-md "
-      style="width: 2560px; max-width: 80vw;"
-    >
+    <q-dialog v-model="carousel">
       <popupModal :activeCarousel="activeCarousel" />
     </q-dialog>
   </div>
@@ -105,13 +101,6 @@ export default {
     return {
       carousel: false,
       activeCarousel: [],
-      pagination: {
-        sortBy: "ID",
-        descending: false,
-        page: 1,
-        rowsPerPage: 3,
-        rowsNumber: 10
-      },
       columns: [
         {
           name: "ID",
@@ -128,7 +117,7 @@ export default {
           label: "Plate No.",
           field: row => row.plate_number,
           align: "center",
-          format: val => `${val}`,
+          format: val => `${val.split("").join(" ")}`,
           sortable: true,
           style: "background-color:#ddd ; font-weight: bold;"
         },
@@ -181,11 +170,6 @@ export default {
     popupModal: require("./TablePopupModal").default
   },
 
-  mounted() {
-    // get initial data from server (1st page)
-    this.pagination = this.paginationRename;
-  },
-
   methods: {
     ...mapActions("lpr", ["setPagination"]),
 
@@ -195,15 +179,13 @@ export default {
     },
 
     onRequest(props) {
-      console.log("table triggered", props);
       const { page, rowsPerPage, sortBy, descending } = props.pagination;
+      let rowsNumber = this.paginationRename.rowsNumber;
 
       this.setPagination({
         page: page,
         limit: rowsPerPage
       });
-
-      this.pagination = props.pagination;
     },
 
     exportTable() {
@@ -238,8 +220,6 @@ export default {
   },
 
   computed: {
-    //...mapState("lpr", ["sortedTransits"]),
-
     ...mapGetters("lpr", ["sortedTransits", "paginationRename"]),
 
     lprData() {
