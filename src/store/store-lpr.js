@@ -677,10 +677,13 @@ const getters = {
     return paginatedTransits;
   },
   paginationRename: state => {
+    let rowsNumber = state.pagination.totalPages * state.pagination.limit;
     let pagination = {
       page: state.pagination.page,
       rowsPerPage: state.pagination.limit,
-      rowsNumber: state.pagination.totalPages * state.pagination.limit
+      rowsNumber,
+      sortBy: "ID",
+      descending: false
     };
     return pagination;
   }

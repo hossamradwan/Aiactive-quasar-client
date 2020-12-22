@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <q-table
       :data="lprData"
-      :pagination.sync="pagination"
+      :pagination.sync="paginationRename"
       :columns="columns"
       row-key="name"
       @request="onRequest"
@@ -22,7 +22,12 @@
       <template v-slot:header="props">
         <q-tr :props="props">
           <!-- loop over data columns -->
-          <q-th v-for="col in props.cols" :key="col.name" :props="props">
+          <q-th
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size: 1.1vw"
+          >
             {{ col.label }}
           </q-th>
         </q-tr>
@@ -36,7 +41,12 @@
           @click="setCarousel(props.row)"
         >
           <!-- Assigne the value of each record if it matches the column name -->
-          <q-td v-for="col in props.cols" :key="col.name" :props="props">
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size: 1.1vw"
+          >
             <span v-if="col.name != 'Image' && col.name != 'Plate_Image'">
               {{ col.value }}</span
             >
@@ -60,7 +70,7 @@
     </q-table>
 
     <!-- Popup Dialoge -->
-    <q-dialog v-model="carousel" class=" q-pa-md items-start q-gutter-md ">
+    <q-dialog v-model="carousel">
       <popupModal :activeCarousel="activeCarousel" />
     </q-dialog>
   </div>
@@ -91,13 +101,6 @@ export default {
     return {
       carousel: false,
       activeCarousel: [],
-      pagination: {
-        sortBy: 'ID',
-        descending: false,
-        page: 1,
-        rowsPerPage: 3,
-        rowsNumber: 10
-      },
       columns: [
         {
           name: "ID",
@@ -113,9 +116,10 @@ export default {
           required: true,
           label: "Plate No.",
           field: row => row.plate_number,
-          align: "left",
-          format: val => `${val}`,
-          sortable: true
+          align: "center",
+          format: val => `${val.split("").join(" ")}`,
+          sortable: true,
+          style: "background-color:#ddd ; font-weight: bold;"
         },
         {
           name: "Plate_Image",
@@ -166,12 +170,6 @@ export default {
     popupModal: require("./TablePopupModal").default
   },
 
-  mounted() {
-    // get initial data from server (1st page)
-      this.pagination = this.paginationRename;
-
-  },
-
   methods: {
     ...mapActions("lpr", ["setPagination"]),
 
@@ -181,15 +179,13 @@ export default {
     },
 
     onRequest(props) {
-      console.log("table triggered", props);
       const { page, rowsPerPage, sortBy, descending } = props.pagination;
+      let rowsNumber = this.paginationRename.rowsNumber;
 
       this.setPagination({
         page: page,
         limit: rowsPerPage
       });
-
-      this.pagination = props.pagination;
     },
 
     exportTable() {
@@ -224,8 +220,6 @@ export default {
   },
 
   computed: {
-    //...mapState("lpr", ["sortedTransits"]),
-
     ...mapGetters("lpr", ["sortedTransits", "paginationRename"]),
 
     lprData() {
