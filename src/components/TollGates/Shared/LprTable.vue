@@ -26,7 +26,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-            style="font-size: 1.1vw"
+            style="font-size: 15px"
           >
             {{ col.label }}
           </q-th>
@@ -45,7 +45,7 @@
             v-for="col in props.cols"
             :key="col.name"
             :props="props"
-            style="font-size: 1.1vw"
+            style="font-size:15px"
           >
             <span v-if="col.name != 'Image' && col.name != 'Plate_Image'">
               {{ col.value }}</span
