@@ -117,7 +117,7 @@ export default {
           label: "Plate No.",
           field: row => row.plate_number,
           align: "center",
-          format: val => `${val.split("").join(" ")}`,
+          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
           sortable: true,
           style: "background-color:#ddd ; font-weight: bold;"
         },
