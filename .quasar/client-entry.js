@@ -56,6 +56,8 @@ import qboot_Bootwebsocketclient from 'boot/websocket-client'
 
 import qboot_Bootapex from 'boot/apex'
 
+import qboot_Booti18n from 'boot/i18n'
+
 
 
 
@@ -93,7 +95,7 @@ async function start () {
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootaxios,qboot_Bootrouterauth,qboot_Bootwebsocketclient,qboot_Bootapex]
+  const bootFiles = [qboot_Bootaxios,qboot_Bootrouterauth,qboot_Bootwebsocketclient,qboot_Bootapex,qboot_Booti18n]
 
   for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {
