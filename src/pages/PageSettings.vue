@@ -10,29 +10,41 @@
         align="justify"
         narrow-indicator
       >
-        <q-tab name="users-settings" icon="fas fa-users-cog" label="Users" />
+        <q-tab
+          name="users-settings"
+          icon="fas fa-users-cog"
+          :label="$t('Users')"
+        />
 
-        <q-tab name="devices-settings" icon="device_hub" label="Devices" />
+        <q-tab
+          name="devices-settings"
+          icon="device_hub"
+          :label="$t('Devices')"
+        />
 
         <q-tab
           name="average-speed-settings"
           icon="speed"
-          label="Average Speed"
+          :label="$t('AverageSpeed')"
         />
 
         <q-tab
           name="database-settings"
           icon="fas fa-database"
-          label="Database"
+          :label="$t('Database')"
         />
 
         <q-tab
           name="notification-settings"
           icon="fas fa-bell"
-          label="Notifications"
+          :label="$t('Notifications')"
         />
 
-        <q-tab name="general-settings" icon="fas fa-tools" label="General" />
+        <q-tab
+          name="general-settings"
+          icon="fas fa-tools"
+          :label="$t('General')"
+        />
       </q-tabs>
 
       <q-separator />

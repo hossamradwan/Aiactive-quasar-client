@@ -1,14 +1,16 @@
 <template>
-  <q-select
-    label="Select Language"
-    v-model="lang"
-    :options="langOptions"
-    dense
-    borderless
-    map-options
-    options-dense
-    style="max-width: 150px"
-  />
+  <div>
+    <q-select
+      :label="$t('SelectLanguage')"
+      v-model="lang"
+      :options="langOptions"
+      dense
+      borderless
+      map-options
+      options-dense
+      style="max-width: 150px"
+    />
+  </div>
 </template>
 
 <script>
@@ -25,7 +27,10 @@ export default {
 
   watch: {
     lang(lang) {
+      console.log("this.$i18n.locale", this.$i18n.locale);
       this.$i18n.locale = lang.value;
+      console.log("langvalue", lang.value);
+      console.log("this.$i18n.locale", this.$i18n.locale);
       // set quasar's language too!!
       import(`quasar/lang/${lang.value}`).then(language => {
         this.$q.lang.set(language.default);

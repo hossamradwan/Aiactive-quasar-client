@@ -12,7 +12,7 @@
         <q-btn
           color="primary"
           icon-right="archive"
-          label="Export to csv"
+          :label="$t('ExportCSV')"
           no-caps
           @click="exportTable"
         />
@@ -105,7 +105,7 @@ export default {
         {
           name: "ID",
           required: true,
-          label: "ID",
+          label: this.$t("ID"),
           field: row => row.id,
           align: "left",
           format: val => `${val}`,
@@ -114,7 +114,7 @@ export default {
         {
           name: "Plate No.",
           required: true,
-          label: "Plate No.",
+          label: this.$t("PlateNo"),
           field: row => row.plate_number,
           align: "center",
           format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
@@ -123,34 +123,34 @@ export default {
         },
         {
           name: "Plate_Image",
-          label: "Plate Image",
+          label: this.$t("PlateImage"),
           field: "plate_image",
           style: "width: 5px"
         },
         {
           name: "Date",
-          label: "Date",
+          label: this.$t("Date"),
           field: row => row.date_time,
           align: "center",
           sortable: true
         },
         {
           name: "Brand",
-          label: "Brand",
+          label: this.$t("Brand"),
           field: row => row.brand,
           align: "center",
           sortable: true
         },
         {
           name: "Model",
-          label: "Model",
+          label: this.$t("Model"),
           field: row => row.model,
           align: "center",
           sortable: true
         },
         {
           name: "Color",
-          label: "Color",
+          label: this.$t("Color"),
           field: row => row.color,
           align: "center",
           sortable: true
@@ -158,7 +158,7 @@ export default {
 
         {
           name: "Image",
-          label: "Image",
+          label: this.$t("Image"),
           field: "image",
           style: "width: 5px"
         }

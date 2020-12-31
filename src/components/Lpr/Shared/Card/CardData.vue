@@ -9,7 +9,7 @@
       <q-chip square size="md" class="q-pt-lg q-pb-lg">
         <div class="coulmn">
           <div class="text-bold">
-            Speed
+            {{ $t("Speed") }}
           </div>
 
           <q-separator class="q-mt-xs q-mb-xs" />
@@ -24,7 +24,7 @@
       <q-chip square size="md" class="q-pt-lg q-pb-lg">
         <div class="coulmn">
           <div class="text-bold">
-            Confidence
+            {{ $t("Confidence") }}
           </div>
 
           <q-separator class="q-mt-xs q-mb-xs" />
@@ -36,14 +36,13 @@
       </q-chip>
     </div>
 
-
     <!-- For Average Speed -->
     <div v-else class="q-pa-sm">
       <!-- Speed -->
       <q-chip square size="md" class="q-pt-lg q-pb-lg">
         <div class="coulmn">
           <div class="text-bold">
-            Average Speed
+            {{ $t("AverageSpeed") }}
           </div>
 
           <q-separator class="q-mt-xs q-mb-xs" />
@@ -53,8 +52,7 @@
           </div>
         </div>
       </q-chip>
-    </div>   
-
+    </div>
 
     <!-- Date Time -->
     <div class="">
@@ -68,12 +66,8 @@ export default {
   props: ["lprData", "moduleName", "deviceNumber"],
   data() {
     return {
-      lprModules: [
-        'generic-lpr-module',
-        'match-module',
-        'toll-gates-module'
-      ],
-      lprType: 'lpr',
+      lprModules: ["generic-lpr-module", "match-module", "toll-gates-module"],
+      lprType: "lpr",
       cardData: {
         device_name: "",
         speed: null,
@@ -83,16 +77,12 @@ export default {
     };
   },
   mounted() {
-    if (
-      this.lprModules.includes(this.moduleName)
-    ) {
+    if (this.lprModules.includes(this.moduleName)) {
       this.cardData.device_name = this.lprData.device_name;
       this.cardData.speed = this.lprData.speed;
       this.cardData.confidence_number = this.lprData.confidence_number;
       this.cardData.date_time = this.lprData.date_time;
-    } 
-
-    else if (this.moduleName == "average-speed-module") {    
+    } else if (this.moduleName == "average-speed-module") {
       if (this.deviceNumber == "device_one") {
         this.cardData.device_name = this.lprData.device_one_name;
         this.cardData.speed = this.lprData.device_one_speed;
@@ -104,7 +94,7 @@ export default {
         this.cardData.confidence_number = this.lprData.device_two_confidence_number;
         this.cardData.date_time = this.lprData.device_two_date_time;
       } else if (this.deviceNumber == "device_average") {
-        this.lprType = 'average_speed';
+        this.lprType = "average_speed";
         this.cardData.device_name = this.lprData.road_name;
         this.cardData.speed = this.lprData.average_speed;
         //this.cardData.confidence = this.lprData.confidence;
