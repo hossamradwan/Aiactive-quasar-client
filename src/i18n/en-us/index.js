@@ -49,5 +49,10 @@ export default {
   Type: "Type",
   Zone: "Zone",
   AddRoad: "Add Road",
-  SelectLanguage: "Select Language"
+  SelectLanguage: "Select Language",
+  Search: "Search",
+  Filters: "Filters",
+  Sorters: "Sorters",
+  Confirmed: "Confirmed",
+  Pagination: "Pagination"
 };

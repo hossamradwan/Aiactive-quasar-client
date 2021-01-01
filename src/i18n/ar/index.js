@@ -47,5 +47,10 @@ export default {
   Type: "نوع",
   Zone: "منطقة",
   AddRoad: "اضافة طريق",
-  SelectLanguage: "اختار اللغة"
+  SelectLanguage: "اختار اللغة",
+  Search: "بحث",
+  Filters: "فلاتر",
+  Sorters: "ترتيب حسب",
+  Confirmed: "تم التأكيد",
+  Pagination: "ترقيم الصفحات"
 };

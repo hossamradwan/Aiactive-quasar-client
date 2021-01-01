@@ -31,7 +31,7 @@
           debounce="300"
           color="primary"
           v-model="filter"
-          placeholder="Search"
+          :placeholder="$t('Search')"
         >
           <template v-slot:append>
             <q-icon name="search" />

@@ -1,6 +1,6 @@
 <template>
   <div class="column items-center filter">
-    <div class="text-h6 text-center q-mb-md">Devices</div>
+    <div class="text-h6 text-center q-mb-md">{{ $t("Devices") }}</div>
 
     <q-tree
       :nodes="devicesTree"
@@ -10,29 +10,28 @@
       default-expand-all
       no-connectors
     />
-
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
       simple: [
         {
-          label: 'Devices Zone',
+          label: "Devices Zone",
           //avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-          icon: 'gps_fixed',
+          icon: "gps_fixed",
           children: [
             {
-              label: 'Device_one',
-              icon: 'videocam'
+              label: "Device_one",
+              icon: "videocam"
             },
             {
-              label: 'Device_two',
-              icon: 'videocam',
+              label: "Device_two",
+              icon: "videocam",
               disabled: false
             }
           ]
@@ -41,14 +40,13 @@ export default {
       ticked: []
     };
   },
-  components: {
-  },
+  components: {},
   watch: {
-    'ticked': function(newVal, oldVal) {
-      if(newVal) {
-        if(this.moduleName == 'average-speed-module'){
+    ticked: function(newVal, oldVal) {
+      if (newVal) {
+        if (this.moduleName == "average-speed-module") {
           this.setAverageSpeedDeviceFilter(newVal);
-          return
+          return;
         }
 
         this.setDeviceFilter(newVal);
@@ -56,14 +54,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions('lpr', ['setDeviceFilter']),
-    ...mapActions('averageSpeedResult', {
-        setAverageSpeedDeviceFilter: 'setDeviceFilter'
+    ...mapActions("lpr", ["setDeviceFilter"]),
+    ...mapActions("averageSpeedResult", {
+      setAverageSpeedDeviceFilter: "setDeviceFilter"
     })
   },
   mounted() {
     setTimeout(() => {
-      if(this.moduleName == 'average-speed-module') {
+      if (this.moduleName == "average-speed-module") {
         this.ticked = Array.from(this.activeTraps);
         return;
       }
@@ -72,12 +70,12 @@ export default {
     }, 200);
   },
   computed: {
-    ...mapState('lpr', ['activeDevices']),
-    ...mapState('averageSpeedResult', ['activeTraps']),
-    ...mapGetters('devices', ['getDevicesTree', 'getAverageSpeedDevicesTree']),
+    ...mapState("lpr", ["activeDevices"]),
+    ...mapState("averageSpeedResult", ["activeTraps"]),
+    ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
 
     devicesTree() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.getAverageSpeedDevicesTree;
 
       return this.getDevicesTree(this.moduleName);
@@ -91,5 +89,4 @@ export default {
   justify-content: center;
   //width: 230 px;
 }
-
 </style>
