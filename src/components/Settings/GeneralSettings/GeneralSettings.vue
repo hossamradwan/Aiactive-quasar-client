@@ -27,11 +27,8 @@ export default {
 
   watch: {
     lang(lang) {
-      console.log("this.$i18n.locale", this.$i18n.locale);
       this.$i18n.locale = lang.value;
-      console.log("langvalue", lang.value);
-      console.log("this.$i18n.locale", this.$i18n.locale);
-      // set quasar's language too!!
+      // Fix RTL issue
       import(`quasar/lang/${lang.value}`).then(language => {
         this.$q.lang.set(language.default);
       });

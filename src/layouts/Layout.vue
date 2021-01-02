@@ -63,26 +63,8 @@
               <q-icon :name="nav.icon" />
             </q-item-section>
             <q-item-section>
-              <q-item-label v-if="nav.label == 'Dashboard'">
-                {{ $t("Dashboard") }}
-              </q-item-label>
-              <q-item-label v-else-if="nav.label == 'FreeFlow'">
-                {{ $t("FreeFlow") }}
-              </q-item-label>
-              <q-item-label v-else-if="nav.label == 'AverageSpeed'">
-                {{ $t("AverageSpeed") }}
-              </q-item-label>
-              <q-item-label v-else-if="nav.label == 'TollGates'">
-                {{ $t("TollGates") }}
-              </q-item-label>
-              <q-item-label v-else-if="nav.label == 'Reporting'">
-                {{ $t("Reporting") }}
-              </q-item-label>
-              <q-item-label v-else-if="nav.label == 'Settings'">
-                {{ $t("Settings") }}
-              </q-item-label>
-              <q-item-label v-else>
-                {{ nav.label }}
+              <q-item-label>
+                {{ $t(nav.label) }}
               </q-item-label>
             </q-item-section>
           </q-item>

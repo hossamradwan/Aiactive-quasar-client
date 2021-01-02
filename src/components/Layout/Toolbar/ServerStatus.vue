@@ -6,7 +6,7 @@
         {{serverStatus}} 
       </span>
     </span> -->
-    <q-btn flat :label="serverStatus" :color="iconColor">
+    <q-btn flat :label="$t(serverStatus)" :color="iconColor">
       <div class="q-ml-md">
         <q-spinner-radio size="1.2rem" />
       </div>
