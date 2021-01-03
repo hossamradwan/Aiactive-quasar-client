@@ -13,15 +13,15 @@
       flat
       hide-bottom
     >
-
       <template v-slot:top>
         <q-btn
           outline
           rounded
-          label="Add User"
+          :label="$t('AddUser')"
           :disable="loading"
           icon="add"
-          @click="addUserModal=true" />
+          @click="addUserModal = true"
+        />
 
         <q-space />
 
@@ -31,7 +31,8 @@
           debounce="300"
           color="primary"
           v-model="filter"
-          placeholder="Search">
+          :placeholder="$t('Search')"
+        >
           <template v-slot:append>
             <q-icon name="search" />
           </template>
@@ -39,83 +40,76 @@
       </template>
 
       <template v-slot:body="props">
-          <q-tr :props="props">
-            <q-td key="id" :props="props">
-                {{ props.row.id }}
-            </q-td>
-            <q-td
-              key="userName"
-              :props="props"
-              class="text-subtitle2">
-                {{ props.row.name }}
-            </q-td>
-            <q-td key="email" :props="props">
-                {{ props.row.email }}
-            </q-td>
-            <q-td key="permissions" :props="props">
-                <q-badge :color="props.row.is_admin ? 'primary' : 'green-5'">
-                  {{ props.row.is_admin | isAdmin }}
-                </q-badge>
-            </q-td>
-            <q-td key="status" :props="props">
-                <q-badge :color="props.row.is_active ? 'primary' : 'accent'">
-                    {{ props.row.is_active | isActive }}
-                </q-badge>
-            </q-td>
-            <q-td auto-width>
-                <q-btn
-                  class="q-ma-sm"
-                  flat
-                  size="sm"
-                  color="primary"
-                  round
-                  dense
-                  @click="editUser(props.row.id)"
-                  icon="edit" />
-                <q-btn
-                  class="q-ma-sm"
-                  size="sm"
-                  color="accent"
-                  round
-                  dense
-                  @click="removeUser(props.row.id)"
-                  icon="remove" />
-            </q-td>          
-          </q-tr>
+        <q-tr :props="props">
+          <q-td key="id" :props="props">
+            {{ props.row.id }}
+          </q-td>
+          <q-td key="userName" :props="props" class="text-subtitle2">
+            {{ props.row.name }}
+          </q-td>
+          <q-td key="email" :props="props">
+            {{ props.row.email }}
+          </q-td>
+          <q-td key="permissions" :props="props">
+            <q-badge :color="props.row.is_admin ? 'primary' : 'green-5'">
+              {{ props.row.is_admin | isAdmin }}
+            </q-badge>
+          </q-td>
+          <q-td key="status" :props="props">
+            <q-badge :color="props.row.is_active ? 'primary' : 'accent'">
+              {{ props.row.is_active | isActive }}
+            </q-badge>
+          </q-td>
+          <q-td auto-width>
+            <q-btn
+              class="q-ma-sm"
+              flat
+              size="sm"
+              color="primary"
+              round
+              dense
+              @click="editUser(props.row.id)"
+              icon="edit"
+            />
+            <q-btn
+              class="q-ma-sm"
+              size="sm"
+              color="accent"
+              round
+              dense
+              @click="removeUser(props.row.id)"
+              icon="remove"
+            />
+          </q-td>
+        </q-tr>
       </template>
     </q-table>
 
     <!-- Add User Modal -->
-    <q-dialog
-      v-model="addUserModal">
-      <add-user
-        @close="addUserModal=false" />
+    <q-dialog v-model="addUserModal">
+      <add-user @close="addUserModal = false" />
     </q-dialog>
 
     <!-- Edit User Modal -->
-    <q-dialog
-      v-model="editUserModal"
-      @hide="closeEditUser" >
-      <edit-user
-        @close="closeEditUser"
-        :user="modals.editUserData" />
+    <q-dialog v-model="editUserModal" @hide="closeEditUser">
+      <edit-user @close="closeEditUser" :user="modals.editUserData" />
     </q-dialog>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
-  data () {
+  data() {
     return {
       modals: {
         editUserData: {}
       },
       loading: false,
-      filter: '',
+      filter: "",
       pagination: {
-        sortBy: 'desc',
+        sortBy: "desc",
         descending: false,
         //page: 2,
         rowsPerPage: 0
@@ -123,106 +117,139 @@ export default {
       },
       columns: [
         {
-          name: 'id',
+          name: "id",
           required: true,
-          label: 'ID',
-          align: 'left',
+          label: this.$t("ID"),
+          align: "left",
           field: row => row.id,
           sortable: true
         },
-        { name: 'userName', align: 'center', label: 'User Name', field: 'userName', sortable: true },
-        { name: 'email', align: 'center', label: 'Email', field: 'email', sortable: true },
-        { name: 'permissions', align: 'center', label: 'Permission', field: 'isAdmin' },
-        { name: 'status', align: 'center', label: 'Status', field: 'isActive' },
-        { name: 'actions', align: 'center', label: 'Actions'}
+        {
+          name: "userName",
+          align: "center",
+          label: this.$t("Username"),
+          field: "userName",
+          sortable: true
+        },
+        {
+          name: "email",
+          align: "center",
+          label: this.$t("Email"),
+          field: "email",
+          sortable: true
+        },
+        {
+          name: "permissions",
+          align: "center",
+          label: this.$t("Permission"),
+          field: "isAdmin"
+        },
+        {
+          name: "status",
+          align: "center",
+          label: this.$t("Status"),
+          field: "isActive"
+        },
+        { name: "actions", align: "center", label: this.$t("Actions") }
       ],
       data: [
         {
           id: 1,
-          userName: 'Baher Elnaggar',
-          email: 'baher@aiactive.com',
-          isAdmin: 'admin',
-          isActive: 'enabled'
-        },        {
+          userName: "Baher Elnaggar",
+          email: "baher@aiactive.com",
+          isAdmin: "admin",
+          isActive: "enabled"
+        },
+        {
           id: 2,
-          userName: 'Ahmed Helmy',
-          email: 'ahme@aiactive.com',
-          isAdmin: 'admin',
-          isActive: 'enabled'
-        },        {
+          userName: "Ahmed Helmy",
+          email: "ahme@aiactive.com",
+          isAdmin: "admin",
+          isActive: "enabled"
+        },
+        {
           id: 3,
-          userName: 'Sara H.',
-          email: 'sara@aiactive.com',
-          isAdmin: 'user',
-          isActive: 'disabled'
+          userName: "Sara H.",
+          email: "sara@aiactive.com",
+          isAdmin: "user",
+          isActive: "disabled"
         }
       ]
-    }
+    };
   },
   components: {
-    'add-user': require('components/Settings/UsersSettings/Modals/AddUser').default,
-    'edit-user': require('components/Settings/UsersSettings/Modals/EditUser').default
+    "add-user": require("components/Settings/UsersSettings/Modals/AddUser")
+      .default,
+    "edit-user": require("components/Settings/UsersSettings/Modals/EditUser")
+      .default
   },
   methods: {
-    ...mapActions('users', ['getUsers', 'deleteUser', 'setAddUserModal', 'setEditUserModal']),
+    ...mapActions("users", [
+      "getUsers",
+      "deleteUser",
+      "setAddUserModal",
+      "setEditUserModal"
+    ]),
     editUser(userId) {
-      let selectedUser = this.users.find(x => x.id === userId)
-      this.modals.editUserData = Object.assign({}, selectedUser)            
-      this.editUserModal = true
+      let selectedUser = this.users.find(x => x.id === userId);
+      this.modals.editUserData = Object.assign({}, selectedUser);
+      this.editUserModal = true;
     },
     removeUser(userId) {
-        this.$q.dialog({
-            title: 'Confirm',
-            message: 'Would you like to Delete this User?',
-            cancel: true,
-            //persistent: true
-        }).onOk(() => {
-            this.deleteUser(userId)
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "Would you like to Delete this User?",
+          cancel: true
+          //persistent: true
         })
+        .onOk(() => {
+          this.deleteUser(userId);
+        });
     },
     closeEditUser() {
-      this.editUserModal = false
-      this.modals.editUserData = {}
+      this.editUserModal = false;
+      this.modals.editUserData = {};
     }
   },
   mounted() {
-    this.getUsers()
+    this.getUsers();
   },
   computed: {
-    ...mapState('users', ['users']),
-    ...mapGetters('users', ['showAddUserModal', 'showEditUserModal']),
+    ...mapState("users", ["users"]),
+    ...mapGetters("users", ["showAddUserModal", "showEditUserModal"]),
     addUserModal: {
       get() {
-        return this.showAddUserModal
+        return this.showAddUserModal;
       },
       set(value) {
-        this.setAddUserModal(value)
+        this.setAddUserModal(value);
       }
     },
     editUserModal: {
       get() {
-        return this.showEditUserModal
+        return this.showEditUserModal;
       },
       set(value) {
-        this.setEditUserModal(value)
+        this.setEditUserModal(value);
       }
     }
-
   },
   filters: {
     isAdmin(value) {
-      if(value) return 'admin'
-      else return 'user'
+      if (value) return "admin";
+      else return "user";
     },
     isActive(value) {
-      if(value) return 'enabled'
-      else return 'disabled'
+      if (value) return "enabled";
+      else return "disabled";
     }
   }
-}
+};
 </script>
 <style lang="scss">
-    .users-table thead, tr {
-        background-color: #adadad2b;
-    }
+.users-table thead,
+tr {
+  background-color: #adadad2b;
+}
 </style>

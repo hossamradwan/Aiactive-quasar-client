@@ -8,17 +8,12 @@
       @keyup.esc="stopSeach"
       v-select-all
       input-class="text-left"
-      placeholder="Search Plate"
+      :placeholder="$t('SearchPlate')"
       class="q-mr-lg col-md-3"
     >
       <template v-slot:append>
         <q-icon v-if="searchField === ''" name="search" />
-        <q-icon
-          v-else
-          name="clear"
-          class="cursor-pointer"
-          @click="stopSeach"
-        />
+        <q-icon v-else name="clear" class="cursor-pointer" @click="stopSeach" />
       </template>
     </q-input>
   </div>
@@ -30,15 +25,23 @@ import { SearchLpr } from "src/functions/class-lpr-search";
 import { selectAll } from "src/directives/directive-select-all";
 
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
       searchField: ""
     };
   },
   methods: {
-    ...mapActions("lpr", ["setUpdateTransits", "setSearchFlag", "searchLprData"]),
-    ...mapActions("averageSpeedResult", ["setUpdateAverageSpeedTransits", "searchAverageSpeedData", "setAverageSpeedSearchFlag"]),
+    ...mapActions("lpr", [
+      "setUpdateTransits",
+      "setSearchFlag",
+      "searchLprData"
+    ]),
+    ...mapActions("averageSpeedResult", [
+      "setUpdateAverageSpeedTransits",
+      "searchAverageSpeedData",
+      "setAverageSpeedSearchFlag"
+    ]),
 
     searchLpr() {
       if (this.searchField.length == 0) return;
@@ -47,21 +50,20 @@ export default {
       let outputPlateNumber = Search.search();
 
       if (outputPlateNumber.length != 0) {
-        if(this.moduleName == 'average-speed-module') {
-          this.searchAverageSpeedData(outputPlateNumber);   // Commit Search Action
+        if (this.moduleName == "average-speed-module") {
+          this.searchAverageSpeedData(outputPlateNumber); // Commit Search Action
           return;
         }
 
-        this.searchLprData(outputPlateNumber);              // commit search action
+        this.searchLprData(outputPlateNumber); // commit search action
       }
 
       console.log("output platenumber:: ", outputPlateNumber);
     },
 
-    
     stopSeach() {
       this.searchField = "";
-      if(this.moduleName == 'average-speed-module') {
+      if (this.moduleName == "average-speed-module") {
         this.setAverageSpeedSearchFlag(false);
         return;
       }
@@ -70,7 +72,7 @@ export default {
     }
   },
   mounted() {
-    console.log('searching module', this.moduleName);
+    console.log("searching module", this.moduleName);
   },
   computed: {},
   directives: {

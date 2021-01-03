@@ -1,81 +1,73 @@
 <template>
-  <div @click="serverStatusModal=true" class="cursor-pointer">
+  <div @click="serverStatusModal = true" class="cursor-pointer">
     <!-- <span class="q-mr-md">
       Server &nbsp; : &nbsp; 
       <span :class="classColor ? 'bg-blue' : 'bg-red'">
         {{serverStatus}} 
       </span>
     </span> -->
-    <q-btn
-        flat
-        :label="serverStatus"
-        :color="iconColor">
-        <div class="q-ml-md">
-            <q-spinner-radio
-              size="1.2rem"
-               />  
-        </div>
-
+    <q-btn flat :label="$t(serverStatus)" :color="iconColor">
+      <div class="q-ml-md">
+        <q-spinner-radio size="1.2rem" />
+      </div>
     </q-btn>
-<!-- 
+    <!-- 
     <q-spinner-radio
       :color="iconColor" /> -->
 
-    
     <!-- Server Status Modal -->
-    <q-dialog
-      v-model="serverStatusModal">
+    <q-dialog v-model="serverStatusModal">
       <edit-server-info
         :serverIp="serverIp"
         :serverPortNumber="serverPortNumber"
-        @close="serverStatusModal=false" />
+        @close="serverStatusModal = false"
+      />
     </q-dialog>
   </div>
 </template>
 
 <script>
-import { LocalStorage } from 'quasar'
-import { mapActions, mapState } from 'vuex'
-import { clearInterval } from 'timers';
-import { log } from 'util';
+import { LocalStorage } from "quasar";
+import { mapActions, mapState } from "vuex";
+import { clearInterval } from "timers";
+import { log } from "util";
 
 export default {
   data() {
     return {
-      updateInterval: '',
+      updateInterval: "",
       serverStatusModal: false,
-      serverIp: LocalStorage.getItem('serverUrl') || 'http://192.168.1.100',
-      serverPortNumber: LocalStorage.getItem('serverPort') || '5000'
-    }
+      serverIp: LocalStorage.getItem("serverUrl") || "http://192.168.1.100",
+      serverPortNumber: LocalStorage.getItem("serverPort") || "5000"
+    };
   },
   methods: {
-    ...mapActions('server', ['getServerStatus'])
+    ...mapActions("server", ["getServerStatus"])
   },
   mounted() {
-    this.getServerStatus()
+    this.getServerStatus();
     this.updateInterval = setInterval(() => {
-      this.getServerStatus()
+      this.getServerStatus();
     }, 15000);
   },
   beforeDestroy() {
-    console.log('stop server updating');
-    clearInterval( this.updateInterval )
+    console.log("stop server updating");
+    clearInterval(this.updateInterval);
   },
   computed: {
-    ...mapState('server', ['serverStatus']),
+    ...mapState("server", ["serverStatus"]),
     classColor() {
-      if(this.serverStatus == 'online')
-        return true
-      else return false
+      if (this.serverStatus == "online") return true;
+      else return false;
     },
     iconColor() {
-      if(this.serverStatus == 'online')
-        return 'blue'
-      else return 'accent'
+      if (this.serverStatus == "online") return "blue";
+      else return "accent";
     }
   },
   components: {
-    'edit-server-info': require('components/Layout/Toolbar/Modal/EditServerInfo.vue').default
+    "edit-server-info": require("components/Layout/Toolbar/Modal/EditServerInfo.vue")
+      .default
   }
 };
 </script>

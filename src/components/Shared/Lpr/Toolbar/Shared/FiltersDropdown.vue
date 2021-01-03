@@ -3,224 +3,210 @@
     <div class="row no-wrap q-pa-md">
       <!-- <dateTime-filter v-if="openFilter == 'dateTime'" /> -->
 
-
       <!-- Devices Filter Data -->
-      <device-filter
-        v-if="openFilter == 'devices'"
-        :moduleName='moduleName' />
-
-
+      <device-filter v-if="openFilter == 'devices'" :moduleName="moduleName" />
 
       <!-- Confidence Filter Data -->
       <confidence-filter
         v-if="openFilter == 'confidence'"
-        :confidence='filtersByConfidenceData'
-        v-show = "!(moduleName == 'average-speed-module')"
-        @applyConfidenceFilter="applyConfidenceFilter" />
-
+        :confidence="filtersByConfidenceData"
+        v-show="!(moduleName == 'average-speed-module')"
+        @applyConfidenceFilter="applyConfidenceFilter"
+      />
 
       <!-- Speed Filter Data -->
       <speed-filter
         v-if="openFilter == 'speed'"
-        :speed='filtersBySpeedData'
-        @applySpeedFilter="applySpeedFilter" />
-
-
+        :speed="filtersBySpeedData"
+        @applySpeedFilter="applySpeedFilter"
+      />
 
       <!-- ID Sorter Data -->
       <id-sorter
         v-if="openFilter == 'sorterId'"
-        :sorterId='sortersByIdData'
-        @applyIdSorter="applyIdSorter" />
-
-
+        :sorterId="sortersByIdData"
+        @applyIdSorter="applyIdSorter"
+      />
 
       <!-- Confidence Sorter Data -->
       <confidence-sorter
         v-if="openFilter == 'sorterConfidence'"
-        v-show = "!(moduleName == 'average-speed-module')"
-        :sorterConfidence='sortersByConfidenceData'
-        @applyConfidenceSorter="applyConfidenceSorter" />
-      
-
-
+        v-show="!(moduleName == 'average-speed-module')"
+        :sorterConfidence="sortersByConfidenceData"
+        @applyConfidenceSorter="applyConfidenceSorter"
+      />
 
       <!-- Speed Sorter Data -->
       <speed-sorter
         v-if="openFilter == 'sorterSpeed'"
-        :sorterSpeed='sortersBySpeedData'
-        @applySpeedSorter="applySpeedSorter" />
-
-
+        :sorterSpeed="sortersBySpeedData"
+        @applySpeedSorter="applySpeedSorter"
+      />
 
       <!-- Pagination Data -->
       <pagination-settings
         v-if="openFilter == 'pagination'"
-        :paginationLimit='paginationData'
-        @applyPaginationLimit="applyPaginationLimit" />
-
+        :paginationLimit="paginationData"
+        @applyPaginationLimit="applyPaginationLimit"
+      />
 
       <q-separator vertical inset class="q-mx-lg" />
 
-
-
       <div class="column items-left">
-        <div class="text-h6 text-center q-mt-sm">Filters</div>
+        <div class="text-h6 text-center q-mt-sm">{{ $t("Filters") }}</div>
 
         <!-- Devices Filter Button -->
         <q-chip
           clickable
           @click="openFilter = 'devices'"
-          :color="openFilter=='devices' ? 'secondary' : ''"
+          :color="openFilter == 'devices' ? 'secondary' : ''"
           text-color="black"
-          class="q-ma-sm q-pa-md">
+          class="q-ma-sm q-pa-md"
+        >
           <q-toggle
             :value="true"
             disable
             color="primary"
-            class="active-toggels" />
-          Devices
+            class="active-toggels"
+          />
+          {{ $t("Devices") }}
         </q-chip>
-
-
 
         <!-- Confidence Filter Button -->
         <q-chip
           clickable
           @click="openFilter = 'confidence'"
-          :color="openFilter=='confidence' ? 'secondary' : ''"
-          v-show = "!(moduleName == 'average-speed-module')"
+          :color="openFilter == 'confidence' ? 'secondary' : ''"
+          v-show="!(moduleName == 'average-speed-module')"
           text-color="black"
-          class="q-ma-sm q-pa-md">
+          class="q-ma-sm q-pa-md"
+        >
           <q-toggle
             v-model="filtersByConfidence"
             color="primary"
-            class="active-toggels" />
-          confidence
+            class="active-toggels"
+          />
+          {{ $t("Confidence") }}
         </q-chip>
-
 
         <!-- Speed Filter Button -->
         <q-chip
           clickable
           @click="openFilter = 'speed'"
-          :color="openFilter=='speed' ? 'secondary' : ''"
+          :color="openFilter == 'speed' ? 'secondary' : ''"
           text-color="black"
-          class="q-ma-sm q-pa-md">
-          <q-toggle color="primary" class="active-toggels" v-model="filtersBySpeed" />
-          speed
+          class="q-ma-sm q-pa-md"
+        >
+          <q-toggle
+            color="primary"
+            class="active-toggels"
+            v-model="filtersBySpeed"
+          />
+          {{ $t("Speed") }}
         </q-chip>
 
-
         <!-- Confirmed Filter Button -->
-        <q-chip
-          clickable
-          text-color="black"
-          class="q-ma-sm q-pa-md">
-          <q-toggle color="primary" class="active-toggels" v-model="filtersByConfirmed" />
+        <q-chip clickable text-color="black" class="q-ma-sm q-pa-md">
+          <q-toggle
+            color="primary"
+            class="active-toggels"
+            v-model="filtersByConfirmed"
+          />
           <q-avatar
             size="37px"
             class="filters-avatar"
             :text-color="filtersByConfirmed ? 'red' : 'teal'"
-            :icon="filtersByConfirmed ? 'visibility_off' : 'visibility'" />
-          Confirmed
+            :icon="filtersByConfirmed ? 'visibility_off' : 'visibility'"
+          />
+          {{ $t("Confirmed") }}
         </q-chip>
 
-
-
-        <q-separator inset size='1px' color="teal" class="q-mt-md q-mx-lg" />
-
-
+        <q-separator inset size="1px" color="teal" class="q-mt-md q-mx-lg" />
 
         <!-- ID Sorter Button -->
-        <div class="text-h6 text-center q-mt-sm">Sorters</div>
+        <div class="text-h6 text-center q-mt-sm">{{ $t("Sorters") }}</div>
         <q-chip
           clickable
           @click="openFilter = 'sorterId'"
-          :color="openFilter=='sorterId' ? 'secondary' : ''"
+          :color="openFilter == 'sorterId' ? 'secondary' : ''"
           text-color="black"
-          class="q-ma-sm q-pa-md">
-          <q-toggle
-            v-model="sortersById"
-            color="primary" />
-          ID
+          class="q-ma-sm q-pa-md"
+        >
+          <q-toggle v-model="sortersById" color="primary" />
+          {{ $t("ID") }}
         </q-chip>
-
 
         <!--  Confidence Sorter Button  -->
         <q-chip
           clickable
           @click="openFilter = 'sorterConfidence'"
-          :color="openFilter=='sorterConfidence' ? 'secondary' : ''"
-          v-show = "!(moduleName == 'average-speed-module')"
+          :color="openFilter == 'sorterConfidence' ? 'secondary' : ''"
+          v-show="!(moduleName == 'average-speed-module')"
           text-color="black"
-          class="q-ma-sm q-pa-md">
-          <q-toggle
-            v-model="sortersByConfidence"
-            color="primary" />
-          confidence
+          class="q-ma-sm q-pa-md"
+        >
+          <q-toggle v-model="sortersByConfidence" color="primary" />
+          {{ $t("Confidence") }}
         </q-chip>
-
 
         <!-- Speed Sorter Button -->
         <q-chip
           clickable
           @click="openFilter = 'sorterSpeed'"
-          :color="openFilter=='sorterSpeed' ? 'secondary' : ''"
+          :color="openFilter == 'sorterSpeed' ? 'secondary' : ''"
           text-color="black"
-          class="q-ma-sm q-pa-md">
-          <q-toggle
-            color="primary"
-            v-model="sortersBySpeed" />
-          speed
+          class="q-ma-sm q-pa-md"
+        >
+          <q-toggle color="primary" v-model="sortersBySpeed" />
+          {{ $t("Speed") }}
         </q-chip>
 
-        
-        <q-separator inset size='1px' color="teal" class="q-mt-md q-mx-lg" />
+        <q-separator inset size="1px" color="teal" class="q-mt-md q-mx-lg" />
 
         <!-- Pagination Sorter Button -->
         <q-chip
           clickable
           @click="openFilter = 'pagination'"
-          :color="openFilter=='pagination' ? 'secondary' : ''"
+          :color="openFilter == 'pagination' ? 'secondary' : ''"
           text-color="black"
-          class="q-ma-sm q-pa-md q-pl-xl">
-          
-          Pagination
+          class="q-ma-sm q-pa-md q-pl-xl"
+        >
+          {{ $t("Pagination") }}
         </q-chip>
       </div>
-
-          
     </div>
   </q-btn-dropdown>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions, mapGetters } from "vuex";
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
-      openFilter: 'devices',
+      openFilter: "devices",
       dateTime: true,
       //confidence: 60,
-      speed: 10      
+      speed: 10
     };
   },
   components: {
-    'device-filter': require("./Filters/DeviceFilter").default,
-    'confidence-filter': require("./Filters/ConfidenceFilter").default,
-    'dateTime-filter': require("./Filters/DateTimeFilter").default,
-    'speed-filter': require("./Filters/SpeedFilter").default,
-    'id-sorter': require("./Filters/IdSorter").default,
-    'confidence-sorter': require("./Filters/ConfidenceSorter").default,
-    'speed-sorter': require("./Filters/SpeedSorter").default,
-    'pagination-settings': require("./Filters/PaginationSettings").default
+    "device-filter": require("./Filters/DeviceFilter").default,
+    "confidence-filter": require("./Filters/ConfidenceFilter").default,
+    "dateTime-filter": require("./Filters/DateTimeFilter").default,
+    "speed-filter": require("./Filters/SpeedFilter").default,
+    "id-sorter": require("./Filters/IdSorter").default,
+    "confidence-sorter": require("./Filters/ConfidenceSorter").default,
+    "speed-sorter": require("./Filters/SpeedSorter").default,
+    "pagination-settings": require("./Filters/PaginationSettings").default
   },
   methods: {
-    ...mapActions('lpr', ['setFilter', 'setSorter', 'setPagination']),
-    ...mapActions('averageSpeedResult', ['setAverageSpeedPagination',
-                                         'setAverageSpeedSorter', 'setAverageSpeedFilter']),
+    ...mapActions("lpr", ["setFilter", "setSorter", "setPagination"]),
+    ...mapActions("averageSpeedResult", [
+      "setAverageSpeedPagination",
+      "setAverageSpeedSorter",
+      "setAverageSpeedFilter"
+    ]),
 
     applyConfidenceFilter(filterNum, filterStatus) {
       /**
@@ -229,16 +215,18 @@ export default {
        * Validating filter data
        */
 
-      filterStatus = typeof filterStatus == 'undefined' ? true : filterStatus
-      filterNum = filterNum == '' ? this.filters.confidence_number.data : filterNum
+      filterStatus = typeof filterStatus == "undefined" ? true : filterStatus;
+      filterNum =
+        filterNum == "" ? this.filters.confidence_number.data : filterNum;
 
-      let filterData = {filterName: 'confidence_number', filterData: {isActive: filterStatus, data: filterNum}}
+      let filterData = {
+        filterName: "confidence_number",
+        filterData: { isActive: filterStatus, data: filterNum }
+      };
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedFilter(filterData);
-
-      else
-        this.setFilter(filterData)
+      else this.setFilter(filterData);
     },
 
     applySpeedFilter(filterNum, filterStatus) {
@@ -248,16 +236,17 @@ export default {
        * Validating filter data
        */
 
-      filterStatus = typeof filterStatus == 'undefined' ? true : filterStatus
-      filterNum = filterNum == '' ? this.filters.speed.data : filterNum
+      filterStatus = typeof filterStatus == "undefined" ? true : filterStatus;
+      filterNum = filterNum == "" ? this.filters.speed.data : filterNum;
 
-      let filterData = {filterName: 'speed', filterData: {isActive: filterStatus, data: filterNum}}
+      let filterData = {
+        filterName: "speed",
+        filterData: { isActive: filterStatus, data: filterNum }
+      };
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedFilter(filterData);
-
-      else
-        this.setFilter(filterData)
+      else this.setFilter(filterData);
     },
 
     applyConfirmedFilter(filterNum, filterStatus) {
@@ -267,72 +256,74 @@ export default {
        * Validating filter data
        */
 
-      filterStatus = typeof filterStatus == 'undefined' ? true : filterStatus
-      filterNum = filterNum == '' ? this.filters.confirmed.data : filterNum
+      filterStatus = typeof filterStatus == "undefined" ? true : filterStatus;
+      filterNum = filterNum == "" ? this.filters.confirmed.data : filterNum;
 
-      let filterData = {filterName: 'confirmed', filterData: {isActive: filterStatus, data: filterNum}}
+      let filterData = {
+        filterName: "confirmed",
+        filterData: { isActive: filterStatus, data: filterNum }
+      };
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedFilter(filterData);
-
-      else
-        this.setFilter(filterData)
+      else this.setFilter(filterData);
     },
 
     applyIdSorter(sorterType, sorterStatus) {
-      sorterStatus = typeof sorterStatus == 'undefined' ? true : sorterStatus
-      sorterType = sorterType == '' ? this.sorters.id.type : sorterType
+      sorterStatus = typeof sorterStatus == "undefined" ? true : sorterStatus;
+      sorterType = sorterType == "" ? this.sorters.id.type : sorterType;
 
-      let sorterData = {sorterName: 'id', sorterData: {isActive: sorterStatus, type: sorterType}}
-      
-      if(this.moduleName == 'average-speed-module')
+      let sorterData = {
+        sorterName: "id",
+        sorterData: { isActive: sorterStatus, type: sorterType }
+      };
+
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedSorter(sorterData);
-
-      else
-        this.setSorter(sorterData)
+      else this.setSorter(sorterData);
     },
 
     applyConfidenceSorter(sorterType, sorterStatus) {
-      sorterStatus = typeof sorterStatus == 'undefined' ? true : sorterStatus
-      sorterType = sorterType == '' ? this.sorters.confidence_number.type : sorterType
+      sorterStatus = typeof sorterStatus == "undefined" ? true : sorterStatus;
+      sorterType =
+        sorterType == "" ? this.sorters.confidence_number.type : sorterType;
 
-      let sorterData = {sorterName: 'confidence_number', sorterData: {isActive: sorterStatus, type: sorterType}}
+      let sorterData = {
+        sorterName: "confidence_number",
+        sorterData: { isActive: sorterStatus, type: sorterType }
+      };
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedSorter(sorterData);
-
-      else
-        this.setSorter(sorterData)
+      else this.setSorter(sorterData);
     },
 
     applySpeedSorter(sorterType, sorterStatus) {
-      sorterStatus = typeof sorterStatus == 'undefined' ? true : sorterStatus
-      sorterType = sorterType == '' ? this.sorters.speed.type : sorterType
+      sorterStatus = typeof sorterStatus == "undefined" ? true : sorterStatus;
+      sorterType = sorterType == "" ? this.sorters.speed.type : sorterType;
 
-      let sorterData = {sorterName: 'speed', sorterData: {isActive: sorterStatus, type: sorterType}}
+      let sorterData = {
+        sorterName: "speed",
+        sorterData: { isActive: sorterStatus, type: sorterType }
+      };
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         this.setAverageSpeedSorter(sorterData);
-
-      else
-        this.setSorter(sorterData)
+      else this.setSorter(sorterData);
     },
 
     applyPaginationLimit(pageLimit) {
-      console.log('apply pagination limit', pageLimit);
-      
-      if(this.moduleName == 'average-speed-module')
-        this.setAverageSpeedPagination({ limit: pageLimit });
+      console.log("apply pagination limit", pageLimit);
 
-      else
-        this.setPagination({limit: pageLimit})
+      if (this.moduleName == "average-speed-module")
+        this.setAverageSpeedPagination({ limit: pageLimit });
+      else this.setPagination({ limit: pageLimit });
     }
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
-    ...mapState('lpr', ['filters', 'sorters', 'pagination']),
-    ...mapState('averageSpeedResult', {
+    ...mapState("lpr", ["filters", "sorters", "pagination"]),
+    ...mapState("averageSpeedResult", {
       averageSpeedSorters: state => state.sorters,
       averageSpeedFilters: state => state.filters,
       averageSpeedPagination: state => state.pagination
@@ -340,30 +331,29 @@ export default {
 
     filtersByDateTime: {
       get() {
-        return this.filters.dateTime.isActive
-      }, 
+        return this.filters.dateTime.isActive;
+      },
       set(value) {
-        console.log('filtering date time', value);
-        console.log('apply date time filter then set filter');
+        console.log("filtering date time", value);
+        console.log("apply date time filter then set filter");
         //this.setFilter(value)
       }
     },
-    
 
     filtersByConfidence: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedFilters.confidence_number.isActive;
 
-        return this.filters.confidence_number.isActive
-      }, 
+        return this.filters.confidence_number.isActive;
+      },
       set(value) {
-        this.applyConfidenceFilter('', value)
+        this.applyConfidenceFilter("", value);
       }
     },
 
     filtersByConfidenceData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedFilters.confidence_number;
 
       return this.filters.confidence_number;
@@ -371,29 +361,29 @@ export default {
 
     filtersBySpeed: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedFilters.speed.isActive;
-        return this.filters.speed.isActive
-      }, 
+        return this.filters.speed.isActive;
+      },
       set(value) {
-        this.applySpeedFilter('', value)
+        this.applySpeedFilter("", value);
       }
     },
 
     filtersByConfirmed: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedFilters.confirmed.isActive;
 
-        return this.filters.confirmed.isActive
-      }, 
+        return this.filters.confirmed.isActive;
+      },
       set(value) {
-        this.applyConfirmedFilter('', value)
+        this.applyConfirmedFilter("", value);
       }
     },
 
     filtersBySpeedData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedFilters.speed;
 
       return this.filters.speed;
@@ -401,18 +391,18 @@ export default {
 
     sortersById: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedSorters.id.isActive;
 
-        return this.sorters.id.isActive
+        return this.sorters.id.isActive;
       },
       set(value) {
-        this.applyIdSorter('', value)
+        this.applyIdSorter("", value);
       }
     },
 
     sortersByIdData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedSorters.id;
 
       return this.sorters.id;
@@ -420,18 +410,18 @@ export default {
 
     sortersByConfidence: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedSorters.confidence_number.isActive;
 
-        return this.sorters.confidence_number.isActive
+        return this.sorters.confidence_number.isActive;
       },
       set(value) {
-        this.applyConfidenceSorter('', value)
+        this.applyConfidenceSorter("", value);
       }
     },
 
     sortersByConfidenceData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedSorters.confidence_number;
 
       return this.sorters.confidence_number;
@@ -439,25 +429,25 @@ export default {
 
     sortersBySpeed: {
       get() {
-        if(this.moduleName == 'average-speed-module')
+        if (this.moduleName == "average-speed-module")
           return this.averageSpeedSorters.speed.isActive;
 
         return this.sorters.speed.isActive;
       },
       set(value) {
-        this.applySpeedSorter('', value)
+        this.applySpeedSorter("", value);
       }
     },
 
     sortersBySpeedData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedSorters.speed;
 
       return this.sorters.speed;
     },
 
     paginationData() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == "average-speed-module")
         return this.averageSpeedPagination.limit;
 
       return this.pagination.limit;

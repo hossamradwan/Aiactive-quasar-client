@@ -2,13 +2,13 @@
   <div class="q-pa-md">
     <q-list padding bordered class="rounded-borders bg-grey-4">
       <q-btn
-            outline
-            rounded
-            class="q-ml-md q-mt-sm bg-white"
-            label="Add Road"
-            icon="add"
-            @click="addAverageSpeedModal=true"
-            />
+        outline
+        rounded
+        class="q-ml-md q-mt-sm bg-white"
+        :label="$t('AddRoad')"
+        icon="add"
+        @click="addAverageSpeedModal = true"
+      />
       <!-- Road -->
       <q-expansion-item
         v-for="(road, key) in averageSpeedSettings"
@@ -17,26 +17,26 @@
         class="q-ma-md"
         header-class=""
       >
-
-       <template v-slot:header>
+        <template v-slot:header>
           <q-item-section avatar>
             <q-avatar icon="fas fa-road" color="primary" text-color="white" />
           </q-item-section>
 
           <q-item-section>
-            <span class="text-subtitle1">{{Object.keys(road)[0]}}</span>
+            <span class="text-subtitle1">{{ Object.keys(road)[0] }}</span>
           </q-item-section>
 
           <q-item-section side>
             <div class="row items-cente">
               <q-btn
-                  class="q-ma-sm"
-                  size="sm"
-                  color="primary"
-                  round
-                  dense
-                  @click.stop="editAverageSpeedSettings(Object.keys(road)[0])"
-                  icon="edit" />
+                class="q-ma-sm"
+                size="sm"
+                color="primary"
+                round
+                dense
+                @click.stop="editAverageSpeedSettings(Object.keys(road)[0])"
+                icon="edit"
+              />
               <q-btn
                 round
                 dense
@@ -44,7 +44,8 @@
                 class="q-ma-sm"
                 size="sm"
                 color="accent"
-                icon="remove" />
+                icon="remove"
+              />
             </div>
           </q-item-section>
         </template>
@@ -121,21 +122,18 @@
     <q-dialog
       v-model="addAverageSpeedModal"
       @hide="addAverageSpeedModal = false"
-      >
-
+    >
       <add-average-speed-road />
-       
     </q-dialog>
 
     <!-- Edit User Modal -->
     <q-dialog
       v-model="editAverageSpeedModal"
       @hide="editAverageSpeedModal = false"
-      >
-
+    >
       <edit-average-speed-road
-        :averageSpeedRoadData="editAverageSpeedRoadData" />
-
+        :averageSpeedRoadData="editAverageSpeedRoadData"
+      />
     </q-dialog>
   </div>
 </template>
@@ -169,13 +167,17 @@ export default {
     };
   },
   components: {
-    'add-average-speed-road': require('./Modals/AddAverageSpeedRoad').default,
-    'edit-average-speed-road': require('./Modals/EditAverageSpeedRoad').default
+    "add-average-speed-road": require("./Modals/AddAverageSpeedRoad").default,
+    "edit-average-speed-road": require("./Modals/EditAverageSpeedRoad").default
   },
   methods: {
-    ...mapActions("averageSpeed", ["getAverageSpeedSettings", "editAverageSpeedSettings",
-                  "deleteAverageSpeedSettings",
-                  "setAddAverageSpeedModal", "setEditAverageSpeedModal"]),
+    ...mapActions("averageSpeed", [
+      "getAverageSpeedSettings",
+      "editAverageSpeedSettings",
+      "deleteAverageSpeedSettings",
+      "setAddAverageSpeedModal",
+      "setEditAverageSpeedModal"
+    ]),
     editAverageSpeedSettings(averageSpeedRoadName) {
       this.editAverageSpeedModal = true;
 
@@ -187,15 +189,17 @@ export default {
       //console.log('match found', found);
     },
     removeAverageSpeedSettings(averageSpeedRoadName) {
-        this.$q.dialog({
-            title: 'Confirm',
-            message: 'Would you like to Delete this Average Speed Road?',
-            cancel: true,
-            //persistent: true
-        }).onOk(() => {
-          this.deleteAverageSpeedSettings(averageSpeedRoadName)
-            //console.log('confiremed', averageSpeedRoadName);
+      this.$q
+        .dialog({
+          title: "Confirm",
+          message: "Would you like to Delete this Average Speed Road?",
+          cancel: true
+          //persistent: true
         })
+        .onOk(() => {
+          this.deleteAverageSpeedSettings(averageSpeedRoadName);
+          //console.log('confiremed', averageSpeedRoadName);
+        });
     }
   },
   mounted() {
@@ -203,21 +207,24 @@ export default {
   },
   computed: {
     ...mapState("averageSpeed", ["averageSpeedSettings"]),
-    ...mapGetters("averageSpeed", ['showAddAverageSpeedModal', 'showEditAverageSpeedModal']),
+    ...mapGetters("averageSpeed", [
+      "showAddAverageSpeedModal",
+      "showEditAverageSpeedModal"
+    ]),
     addAverageSpeedModal: {
       get() {
-        return this.showAddAverageSpeedModal
+        return this.showAddAverageSpeedModal;
       },
       set(value) {
-        this.setAddAverageSpeedModal(value)
+        this.setAddAverageSpeedModal(value);
       }
     },
     editAverageSpeedModal: {
       get() {
-        return this.showEditAverageSpeedModal
+        return this.showEditAverageSpeedModal;
       },
       set(value) {
-        this.setEditAverageSpeedModal(value)
+        this.setEditAverageSpeedModal(value);
       }
     }
   },
