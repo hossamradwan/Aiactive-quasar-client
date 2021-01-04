@@ -52,5 +52,6 @@ export default {
   Filters: "فلاتر",
   Sorters: "ترتيب حسب",
   Confirmed: "تم التأكيد",
-  Pagination: "ترقيم الصفحات"
+  Pagination: "ترقيم الصفحات",
+  Apply:"تم"
 };

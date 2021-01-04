@@ -54,5 +54,6 @@ export default {
   Filters: "Filters",
   Sorters: "Sorters",
   Confirmed: "Confirmed",
-  Pagination: "Pagination"
+  Pagination: "Pagination",
+  Apply:"Apply"
 };
