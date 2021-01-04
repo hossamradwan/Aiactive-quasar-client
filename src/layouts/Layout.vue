@@ -35,7 +35,7 @@
           :key="nav.label"
           :to="nav.to"
           :icon="nav.icon"
-          :label="nav.label"
+          :label="$t(nav.label)"
         />
       </q-tabs>
     </q-footer>
