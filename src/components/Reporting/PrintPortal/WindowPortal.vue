@@ -56,20 +56,21 @@ export default {
   },
   methods: {
     openPortal() {
-      var windowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+      var windowFeatures =
+        "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
 
-      this.windowRef = window.open();      
-      this.windowRef.document.title = 'good to go';
+      this.windowRef = window.open();
+      this.windowRef.document.title = "good to go";
       this.windowRef.document.body.appendChild(this.$el);
       copyStyles(window.document, this.windowRef.document);
-      setTimeout(this.print, 1);      
+      setTimeout(this.print, 1);
     },
-    
-    print(){
+
+    print() {
       this.windowRef.print();
       window.onfocus = this.closePortal();
     },
-    
+
     closePortal() {
       if (this.windowRef) {
         this.windowRef.close();

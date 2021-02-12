@@ -4,12 +4,12 @@ import { LocalStorage, Loading } from 'quasar'
 import { showErrorMessage } from 'src/functions/function-show-error-message'
 
 const state = {
-	loggedIn: false,
+	loggedIn: true,
 	userData: {
-		userName: '',
-		email: '',
-		isAdmin: '',
-		isActive: ''
+		userName: 'marcorefaat',
+		email: 'marco@email.com',
+		isAdmin: true,
+		isActive: true
 	}
 }
 
