@@ -1,180 +1,176 @@
 <template>
-  <q-card style=" max-width: 105ch;height:110ch  ">
-    <q-btn icon="close" flat round dense v-close-popup />
-
-    <q-scroll-area style="width: 105ch;height:90%   ">
-      <div id="loop" v-for="violation in violationToPrint" :key="violation.id">
-        <div class="A4">
-          <div id="A4-form" dir="rtl">
-            <!-- Header Right -->
-            <div ref="testHtml">
-              <div>
-                <div class="logo">
-                  <p class="titles">مديرية أمن الاسماعيلية</p>
-                  <p class="titles">ادارة مرور الاسماعيلية</p>
-                </div>
-                <!-- Header Center -->
-                <div class="lable">
-                  <p class="titles">نموذج ١٢٥ مرور</p>
-                  <p class="titles">تقرير مخالفة مرور</p>
-                </div>
+  <div>
+    <div id="loop" v-for="violation in violationToPrint" :key="violation.id">
+      <div class="A4">
+        <div id="A4-form" dir="rtl">
+          <!-- Header Right -->
+          <div ref="testHtml">
+            <div>
+              <div class="logo">
+                <p class="titles">مديرية أمن الاسماعيلية</p>
+                <p class="titles">ادارة مرور الاسماعيلية</p>
+              </div>
+              <!-- Header Center -->
+              <div class="lable">
+                <p class="titles">نموذج ١٢٥ مرور</p>
+                <p class="titles">تقرير مخالفة مرور</p>
               </div>
             </div>
-            <div class="receipt-container">
-              <!-- Column Right -->
-              <div class="columnn 1">
-                <div class="textt">
-                  <p>
-                    <span> بتاريخ: </span>
-                    <span> {{ violation.date_time.split(",")[0] }} </span>
-                    &emsp;
-                    <span> الساعة: </span>
-                    <span> {{ violation.date_time.split(",")[1] }} </span>
-                    &emsp;
-                    <span> بجهة: </span>
-                    <span>________</span>
-                  </p>
-                  <p>
-                    <span> اسم المخالف: </span>
-                    <span>________________</span>
-                    &emsp;
-                    <span> عنوانه: </span>
-                    <span>_________</span>
-                  </p>
-                  <p>
-                    <span> رقم رخصة القيادة: </span>
-                    <span>______</span>
-                    &emsp;
-                    <span> نوعها و جهة صدورها: </span>
-                    <span>______</span>
-                  </p>
-                  <p>
-                    <span> رقم المركبة: </span>
-                    <span> {{ violation.plate_number }} </span>
-                  </p>
-                  <p
-                    style="text-align: center;
+          </div>
+          <div class="receipt-container">
+            <!-- Column Right -->
+            <div class="columnn 1">
+              <div class="textt">
+                <p>
+                  <span> :بتاريخ </span>
+                  <span> {{ violation.date_time.split(",")[0] }} </span>
+                  &emsp;
+                  <span> :الساعة </span>
+                  <span> {{ violation.date_time.split(",")[1] }} </span>
+                  &emsp;
+                  <span> :بجهة </span>
+                  <span>________</span>
+                </p>
+                <p>
+                  <span> :اسم المخالف </span>
+                  <span>________________</span>
+                  &emsp;
+                  <span> :عنوانه </span>
+                  <span>_________</span>
+                </p>
+                <p>
+                  <span> :رقم رخصة القيادة </span>
+                  <span>______</span>
+                  &emsp;
+                  <span> :نوعها و جهة صدورها </span>
+                  <span>______</span>
+                </p>
+                <p>
+                  <span> :رقم المركبة </span>
+                  <span> {{ violation.plate_number }} </span>
+                </p>
+                <p
+                  style="text-align: center;
                             
                             margin-left: auto;
                             margin-right: auto;"
-                  >
-                    وصف الاتهام
-                  </p>
-                  <p
-                    style="text-align: center;
+                >
+                  وصف الاتهام
+                </p>
+                <p
+                  style="text-align: center;
                             
                             margin-left: auto;
                             margin-right: auto;"
-                  >
-                    ________________
-                  </p>
-                  <p>
-                    <span>تم سحب رخصة القيادة (</span>
-                    <span>____________</span>
-                    <span>)&emsp;التسيير(</span>
-                    <span>_________</span>
-                    <span>)</span>
-                  </p>
-                  <p>
-                    <span>مدة الايقاف(</span>
-                    <span>_____________</span>
-                    <span>)&emsp; الغاء (</span>
-                    <span>________________</span>
-                    <span>) م</span>
-                  </p>
-                  <p>
-                    <span>تم التصالح بالايصال رقم:</span>
-                    <span>________________</span>
-                  </p>
-                  <p>
-                    <span>اسم و رتبة شاهد المخالفة:</span>
-                    <span>_____________</span>
-                    &emsp;
-                    <span>التوقيع:</span>
-                    <span>_____</span>
-                  </p>
-                </div>
+                >
+                  ________________
+                </p>
+                <p>
+                  <span>تم سحب رخصة القيادة (</span>
+                  <span>____________</span>
+                  <span>)&emsp;التسيير(</span>
+                  <span>_________</span>
+                  <span>)</span>
+                </p>
+                <p>
+                  <span>مدة الايقاف(</span>
+                  <span>_____________</span>
+                  <span>)&emsp; الغاء (</span>
+                  <span>________________</span>
+                  <span>) م</span>
+                </p>
+                <p>
+                  <span>تم التصالح بالايصال رقم:</span>
+                  <span>________________</span>
+                </p>
+                <p>
+                  <span>:اسم و رتبة شاهد المخالفة</span>
+                  <span>_____________</span>
+                  &emsp;
+                  <span>:التوقيع</span>
+                  <span>_____</span>
+                </p>
               </div>
+            </div>
 
-              <!-- Column Left -->
-              <div class="columnn 2">
-                <div class="text">
-                  <p
-                    style="text-align: center;
+            <!-- Column Left -->
+            <div class="columnn 2">
+              <div class="text">
+                <p
+                  style="text-align: center;
                             float: inline-end;
                             margin-left: auto;
                             margin-right: auto;"
-                  >
-                    بيانات خاصة بنيابة المرور
-                  </p>
-                  <p>
-                    <span>بتاريخ:</span>
-                    <span></span>
-                  </p>
-                  <p>
-                    <span>نحن:</span>
-                    <span>________________________________</span>
-                    &emsp;
-                    <span>نحن</span>
-                  </p>
-                  <p>
-                    <span>القائم بأعمال نيابة المرور </span>
-                    <span> _______________ </span>
+                >
+                  بيانات خاصة بنيابة المرور
+                </p>
+                <p>
+                  <span>:بتاريخ</span>
+                  <span></span>
+                </p>
+                <p>
+                  <span>:نحن</span>
+                  <span>________________________________</span>
+                  &emsp;
+                  <span>نحن</span>
+                </p>
+                <p>
+                  <span>القائم بأعمال نيابة المرور </span>
+                  <span> _______________ </span>
 
-                    <span>نأمر بتغريم المخالف</span>
-                  </p>
-                  <p>
-                    <span>مبلغ:</span>
-                    <span> ________________________________</span>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <span>قرش</span>
-                  </p>
-                  <p>
-                    <span>كود المخالفة: </span>
-                    <span>________________</span>
-                  </p>
-                  <p>
-                    <span>رقم القضية: </span>
-                    <span>_________________</span>
-                  </p>
-                  <p style="float:left">وكيل النيابة</p>
-                  <br />
-                  <p style="float:left; text-align: left">
-                    ________________
-                  </p>
-                  <br />
-                  <p>
-                    <img
-                      src="http://localhost:8080/ftp/5.jpg"
-                      style="height:150px; width:300px;  float:left;"
-                    />
-                  </p>
-                </div>
+                  <span>نأمر بتغريم المخالف</span>
+                </p>
+                <p>
+                  <span>:مبلغ</span>
+                  <span> ________________________________</span>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <span>قرش</span>
+                </p>
+                <p>
+                  <span>:كود المخالفة </span>
+                  <span>________________</span>
+                </p>
+                <p>
+                  <span>:رقم القضية </span>
+                  <span>_________________</span>
+                </p>
+                <p style="float:left">وكيل النيابة</p>
+                <br />
+                <p style="float:left; text-align: left">
+                  ________________
+                </p>
+                <br />
+                <p>
+                  <img
+                    src="http://localhost:8081/ftp/5.jpg"
+                    style="height:150px; width:300px;  float:left;"
+                  />
+                </p>
               </div>
             </div>
-            <br />
-            <img
-              src="http://localhost:8080/ftp/4.jpg"
-              style="height:150px; width:6.5cm;  "
-            />
-            <img
-              src="http://localhost:8080/ftp/3.jpg"
-              style="height:150px; width:6.5cm;  "
-            />
-            <img
-              src="http://localhost:8080/ftp/2.jpg"
-              style="height:150px; width:6.5cm;  "
-            />
-            <img
-              src="http://localhost:8080/ftp/1.jpg"
-              style="width:21cm;
-            height:8cm"
-            />
           </div>
+          <br />
+          <img
+            src="http://localhost:8081/ftp/4.jpg"
+            style="height:150px; width:6.5cm;  "
+          />
+          <img
+            src="http://localhost:8081/ftp/3.jpg"
+            style="height:150px; width:6.5cm;  "
+          />
+          <img
+            src="http://localhost:8081/ftp/2.jpg"
+            style="height:150px; width:6.5cm;  "
+          />
+          <img
+            src="http://localhost:8081/ftp/1.jpg"
+            style="width:21cm;
+            height:8cm"
+          />
         </div>
       </div>
-    </q-scroll-area>
-  </q-card>
+    </div>
+  </div>
 </template>
 
 <script>
