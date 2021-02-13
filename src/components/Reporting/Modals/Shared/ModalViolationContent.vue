@@ -142,7 +142,7 @@
                 <br />
                 <p>
                   <img
-                    src="http://localhost:8081/ftp/5.jpg"
+                    src="http://localhost:8080/ftp/5.jpg"
                     style="height:150px; width:300px;  float:left;"
                   />
                 </p>
@@ -151,19 +151,19 @@
           </div>
           <br />
           <img
-            src="http://localhost:8081/ftp/4.jpg"
+            src="http://localhost:8080/ftp/4.jpg"
             style="height:150px; width:6.5cm;  "
           />
           <img
-            src="http://localhost:8081/ftp/3.jpg"
+            src="http://localhost:8080/ftp/3.jpg"
             style="height:150px; width:6.5cm;  "
           />
           <img
-            src="http://localhost:8081/ftp/2.jpg"
+            src="http://localhost:8080/ftp/2.jpg"
             style="height:150px; width:6.5cm;  "
           />
           <img
-            src="http://localhost:8081/ftp/1.jpg"
+            src="http://localhost:8080/ftp/1.jpg"
             style="width:21cm;
             height:8cm"
           />

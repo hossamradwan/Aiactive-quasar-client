@@ -1,5 +1,18 @@
 <template>
   <div :key="renderComponent" class="q-mt-lg">
+    <!-- Print All Button -->
+    <!-- <q-btn
+      class=""
+      size="12px"
+      flat
+      dense
+      round
+      icon="print"
+      v-if="selection.length > 1"
+      @click="printAll()"
+    /> -->
+    <!-- @click="PDF(lpr.id, 0, 1)" -->
+
     <q-list
       bordered
       v-for="lpr in reportingData"
@@ -7,6 +20,23 @@
       class="q-ma-md card-style"
     >
       <q-item class="card-style">
+        <!-- Select Checkbox -->
+        <!-- <q-item-section avatar>
+          <q-checkbox v-model="selection" :val="lpr.id" />
+        </q-item-section> -->
+        <q-item-section avatar>
+          <!-- Select Button -->
+          <q-btn
+            class=""
+            size="12px"
+            flat
+            dense
+            round
+            :color="selectedData_id.includes(lpr.id) ? 'teal' : ''"
+            icon="done"
+            @click="select(lpr.id)"
+          />
+        </q-item-section>
         <q-item-section avatar>
           <q-icon name="speed" color="teal" size="34px" />
         </q-item-section>
@@ -38,8 +68,9 @@
               dense
               round
               icon="print"
-              @click="PDF(lpr.id, 0, 1)"
+              @click="PDF(lpr.id, false, true)"
             />
+            <!-- Download Button -->
             <q-btn
               class=""
               size="12px"
@@ -47,28 +78,16 @@
               dense
               round
               icon="get_app"
-              @click="PDF(lpr.id, 1, 0)"
-            />
-
-            <!-- Select Button -->
-            <q-btn
-              class=""
-              size="12px"
-              flat
-              dense
-              round
-              :color="selectedData_id.includes(lpr.id) ? 'teal' : ''"
-              icon="done"
-              @click="select(lpr.id)"
+              @click="PDF(lpr.id, true, false)"
             />
 
             <!-- Unconfirm Button -->
-            <q-btn class="" size="12px" flat dense round icon="undo" />
+            <!-- <q-btn class="" size="12px" flat dense round icon="undo" /> -->
           </div>
         </q-item-section>
       </q-item>
     </q-list>
-    <!-- <PrintPortal v-model="printViolationDialog" @close="closePortal">
+    <!-- <PrintPortal>
       <print-violation />
     </PrintPortal> -->
 
@@ -93,6 +112,7 @@
       ref="html2Pdf"
     >
       <section slot="pdf-content" class="pdf-content">
+        <!-- Printed Section -->
         <PrintModal />
       </section>
     </vue-html2pdf>
@@ -106,7 +126,7 @@ export default {
   data() {
     return {
       //selected: [],
-      //showPrintViolationDialog: false,
+      selection: [],
       renderComponent: 0,
       progress: 0,
       generatingPdf: false,
@@ -145,24 +165,6 @@ export default {
       "clearViolationToPrint"
     ]),
 
-    closePortal() {
-      // re render component to fix issue of remove q-list element
-      /**
-       * The horrible way: reloading the entire page
-        The terrible way: using the v-if hack
-        The better way: using Vue’s built-in forceUpdate method
-        The best way: key-changing on your component
-       */
-
-      this.printViolationDialog = false;
-      this.renderComponent += 1;
-
-      // Clear All Selected Data
-      this.setSelectedData({
-        action: "removeAll"
-      });
-    },
-
     select(reportId) {
       let action = this.selectedData_id.includes(reportId) ? "remove" : "add";
 
@@ -172,17 +174,18 @@ export default {
       });
     },
 
-    printViolation(reportId) {
-      //this.printViolationDialog = true;
-      this.setViolationToPrint(reportId);
-    },
-    PDF(reportId, download = 0, view = 1) {
+    // printAll() {
+    //   this.selection.map(id => this.select(id));
+    // },
+
+    PDF(reportId, download = false, view = true) {
       this.controlValue.enableDownload = download;
       this.controlValue.previewModal = view;
       this.setViolationToPrint(reportId);
-
       this.$refs.html2Pdf.generatePdf();
     },
+
+    /* Printing Actions */
     onProgress(progress) {
       this.progress = progress;
       console.log(`PDF generation progress: ${progress}%`);
@@ -225,7 +228,7 @@ export default {
       return {
         margin: 0,
 
-        filename: "hee hee.pdf",
+        filename: "Test.pdf",
 
         image: {
           type: "jpeg",
@@ -249,12 +252,7 @@ export default {
   }
 };
 </script>
-//<style lang="scss" scoped>
-// .card-style {
-//   background-color: #adadad2b !important;
-// }
-//
-</style>
+
 <style lang="css">
 @media print {
   #printed-form {
