@@ -32,21 +32,22 @@
                   <span>________</span>
                 </p>
                 <p>
-                  <span> :اسم المخالف </span>
-                  <span>________________</span>
+                  <span> اسم المخالف </span>
+                  <span>________________:</span>
                   &emsp;
                   <span> :عنوانه </span>
                   <span>_________</span>
                 </p>
                 <p>
-                  <span> :رقم رخصة القيادة </span>
-                  <span>______</span>
+                  <span> رقم رخصة القيادة </span>
+                  <span>______:</span>
                   &emsp;
-                  <span> :نوعها و جهة صدورها </span>
-                  <span>______</span>
+                  <span> نوعها و جهة صدورها </span>
+                  <span>______:</span>
                 </p>
                 <p>
-                  <span> :رقم المركبة </span>
+                  <span> رقم المركبة </span>
+                  <span> : </span>
                   <span> {{ violation.plate_number }} </span>
                 </p>
                 <p
@@ -66,8 +67,8 @@
                   ________________
                 </p>
                 <p>
-                  <span>تم سحب رخصة القيادة (</span>
-                  <span>____________</span>
+                  <span>تم سحب رخصة القيادة </span>
+                  <span>____________(</span>
                   <span>)&emsp;التسيير(</span>
                   <span>_________</span>
                   <span>)</span>

@@ -1,18 +1,5 @@
 <template>
   <div :key="renderComponent" class="q-mt-lg">
-    <!-- Print All Button -->
-    <!-- <q-btn
-      class=""
-      size="12px"
-      flat
-      dense
-      round
-      icon="print"
-      v-if="selection.length > 1"
-      @click="printAll()"
-    /> -->
-    <!-- @click="PDF(lpr.id, 0, 1)" -->
-
     <q-list
       bordered
       v-for="lpr in reportingData"
@@ -21,26 +8,17 @@
     >
       <q-item class="card-style">
         <!-- Select Checkbox -->
-        <!-- <q-item-section avatar>
-          <q-checkbox v-model="selection" :val="lpr.id" />
-        </q-item-section> -->
         <q-item-section avatar>
-          <!-- Select Button -->
-          <q-btn
-            class=""
-            size="12px"
-            flat
-            dense
-            round
-            :color="selectedData_id.includes(lpr.id) ? 'teal' : ''"
-            icon="done"
-            @click="select(lpr.id)"
-          />
+          <q-checkbox v-model="selection" :val="lpr.id" />
         </q-item-section>
+
+        <!-- Module Icon -->
+        <q-item-section avatar> </q-item-section>
         <q-item-section avatar>
           <q-icon name="speed" color="teal" size="34px" />
         </q-item-section>
 
+        <!-- Item Data -->
         <q-item-section>
           <q-item-label lines="1" class="text-weight-bold">
             <span class="q-pa-lg">{{ lpr.id }}</span>
@@ -51,6 +29,7 @@
           </q-item-label>
         </q-item-section>
 
+        <!-- Violation Type -->
         <q-item-section side>
           <q-item-label lines="1" class="text-weight-bold text-teal">
             <span class="q-pa-lg">Speed Violation</span>
@@ -68,8 +47,9 @@
               dense
               round
               icon="print"
-              @click="PDF(lpr.id, false, true)"
+              @click="PDF(lpr, false, true)"
             />
+
             <!-- Download Button -->
             <q-btn
               class=""
@@ -78,7 +58,7 @@
               dense
               round
               icon="get_app"
-              @click="PDF(lpr.id, true, false)"
+              @click="PDF(lpr, true, false)"
             />
 
             <!-- Unconfirm Button -->
@@ -87,10 +67,8 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <!-- <PrintPortal>
-      <print-violation />
-    </PrintPortal> -->
 
+    <!-- PDF Modal -->
     <vue-html2pdf
       :show-layout="controlValue.showLayout"
       :float-layout="controlValue.floatLayout"
@@ -103,7 +81,6 @@
       :pdf-orientation="controlValue.pdfOrientation"
       :pdf-content-width="controlValue.pdfContentWidth"
       :manual-pagination="controlValue.manualPagination"
-      :html-to-pdf-options="htmlToPdfOptions"
       @progress="onProgress($event)"
       @startPagination="startPagination()"
       @hasPaginated="hasPaginated()"
@@ -125,7 +102,6 @@ import VueHtml2pdf from "vue-html2pdf";
 export default {
   data() {
     return {
-      //selected: [],
       selection: [],
       renderComponent: 0,
       progress: 0,
@@ -138,7 +114,7 @@ export default {
         previewModal: false,
         paginateElementsByHeight: 1100,
         manualPagination: false,
-        filename: "Hee Hee",
+        filename: "IndexFile",
         pdfQuality: 2,
         pdfFormat: "a4",
         pdfOrientation: "portrait",
@@ -148,10 +124,6 @@ export default {
   },
 
   components: {
-    "print-violation": require("components/Reporting/Modals/PrintViolation")
-      .default,
-    PrintPortal: require("components/Reporting/PrintPortal/WindowPortal")
-      .default,
     PrintModal: require("components/Reporting/Modals/Shared/ModalViolationContent")
       .default,
     VueHtml2pdf
@@ -174,81 +146,89 @@ export default {
       });
     },
 
-    // printAll() {
-    //   this.selection.map(id => this.select(id));
-    // },
-
-    PDF(reportId, download = false, view = true) {
-      this.controlValue.enableDownload = download;
+    // PDF Options (Download Or View)
+    PDF_Options(download = false, view = true) {
       this.controlValue.previewModal = view;
-      this.setViolationToPrint(reportId);
+      this.controlValue.enableDownload = download;
+    },
+
+    // PDF Viewer/Downloader
+    async PDF(report, download = false, view = true) {
+      await this.PDF_Options(download, view);
+      if (report != "MultiplePages") {
+        this.controlValue.filename =
+          report.date_time + report.id + report.plate_number;
+
+        this.setViolationToPrint(report.id);
+      }
+
       this.$refs.html2Pdf.generatePdf();
+    },
+
+    printAll(download = false, view = true) {
+      // Add Selected Reports to State
+      this.selection.map(id => {
+        this.setViolationToPrint(id);
+      });
+
+      // PDF View
+      this.controlValue.filename = "MultiplePages";
+      this.PDF("MultiplePages", download, view);
     },
 
     /* Printing Actions */
     onProgress(progress) {
       this.progress = progress;
-      console.log(`PDF generation progress: ${progress}%`);
+      // console.log(`PDF generation progress: ${progress}%`);
     },
     startPagination() {
-      console.log(`PDF has started pagination`);
+      // console.log(`PDF has started pagination`);
     },
     hasPaginated() {
-      console.log(`PDF has been paginated`);
+      // console.log(`PDF has been paginated`);
     },
     async beforeDownload() {
-      console.log(`On Before PDF Generation`);
+      // console.log(`On Before PDF Generation`);
     },
     hasDownloaded(blobPdf) {
-      console.log(`PDF has downloaded yehey`);
+      // console.log(`PDF has downloaded`);
       this.pdfDownloaded = true;
-      console.log(blobPdf);
+      // console.log(blobPdf);
       // todo: find suitable place
       this.clearViolationToPrint();
+    }
+  },
+  watch: {
+    selection: function() {
+      this.setSelectedData({ action: "removeAll" });
+      this.selection.map(id => {
+        this.select(id);
+      });
+    },
+    violationToPrint: async function() {
+      if (this.violationToPrint.length > 0) {
+        if (this.download) {
+          await this.PDF_Options(true, false);
+        } else {
+          await this.PDF_Options(false, true);
+        }
+        this.$refs.html2Pdf.generatePdf();
+      }
+    },
+    selectedData: function() {
+      if (this.selectedData.length == 0 && this.selection.length > 0) {
+        this.selection = [];
+      }
     }
   },
   computed: {
     ...mapState("reporting", [
       "reportingData",
       "selectedData",
-      "showPrintViolationDialog",
-      "violationToPrint"
+      "violationToPrint",
+      "download"
     ]),
-    ...mapGetters("reporting", ["selectedData_id"]),
-
-    printViolationDialog: {
-      get() {
-        return this.showPrintViolationDialog;
-      },
-      set(value) {
-        return this.setPrintViolationDialog(value);
-      }
-    },
-    htmlToPdfOptions() {
-      return {
-        margin: 0,
-
-        filename: "Test.pdf",
-
-        image: {
-          type: "jpeg",
-          quality: 0.98
-        },
-
-        enableLinks: true,
-
-        html2canvas: {
-          scale: this.controlValue.pdfQuality,
-          useCORS: true
-        },
-
-        jsPDF: {
-          unit: "in",
-          format: this.controlValue.pdfFormat,
-          orientation: this.controlValue.pdfOrientation
-        }
-      };
-    }
+    ...mapGetters("reporting", ["selectedData_id"])
   }
 };
 </script>

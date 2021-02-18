@@ -12,6 +12,8 @@ const state = {
 
   violationToPrint: [],
 
+  download: false,
+
   activeModule: {
     label: "",
     value: ""
@@ -46,9 +48,13 @@ const mutations = {
 
   setViolationToPrint(state, { reportId, getters }) {
     // check if report id is to print all selected
-    if (reportId == "all") {
+    if (reportId == "printAll" || reportId == "downloadAll") {
       state.selectedData.forEach(elem => state.violationToPrint.push(elem));
-
+      if (reportId == "downloadAll") {
+        state.download = true;
+      } else {
+        state.download = false;
+      }
       return;
     }
 
