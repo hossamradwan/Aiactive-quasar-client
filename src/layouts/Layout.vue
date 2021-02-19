@@ -95,11 +95,13 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import { openURL } from "quasar";
+import { colors } from "quasar";
 
 export default {
   name: "MyLayout",
   data() {
     return {
+      lang: localStorage.getItem("Language"),
       leftDrawerOpen: this.$q.platform.is.desktop,
       navs: [
         {
@@ -126,6 +128,11 @@ export default {
           label: "Reporting",
           icon: "fingerprint",
           to: "/reportingModule"
+        },
+        {
+          label: "Attendance",
+          icon: "fas fa-users",
+          to: "/attendance"
         },
         {
           label: "Settings",
@@ -159,6 +166,23 @@ export default {
           if (this.$q.platform.is.electron)
             require("electron").ipcRenderer.send("quit-app");
         });
+    }
+  },
+  mounted() {
+    //Get Stored Theme
+    let ThemeColor = localStorage.getItem("ThemeColor");
+    const { setBrand } = colors;
+    if (ThemeColor != null) {
+      setBrand("primary", ThemeColor);
+    }
+
+    //Change quasar language and RTL direction
+    let Language = localStorage.getItem("Language");
+    if (Language != null && Language != "undefined") {
+      this.$i18n.locale = Language;
+      import(`quasar/lang/${Language}`).then(language => {
+        this.$q.lang.set(language.default);
+      });
     }
   }
 };
