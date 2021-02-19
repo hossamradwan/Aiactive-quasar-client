@@ -88,10 +88,8 @@
       @hasDownloaded="hasDownloaded($event)"
       ref="html2Pdf"
     >
-      <section slot="pdf-content" class="pdf-content">
-        <!-- Printed Section -->
-        <PrintModal />
-      </section>
+      <!-- Printed Section -->
+      <PrintModal slot="pdf-content" />
     </vue-html2pdf>
   </div>
 </template>
@@ -104,6 +102,69 @@ export default {
     return {
       selection: [],
       renderComponent: 0,
+      columns: [
+        {
+          name: "ID",
+          required: true,
+          label: this.$t("ID"),
+          field: row => row.id,
+          align: "left",
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: "Plate No.",
+          required: true,
+          label: this.$t("PlateNo"),
+          field: row => row.plate_number,
+          align: "center",
+          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
+          sortable: true,
+          style: "background-color:#ddd ; font-weight: bold;"
+        },
+        {
+          name: "Country",
+          label: this.$t("Country"),
+          field: row => row.country,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Date_Time",
+          label: this.$t("Date"),
+          field: row => row.date_time,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Speed",
+          label: this.$t("Speed"),
+          field: row => row.speed,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Brand",
+          label: this.$t("Brand"),
+          field: row => row.brand,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Model",
+          label: this.$t("Model"),
+          field: row => row.model,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Color",
+          label: this.$t("Color"),
+          field: row => row.color,
+          align: "center",
+          sortable: true
+        }
+      ],
       progress: 0,
       generatingPdf: false,
       pdfDownloaded: false,
@@ -196,6 +257,7 @@ export default {
       // console.log(blobPdf);
       // todo: find suitable place
       this.clearViolationToPrint();
+      this.PDF_Options(false, false);
     }
   },
   watch: {
@@ -206,8 +268,8 @@ export default {
       });
     },
     violationToPrint: async function() {
-      if (this.violationToPrint.length > 0) {
-        if (this.download) {
+      if (this.violationToPrint.length > 1) {
+        if (this.downloadAll) {
           await this.PDF_Options(true, false);
         } else {
           await this.PDF_Options(false, true);
@@ -226,78 +288,9 @@ export default {
       "reportingData",
       "selectedData",
       "violationToPrint",
-      "download"
+      "downloadAll"
     ]),
     ...mapGetters("reporting", ["selectedData_id"])
   }
 };
 </script>
-
-<style lang="css">
-@media print {
-  #printed-form {
-    page-break-after: always;
-  }
-}
-
-.A4 {
-  width: 21cm;
-  max-height: 29.7cm;
-  padding: 10px;
-  font-family: "Times New Roman", Times, serif;
-}
-.logo {
-  text-align: left;
-  margin-left: 7%;
-  margin-top: 5px;
-}
-.lable {
-  text-align: center;
-}
-.titles {
-  font-size: 12pt;
-  font-weight: bold;
-  margin-bottom: 2pt;
-}
-.receipt-container {
-  display: flex;
-  width: 100%;
-}
-.columnn {
-  display: flex;
-  width: 100%;
-  border-style: solid;
-  border-width: 2px;
-  padding: 10px;
-}
-div {
-  margin-bottom: 0px;
-}
-
-.textt {
-  font-size: 12pt;
-  font-weight: normal;
-  margin: 1pt;
-  border: 4;
-  border-color: red;
-}
-.center {
-  text-align: center;
-  float: inline-end;
-  margin-left: auto;
-  margin-right: auto;
-}
-.lefttt {
-  float: left;
-}
-.righttt {
-  text-align: right;
-  float: right;
-}
-
-.img {
-  max-height: 50%;
-  width: auto;
-  align-content: center;
-}
-</style>

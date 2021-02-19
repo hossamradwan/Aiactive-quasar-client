@@ -1,9 +1,7 @@
 import config from "@/../config/config";
-import Vue from "vue";
 import Axios from "axios";
-import { LocalStorage, Loading, Notify } from "quasar";
+import { LocalStorage, Loading } from "quasar";
 import { showErrorMessage } from "src/functions/function-show-error-message";
-import { stat } from "fs";
 
 const state = {
   reportingData: [],
@@ -12,7 +10,7 @@ const state = {
 
   violationToPrint: [],
 
-  download: false,
+  downloadAll: false,
 
   activeModule: {
     label: "",
@@ -51,9 +49,9 @@ const mutations = {
     if (reportId == "printAll" || reportId == "downloadAll") {
       state.selectedData.forEach(elem => state.violationToPrint.push(elem));
       if (reportId == "downloadAll") {
-        state.download = true;
+        state.downloadAll = true;
       } else {
-        state.download = false;
+        state.downloadAll = false;
       }
       return;
     }
