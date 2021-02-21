@@ -156,32 +156,24 @@
       <!-- Half Page Bottom Parent -->
       <div class="full-width row  justify-center  content-center ">
         <!-- Child Row 1 -->
-
         <div class="col-12  self-stretch full-width row  justify-center  ">
           <img
-            :src="violation.path + '/' + violation.source1"
-            class=" q-pa-xs "
-            onError="removeElement(this);"
+            :src="violation.path + '/' + violation.source2"
+            class="childImage"
           />
           <img
-            :src="violation.path + '/' + violation.source1"
-            class=" q-pa-xs "
-            onError="removeElement(this);"
+            :src="violation.path + '/' + violation.source3"
+            class="childImage"
           />
           <img
-            :src="violation.path + '/' + violation.source1"
-            class=" q-pa-xs "
-            onError="removeElement(this);"
+            :src="violation.path + '/' + violation.source4"
+            class="childImage"
+          />
+          <img
+            :src="violation.path + '/' + violation.source5"
+            class="childImage"
           />
         </div>
-
-        <!-- Child Row 2 -->
-        <img
-          :src="violation.path + '/' + violation.source2"
-          class=" q-pa-xs col-auto       self-center"
-          style="max-height:8cm"
-          onError="removeElement(this);"
-        />
       </div>
     </div>
   </section>
@@ -190,11 +182,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  methods: {
-    removeElement(element) {
-      element.remove();
-    }
-  },
+  methods: {},
   computed: {
     ...mapState("reporting", ["violationToPrint"])
   },
@@ -202,7 +190,7 @@ export default {
   mounted() {}
 };
 </script>
-<style lang="css">
+<style scoped lang="css">
 .A4 {
   width: 21cm;
   max-height: 28cm;
@@ -260,5 +248,9 @@ div {
 .righttt {
   text-align: right;
   float: right;
+}
+img.childImage {
+  max-height: 6cm;
+  width: 9cm;
 }
 </style>
