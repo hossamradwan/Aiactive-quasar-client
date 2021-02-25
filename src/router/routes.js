@@ -36,8 +36,8 @@ const routes = [
         component: () => import("pages/PageReportingModule.vue")
       },
       {
-        path: "/attendance",
-        component: () => import("pages/PageAttendance.vue")
+        path: "/facial",
+        component: () => import("pages/PageFacial.vue")
       }
     ]
   },

@@ -130,9 +130,9 @@ export default {
           to: "/reportingModule"
         },
         {
-          label: "Attendance",
+          label: "Facial",
           icon: "fas fa-users",
-          to: "/attendance"
+          to: "/facial"
         },
         {
           label: "Settings",

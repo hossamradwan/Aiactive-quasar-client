@@ -8,32 +8,18 @@
         val => isValidEmailAddress(val) || 'Please enter a valid email address.'
       ]"
       lazy-rules
-      v-select-all
-      ref="email"
-      label="User email"
+      :label="label"
       stack-label
       class="col"
+      clearable
     >
-      <template v-slot:append>
-        <q-icon
-          v-if="email"
-          @click="$emit('update:email', '')"
-          name="close"
-          class="cursor-pointer"
-        />
-      </template>
     </q-input>
   </div>
 </template>
 
 <script>
-import { selectAll } from "src/directives/directive-select-all";
-
 export default {
-  props: ["email"],
-  directives: {
-    selectAll
-  },
+  props: ["email", "label"],
   methods: {
     isValidEmailAddress(email) {
       var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

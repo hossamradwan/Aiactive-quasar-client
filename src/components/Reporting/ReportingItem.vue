@@ -1,79 +1,98 @@
 <template>
   <div :key="renderComponent" class="q-mt-lg">
-    <q-list
-      bordered
-      v-for="lpr in reportingData"
-      :key="lpr.id"
-      class="q-ma-md card-style"
+    <q-table
+      :data="reportingData"
+      :columns="columns"
+      selection="multiple"
+      :selected.sync="selection"
     >
-      <q-item class="card-style">
-        <!-- Select Checkbox -->
-        <q-item-section avatar>
-          <q-checkbox v-model="selection" :val="lpr.id" />
-        </q-item-section>
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          <!-- Header Print Button -->
+          <q-btn
+            v-if="props.col.name == 'actionButtons' && selection.length > 1"
+            class=""
+            size="12px"
+            flat
+            dense
+            round
+            icon="print"
+            @click="PDF('MultiplePages', false, true)"
+          />
 
-        <!-- Module Icon -->
-        <q-item-section avatar> </q-item-section>
-        <q-item-section avatar>
-          <q-icon name="speed" color="teal" size="34px" />
-        </q-item-section>
+          <!-- Header Download Button -->
+          <q-btn
+            v-if="props.col.name == 'actionButtons' && selection.length > 1"
+            class=""
+            size="12px"
+            flat
+            dense
+            round
+            icon="get_app"
+            @click="PDF('MultiplePages', true, false)"
+          />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <!-- Table Body -->
+      <template v-slot:body="props">
+        <q-tr :props="props" class="cursor-pointer">
+          <q-td style="font-size:15px">
+            <q-checkbox dense v-model="props.selected" />
+          </q-td>
+          <!-- Assigne the value of each record if it matches the column name -->
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size:15px"
+          >
+            <span v-if="col.name != 'actionButtons' && col.name != 'Color'">
+              {{ col.value }}</span
+            >
 
-        <!-- Item Data -->
-        <q-item-section>
-          <q-item-label lines="1" class="text-weight-bold">
-            <span class="q-pa-lg">{{ lpr.id }}</span>
-            <span class="q-pa-lg">{{ lpr.plate_number }}</span>
-            <span class="q-pa-lg">{{ lpr.country }}</span>
-            <span class="q-pa-lg">{{ lpr.date_time }}</span>
-            <span class="q-pa-lg"> {{ lpr.speed / 100 }} KM/h </span>
-          </q-item-label>
-        </q-item-section>
+            <q-badge
+              v-if="col.name == 'Color' && col.value != '$color$'"
+              :color="col.value != 'white' ? col.value : 'black'"
+            >
+              {{ col.value }}
+            </q-badge>
 
-        <!-- Violation Type -->
-        <q-item-section side>
-          <q-item-label lines="1" class="text-weight-bold text-teal">
-            <span class="q-pa-lg">Speed Violation</span>
-          </q-item-label>
-        </q-item-section>
-
-        <!-- Action Buttons -->
-        <q-item-section top side>
-          <div class="text-grey-8 q-gutter-xs">
-            <!-- Print Button -->
+            <!-- Single Action Buttons -->
+            <!-- Single Print Button -->
             <q-btn
+              v-if="col.name == 'actionButtons'"
               class=""
               size="12px"
               flat
               dense
               round
               icon="print"
-              @click="PDF(lpr, false, true)"
+              @click="PDF(props.row, false, true)"
             />
 
-            <!-- Download Button -->
+            <!-- Single Download Button -->
             <q-btn
+              v-if="col.name == 'actionButtons'"
               class=""
               size="12px"
               flat
               dense
               round
               icon="get_app"
-              @click="PDF(lpr, true, false)"
+              @click="PDF(props.row, true, false)"
             />
-
-            <!-- Unconfirm Button -->
-            <!-- <q-btn class="" size="12px" flat dense round icon="undo" /> -->
-          </div>
-        </q-item-section>
-      </q-item>
-    </q-list>
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
 
     <!-- PDF Modal -->
     <vue-html2pdf
-      :show-layout="controlValue.showLayout"
       :float-layout="controlValue.floatLayout"
-      :enable-download="controlValue.enableDownload"
       :preview-modal="controlValue.previewModal"
+      :show-layout="controlValue.showLayout"
+      :enable-download="controlValue.enableDownload"
       :filename="controlValue.filename"
       :paginate-elements-by-height="controlValue.paginateElementsByHeight"
       :pdf-quality="controlValue.pdfQuality"
@@ -119,8 +138,7 @@ export default {
           field: row => row.plate_number,
           align: "center",
           format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
-          sortable: true,
-          style: "background-color:#ddd ; font-weight: bold;"
+          sortable: true
         },
         {
           name: "Country",
@@ -131,18 +149,20 @@ export default {
         },
         {
           name: "Date_Time",
-          label: this.$t("Date"),
-          field: row => row.date_time,
+          label: this.$t("Time"),
+          field: row => row.date_time.split(",")[1],
           align: "center",
           sortable: true
         },
         {
           name: "Speed",
           label: this.$t("Speed"),
-          field: row => row.speed,
+          field: row => row.speed / 100,
+          format: val => (val ? val + " km/h" : null),
           align: "center",
           sortable: true
         },
+
         {
           name: "Brand",
           label: this.$t("Brand"),
@@ -154,25 +174,33 @@ export default {
           name: "Model",
           label: this.$t("Model"),
           field: row => row.model,
+          format: val => (val != "MODEL" ? val : null),
           align: "center",
           sortable: true
         },
         {
           name: "Color",
           label: this.$t("Color"),
-          field: row => row.color,
+          field: row => row.color.toLowerCase(),
           align: "center",
           sortable: true
+        },
+        {
+          name: "actionButtons",
+          align: "center"
         }
       ],
       progress: 0,
       generatingPdf: false,
       pdfDownloaded: false,
+
       controlValue: {
-        showLayout: false,
         floatLayout: true,
-        enableDownload: false,
+        floatLayoutt: false,
         previewModal: false,
+        previewModall: false,
+        showLayout: false,
+        enableDownload: false,
         paginateElementsByHeight: 1100,
         manualPagination: false,
         filename: "IndexFile",
@@ -191,21 +219,19 @@ export default {
   },
 
   methods: {
+    getSelectedString() {
+      return this.selection.length === 0
+        ? ""
+        : `${this.selection.length} record${
+            this.selection.length > 1 ? "s" : ""
+          } selected of ${this.data.length}`;
+    },
     ...mapActions("reporting", [
       "setSelectedData",
       "setViolationToPrint",
       "setPrintViolationDialog",
       "clearViolationToPrint"
     ]),
-
-    select(reportId) {
-      let action = this.selectedData_id.includes(reportId) ? "remove" : "add";
-
-      this.setSelectedData({
-        action,
-        id: reportId
-      });
-    },
 
     // PDF Options (Download Or View)
     PDF_Options(download = false, view = true) {
@@ -216,25 +242,23 @@ export default {
     // PDF Viewer/Downloader
     async PDF(report, download = false, view = true) {
       await this.PDF_Options(download, view);
-      if (report != "MultiplePages") {
+      if (report == "MultiplePages") {
+        console.log("multiii");
+        // Add Selected Reports to State
+        this.selection.map(selected => {
+          this.setViolationToPrint(selected.id);
+        });
+
+        // PDF View
+        this.controlValue.filename = "MultiplePages";
+      } else {
+        console.log("report.id:", report.id);
         this.controlValue.filename =
           report.date_time + report.id + report.plate_number;
-
         this.setViolationToPrint(report.id);
       }
-
-      this.$refs.html2Pdf.generatePdf();
-    },
-
-    printAll(download = false, view = true) {
-      // Add Selected Reports to State
-      this.selection.map(id => {
-        this.setViolationToPrint(id);
-      });
-
-      // PDF View
-      this.controlValue.filename = "MultiplePages";
-      this.PDF("MultiplePages", download, view);
+      await this.$refs.html2Pdf.generatePdf();
+      // this.setSelectedData({ action: "removeAll" });
     },
 
     /* Printing Actions */
@@ -254,6 +278,7 @@ export default {
     hasDownloaded(blobPdf) {
       // console.log(`PDF has downloaded`);
       this.pdfDownloaded = true;
+
       // console.log(blobPdf);
       // todo: find suitable place
       this.clearViolationToPrint();
@@ -261,32 +286,22 @@ export default {
     }
   },
   watch: {
-    selection: function() {
-      this.setSelectedData({ action: "removeAll" });
-      this.selection.map(id => {
-        this.select(id);
-      });
-    },
-    violationToPrint: async function() {
-      if (this.violationToPrint.length > 1) {
-        if (this.downloadAll) {
-          await this.PDF_Options(true, false);
-        } else {
-          await this.PDF_Options(false, true);
-        }
-        this.$refs.html2Pdf.generatePdf();
-      }
-    },
-    selectedData: function() {
-      if (this.selectedData.length == 0 && this.selection.length > 0) {
-        this.selection = [];
-      }
-    }
+    // selection: function() {
+    //   this.setSelectedData({ action: "removeAll" });
+    //   this.selection.map(selected => {
+    //     this.select(selected.id);
+    //   });
+    // },
+    // selectedData: function() {
+    //   if (this.selectedData.length == 0 && this.selection.length > 0) {
+    //     this.selection = [];
+    //   }
+    // }
   },
   computed: {
     ...mapState("reporting", [
       "reportingData",
-      "selectedData",
+      // "selectedData",
       "violationToPrint",
       "downloadAll"
     ]),

@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-table :data="attendanceData" :columns="columns" row-key="name">
+    <q-table :data="facialData" :columns="columns" row-key="name">
       <!-- @request="onRequest" -->
       <!-- :pagination.sync="paginationRename" -->
       <!-- Export Data -->
@@ -98,6 +98,12 @@ export default {
           sortable: true
         },
         {
+          name: "personName",
+          label: this.$t("Name"),
+          field: row => row.personName,
+          style: "width: 5px"
+        },
+        {
           name: "Image",
           label: this.$t("Image"),
           field: "image",
@@ -126,9 +132,10 @@ export default {
           sortable: true
         }
       ],
-      attendanceData: [
+      facialData: [
         {
           id: 1,
+          personName: "John Adams",
           image: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg",
           date: "5/10/2020",
           arrivalTime: "10:15 am",
@@ -136,6 +143,7 @@ export default {
         },
         {
           id: 1,
+          personName: "John Adams",
           image: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg",
           date: "5/10/2020",
           arrivalTime: "10:15 am",
@@ -143,6 +151,7 @@ export default {
         },
         {
           id: 1,
+          personName: "John Adams",
           image: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg",
           date: "5/10/2020",
           arrivalTime: "10:15 am",
@@ -150,6 +159,7 @@ export default {
         },
         {
           id: 1,
+          personName: "John Adams",
           image: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg",
           date: "5/10/2020",
           arrivalTime: "10:15 am",
@@ -157,6 +167,7 @@ export default {
         },
         {
           id: 1,
+          personName: "John Adams",
           image: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg",
           date: "5/10/2020",
           arrivalTime: "10:15 am",
