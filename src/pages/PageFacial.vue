@@ -1,5 +1,7 @@
 <template>
   <q-page padding>
+    <!-- ToolBar  -->
+    <tool-bar :moduleName="moduleName" />
     <q-card class="settings-tabs">
       <!-- TABS -->
       <q-tabs
@@ -39,6 +41,7 @@ export default {
 
   data() {
     return {
+      moduleName: "facial-module",
       series: [75],
       chartOptions: {
         chart: {
@@ -172,6 +175,7 @@ export default {
     }
   },
   components: {
+    "tool-bar": require("components/Shared/Lpr/Toolbar/Toolbar").default,
     "facial-report": require("components/Facial/FacialReport").default,
     "facial-record": require("components/Facial/FacialRecord").default
   }

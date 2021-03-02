@@ -9,6 +9,7 @@ import devices from "./store-devices";
 import averageSpeed from "./store-averageSpeed";
 import averageSpeedResult from "./store-averageSpeedResult";
 import reporting from "./store-reporting";
+import facialCamera from "./store-facialCamera";
 
 Vue.use(Vuex);
 
@@ -27,7 +28,8 @@ export default function(/* { ssrContext } */) {
       devices,
       averageSpeed,
       averageSpeedResult,
-      reporting
+      reporting,
+      facialCamera
     },
 
     // enable strict mode (adds overhead!)

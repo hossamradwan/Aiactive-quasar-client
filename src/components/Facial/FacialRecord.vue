@@ -3,9 +3,57 @@
     <!-- Row 1 -->
     <div class="full-width row  justify-between  ">
       <!-- Row 1 > Column 1 -->
-      <h5>{{ timestamp }}</h5>
+      <h5>
+        {{ date }} <br />
+        {{ time }}
+      </h5>
 
       <!-- Row 1 > Column 2 -->
+      <div class="q-pa-md">
+        <!-- Button Add New Person -->
+        <q-btn
+          icon="person_add"
+          round
+          color="primary"
+          @click="showDialog = true"
+        />
+        <!-- Buttons For Testing -->
+        <q-btn icon="psychology" round color="primary" @click="push" />
+
+        <q-btn color="primary" icon="video_call" round>
+          <q-menu fit anchor="center right" self="center left">
+            <q-item>
+              <q-item-section
+                ><q-input
+                  outlined
+                  v-model="payload.url"
+                  label="url"
+                  clearable
+                />
+                <q-input
+                  outlined
+                  v-model="payload.width"
+                  label="width"
+                  clearable
+                />
+                <q-input
+                  outlined
+                  v-model="payload.height"
+                  label="height"
+                  clearable
+                />
+
+                <q-btn
+                  label="Add Camera"
+                  color="negative"
+                  @click="addDevice(payload)"
+                />
+              </q-item-section>
+            </q-item>
+          </q-menu>
+        </q-btn>
+      </div>
+      <!-- Row 1 > Column 3 -->
       <div style="overflow: auto;min-height: 110px;  ">
         <div class="fit row">
           <apexchart
@@ -35,8 +83,9 @@
 
     <!-- Row 2 -->
     <div class="col-7">
-      <div class="fit   row  justify-between ">
+      <div class="fit row">
         <!-- Row 2 > Column 1 -->
+        <!-- Faces Carousel -->
         <q-carousel
           v-model="slide"
           vertical
@@ -49,6 +98,7 @@
           infinite
           class="col-2 overflow-hidden "
           style="overflow: auto;"
+          v-if="faceDetection || faceRecognition"
         >
           <q-carousel-slide :name="1" class="row no-wrap">
             <div
@@ -64,9 +114,7 @@
             </div>
           </q-carousel-slide>
           <q-carousel-slide :name="2" class="row no-wrap">
-            <div
-              class="column fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
-            >
+            <div class="column fit justify-start items-center  no-wrap">
               <q-img
                 v-for="image in arr2"
                 :key="image.index"
@@ -78,34 +126,95 @@
           </q-carousel-slide>
         </q-carousel>
 
-        <!-- Record Video Stream -->
         <!-- Row 2 > Column 2 -->
-        <!-- src="http://196.219.234.3:5006/video_feed/0" -->
-        <q-img
-          src="https://placeimg.com/500/300/any"
-          :ratio="1"
-          style="overflow: auto; height: 450px; max-width: 300px"
-          class="col-7"
-        >
-          <template v-slot:error>
-            <div class="absolute-full flex flex-center bg-negative text-white">
-              Cannot load image
-            </div>
-          </template>
-        </q-img>
+        <!-- Record Video Stream -->
+        <div class=" column col" style="overflow: auto; ">
+          <div class=" row  justify-center  " v-if="cameraSlide != 'noImage'">
+            <q-toggle
+              v-model="faceDetection"
+              color="green"
+              label="Face Detection"
+            />
+            <q-toggle
+              v-model="faceRecognition"
+              color="green"
+              label="Face Recognition"
+            />
+          </div>
+          <q-carousel
+            v-model="cameraSlide"
+            transition-prev="slide-right"
+            transition-next="slide-left"
+            animated
+            control-color="primary"
+            padding
+            infinite
+          >
+            <q-carousel-slide name="noImage">
+              <template>
+                <div
+                  class="absolute-full flex flex-center bg-negative text-white"
+                >
+                  No Cameras Added Yet
+                </div>
+              </template>
+            </q-carousel-slide>
+            <q-carousel-slide
+              v-for="camera in cameras"
+              :key="camera.cameraId"
+              :name="camera.cameraId"
+            >
+              <q-img
+                :src="camera.videoFeedUrl"
+                :ratio="1"
+                style="overflow: auto; max-height:100%; "
+                class="col-7"
+              >
+              </q-img>
+            </q-carousel-slide>
+          </q-carousel>
+          <div class="row  justify-center  " v-if="cameraSlide != 'noImage'">
+            <q-btn
+              v-if="videoStatus == 'play'"
+              icon="pause"
+              color="positive"
+              @click="pauseFeed(cameraSlide)"
+            />
+            <q-btn
+              v-if="videoStatus == 'pause'"
+              icon="play_arrow"
+              color="positive"
+              @click="palyFeed(cameraSlide)"
+            />
+            <q-btn
+              icon="stop"
+              color="positive"
+              @click="stopCamera(cameraSlide)"
+            />
+          </div>
+        </div>
 
         <!-- Row 2 > Column 3 -->
-        <div class="col-2" style="overflow: auto;">
-          <q-btn
-            label="Add New Person"
-            color="primary"
-            @click="showDialog = true"
-          />
-          <q-btn label="Generate" color="warning" @click="push" />
+        <div class="col-2" style="overflow: auto;" v-if="cameras.length > 1">
+          <q-list>
+            <q-item
+              clickable
+              v-close-popup
+              v-for="camera in cameras"
+              :key="camera.cameraId"
+              @click="setCameraSlide(camera.cameraId)"
+            >
+              <!-- @click="setStreamUrl(camera.videoFeedUrl)" -->
+              <q-item-section>
+                <q-item-label>Camera {{ camera.cameraId }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
         </div>
       </div>
     </div>
 
+    <!-- Add New Person Dialog -->
     <q-dialog
       v-model="showDialog"
       transition-show="rotate"
@@ -116,12 +225,24 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   name: "ComponentFacialRecord",
 
   data() {
     return {
-      showDialog: true,
+      faceDetection: false,
+      faceRecognition: false,
+      videoStatus: "play",
+      payload: {
+        url: 0,
+        width: 480,
+        height: 320
+      },
+      selectedCamera: {
+        videoFeedUrl: "https://picsum.photos/536/978"
+      },
+      showDialog: false,
       series: [75],
       chartOptions: {
         chart: {
@@ -199,27 +320,72 @@ export default {
         }
       },
       slide: 1,
+      cameraSlide: "noImage",
       autoplay: false,
       images: [
-        "https://cdn.quasar.dev/img/mountains.jpg",
-        "https://cdn.quasar.dev/img/material.png",
-        "https://cdn.quasar.dev/img/donuts.png",
-        "https://cdn.quasar.dev/img/cat.jpg",
-        "https://cdn.quasar.dev/img/linux-avatar.png"
+        "https://picsum.photos/123/456",
+        "https://picsum.photos/789/987",
+        "https://picsum.photos/321/213",
+        "https://picsum.photos/486/654",
+        "https://picsum.photos/756/255"
       ],
       arr1: [],
       arr2: [],
 
-      timestamp: ""
+      timestamp: "",
+      date: "",
+      time: "",
+      settingsLoading: false
     };
   },
   mounted() {
     this.arr1 = this.images.slice(0, 4);
+    if (this.cameras.length > 0) this.cameraSlide = this.cameras[0].cameraId;
   },
   created() {
     setInterval(this.getNow, 1000);
   },
+  computed: {
+    ...mapState("facialCamera", ["cameras"])
+  },
   methods: {
+    ...mapActions("facialCamera", [
+      "addDevice",
+      "removeDevice",
+      "enableFaceRecognition",
+      "enableFaceDetection",
+      "pauseDevice"
+    ]),
+
+    pauseFeed(camera) {
+      this.videoStatus = "pause";
+      this.pauseDevice(camera);
+    },
+    palyFeed(camera) {
+      this.videoStatus = "play";
+      this.addDevice(camera);
+    },
+    stopCamera(camera) {
+      let index = this.cameras.findIndex(x => x.cameraId === camera);
+      let previouseSlide;
+      if (index != 0) {
+        previouseSlide = this.cameras[index - 1].cameraId;
+      } else {
+        if (this.cameras.length == 1) {
+          previouseSlide = "noImage";
+        } else {
+          previouseSlide = this.cameras[this.cameras.length - 1].cameraId;
+        }
+      }
+      console.log("index:", index);
+      console.log("previouseSlide:", previouseSlide);
+      this.removeDevice(camera);
+
+      this.setCameraSlide(previouseSlide);
+    },
+    setCameraSlide(slide) {
+      this.cameraSlide = slide;
+    },
     getNow: function() {
       const today = new Date();
       const date =
@@ -232,15 +398,20 @@ export default {
         today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       const dateTime = date + " " + time;
       this.timestamp = dateTime;
+      this.date = date;
+      this.time = time;
     },
 
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     },
 
-    async push() {
-      let newPic = ["https://placeimg.com/640/480/any"];
+    test() {},
 
+    async push() {
+      let random1 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+      let random2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+      let newPic = [`https://picsum.photos/${random1}/${random2}`];
       if (this.slide == 1) {
         this.arr2 = newPic.concat(this.arr1.slice(0, 3));
       } else {
@@ -253,9 +424,25 @@ export default {
       });
     }
   },
+  watch: {
+    faceDetection: function() {
+      this.enableFaceDetection(this.selectedCamera);
+    },
+    faceRecognition: function() {
+      this.enableFaceRecognition(this.selectedCamera);
+    },
+
+    // Set Carosel on first camera if no other exists
+    cameras: function() {
+      if (this.cameras.length == 1) {
+        this.cameraSlide = this.cameras[0].cameraId;
+      }
+    }
+  },
   components: {
     "new-person-dialog": require("components/Facial/Modals/NewPersonDialog")
-      .default
+      .default,
+    "video-feed": require("components/Facial/Modals/VideoFeed").default
   }
 };
 </script>
