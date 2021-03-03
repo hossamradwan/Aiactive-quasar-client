@@ -1,185 +1,204 @@
 <template>
-  <div class="fit column   ">
-    <!-- Row 2 -->
-    <div class="col-7">
-      <div class="fit row">
-        <!-- Row 2 > Column 1 -->
-        <!-- Faces Carousel -->
-        <q-carousel
-          v-model="slide"
-          vertical
-          transition-prev="slide-up"
-          transition-next="slide-down"
-          animated
-          swipeable
-          height=" 450px"
-          :autoplay="autoplay"
-          infinite
-          class="col-2 overflow-hidden "
-          style="overflow: auto;"
-        >
-          <q-carousel-slide :name="1" class="row no-wrap">
-            <div
-              class="column fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
-            >
-              <q-img
-                v-for="image in arr1"
-                :key="image.index"
-                class="rounded-borders  "
-                style="height: 200px; max-width: 300px"
-                :src="image"
-              />
-            </div>
-          </q-carousel-slide>
-          <q-carousel-slide :name="2" class="row no-wrap">
-            <div class="column fit justify-start items-center  no-wrap">
-              <q-img
-                v-for="image in arr2"
-                :key="image.index"
-                class="rounded-borders  "
-                style="height: 200px; max-width: 300px"
-                :src="image"
-              />
-            </div>
-          </q-carousel-slide>
-        </q-carousel>
-
-        <!-- Row 2 > Column 2 -->
-        <!-- Record Video Stream -->
-
-        <q-carousel
-          v-model="cameraSlide"
-          transition-prev="slide-right"
-          transition-next="slide-left"
-          animated
-          control-color="primary"
-          padding
-          infinite
-          class="col   "
-          style="overflow: auto; border-style: dotted"
-        >
-          <q-carousel-slide
-            v-for="camera in cameras"
-            :key="camera.cameraId"
-            :name="camera.cameraId"
-          >
-            <q-img
-              :src="camera.videoFeedUrl"
-              :ratio="1"
-              style="overflow: auto; max-height:100%; "
-              class="col-7"
-            >
-              <template v-slot:error>
-                <div
-                  class="absolute-full flex flex-center bg-negative text-white"
-                >
-                  Cannot load image
-                </div>
-              </template>
-            </q-img>
-          </q-carousel-slide>
-          <div
-            class="absolute-bottom custom-caption center"
-            v-if="cameras.length > 0"
-          >
-            <q-btn icon="pause" color="positive" @click="pauseDevice(camera)" />
+  <div class="q-pa-md">
+    <div>
+      <q-layout
+        view="hHh Lpr lfr"
+        container
+        style="height: 500px"
+        class="bg-grey-3"
+      >
+        <q-header class="bg-black">
+          <q-toolbar>
             <q-btn
-              icon="play_arrow"
-              color="positive"
-              @click="addDevice(camera)"
+              flat
+              @click="drawerLeft = !drawerLeft"
+              round
+              dense
+              icon="menu"
             />
-            <q-btn icon="stop" color="positive" @click="stopCamera(camera)" />
-          </div>
-        </q-carousel>
-        <!-- Row 2 > Column 3 -->
-        <div class="col-2" style="overflow: auto;">
-          <!-- Button Add New Person -->
-          <q-btn
-            label="Add New Person"
-            color="primary"
-            @click="showDialog = true"
-          />
-          <!-- Buttons For Testing -->
-          <q-btn label="Generate" color="warning" @click="push" />
-          <q-btn label="Test" color="warning" @click="test" />
+            <q-btn icon="psychology" round color="primary" @click="push" />
+            <q-toolbar-title>Camera Name</q-toolbar-title>
+            <div
+              class="row  justify-center  "
+              v-if="selectedCameraID != 'noImage'"
+            >
+              <q-toggle
+                toggle-indeterminate
+                v-model="detection"
+                color="green"
+                :label="
+                  detection
+                    ? 'Face Recognition'
+                    : detection == null
+                    ? 'Face Detection'
+                    : 'Disabled'
+                "
+              />
+              <q-btn
+                v-if="videoStatus == 'play'"
+                icon="pause"
+                color="positive"
+                @click="pauseFeed(selectedCameraID)"
+              />
+              <q-btn
+                v-if="videoStatus == 'pause'"
+                icon="play_arrow"
+                color="positive"
+                @click="palyFeed(selectedCameraID)"
+              />
+              <q-btn
+                icon="stop"
+                color="positive"
+                @click="stopCamera(selectedCameraID)"
+              />
+            </div>
+          </q-toolbar>
+        </q-header>
 
-          <q-btn color="primary" icon="settings" round>
-            <q-menu fit anchor="center right" self="center left">
-              <q-item>
-                <q-item-section
-                  ><q-input
-                    outlined
-                    v-model="payload.url"
-                    label="url"
-                    clearable/>
-                  <q-input
-                    outlined
-                    v-model="payload.width"
-                    label="width"
-                    clearable/>
-                  <q-input
-                    outlined
-                    v-model="payload.height"
-                    label="height"
-                    clearable/>
+        <q-drawer v-model="drawerLeft" bordered :width="200" :breakpoint="300">
+          <q-scroll-area class="fit">
+            <div class="q-pa-sm">
+              <q-carousel
+                v-model="slide"
+                vertical
+                transition-prev="slide-up"
+                transition-next="slide-down"
+                animated
+                swipeable
+                height=" 450px"
+                :autoplay="autoplay"
+                infinite
+                class="col-2 overflow-hidden "
+                style="overflow: auto;"
+              >
+                <q-carousel-slide :name="1" class="row no-wrap">
+                  <div
+                    class="column fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
+                  >
+                    <q-img
+                      v-for="image in arr1"
+                      :key="image.index"
+                      class="rounded-borders  "
+                      style="height: 200px; max-width: 300px"
+                      :src="image"
+                    />
+                  </div>
+                </q-carousel-slide>
+                <q-carousel-slide :name="2" class="row no-wrap">
+                  <div class="column fit justify-start items-center  no-wrap">
+                    <q-img
+                      v-for="image in arr2"
+                      :key="image.index"
+                      class="rounded-borders  "
+                      style="height: 200px; max-width: 300px"
+                      :src="image"
+                    />
+                  </div>
+                </q-carousel-slide>
+              </q-carousel>
+            </div>
+          </q-scroll-area>
+        </q-drawer>
 
-                  <q-btn
-                    label="Add Camera"
-                    color="negative"
-                    @click="addDevice(payload)"/>
-
-                  <q-toggle
-                    v-model="faceDetection"
-                    color="green"
-                    label="Face Detection"/>
-                  <q-toggle
-                    v-model="faceRecognition"
-                    color="green"
-                    label="Face Recognition"
-                /></q-item-section>
-              </q-item>
-            </q-menu>
-          </q-btn>
-        </div>
-      </div>
+        <q-page-container>
+          <q-page class="q-pa-md">
+            <q-carousel
+              v-model="selectedCameraID"
+              transition-prev="slide-right"
+              transition-next="slide-left"
+              animated
+              control-color="primary"
+              padding
+              infinite
+              arrows
+            >
+              <q-carousel-slide name="noImage">
+                <template>
+                  <div
+                    class="absolute-full flex flex-center bg-negative text-white"
+                  >
+                    No Cameras Added Yet
+                  </div>
+                </template>
+              </q-carousel-slide>
+              <q-carousel-slide
+                v-for="camera in cameras"
+                :key="camera.cameraId"
+                :name="camera.cameraId"
+              >
+                <q-img
+                  :src="camera.videoFeedUrl"
+                  :ratio="1"
+                  style="overflow: auto; max-height:100%; "
+                  class="col-7"
+                >
+                </q-img>
+              </q-carousel-slide>
+            </q-carousel>
+          </q-page>
+        </q-page-container>
+      </q-layout>
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
 export default {
-  name: "ComponentFacialRecord",
-
   data() {
     return {
-      faceDetection: false,
-      faceRecognition: false,
-      payload: {
-        url: 0,
-        width: 480,
-        height: 320
-      },
+      drawerLeft: true,
+      selectedCameraID: "noImage",
+      videoStatus: "play",
       slide: 1,
-      cameraSlide: "",
       autoplay: false,
       images: [
-        "https://cdn.quasar.dev/img/mountains.jpg",
-        "https://cdn.quasar.dev/img/material.png",
-        "https://cdn.quasar.dev/img/donuts.png",
-        "https://cdn.quasar.dev/img/cat.jpg",
-        "https://cdn.quasar.dev/img/linux-avatar.png"
+        "https://picsum.photos/123/456",
+        "https://picsum.photos/789/987",
+        "https://picsum.photos/321/213",
+        "https://picsum.photos/486/654",
+        "https://picsum.photos/756/255"
       ],
       arr1: [],
       arr2: []
     };
   },
+
   mounted() {
     this.arr1 = this.images.slice(0, 4);
-    if (this.cameras.length > 0) this.cameraSlide = this.cameras[0].cameraId;
+    if (this.cameras.length > 0)
+      this.selectedCameraID = this.cameras[0].cameraId;
   },
-
   computed: {
-    ...mapState("facialCamera", ["cameras"])
+    ...mapState("facialCamera", ["cameras", "screenToShow"]),
+    detection: {
+      get() {
+        let index = this.cameras.findIndex(
+          x => x.cameraId === this.selectedCameraID
+        );
+        let selectedCamera = this.$store.getters["facialCamera/cameras"][index];
+        if (selectedCamera.faceRecognition) {
+          return true;
+        } else if (
+          selectedCamera.faceDetection == true &&
+          selectedCamera.faceRecognition == false
+        ) {
+          return null;
+        } else {
+          return false;
+        }
+      },
+      set(value) {
+        console.log("value:", value);
+        let index = this.cameras.findIndex(
+          x => x.cameraId === this.selectedCameraID
+        );
+        this.$store.dispatch("facialCamera/updateFaceDetection", {
+          index,
+          value,
+          cameraId: this.selectedCameraID
+        });
+      }
+    }
   },
   methods: {
     ...mapActions("facialCamera", [
@@ -187,28 +206,42 @@ export default {
       "removeDevice",
       "enableFaceRecognition",
       "enableFaceDetection",
-      "pauseDevice"
+      "pauseDevice",
+      "updateMessage"
     ]),
+    pauseFeed(camera) {
+      this.videoStatus = "pause";
+      this.pauseDevice(camera);
+    },
+    palyFeed(camera) {
+      this.videoStatus = "play";
+      this.addDevice(camera);
+    },
     stopCamera(camera) {
-      // TOdo error if slide of index 0
-      let index = this.cameras.findIndex(x => x.cameraId === camera.cameraId);
-
-      let previouseSlide = this.cameras[index - 1].cameraId;
+      let index = this.cameras.findIndex(x => x.cameraId === camera);
+      let previouseSlide;
+      if (index != 0) {
+        previouseSlide = this.cameras[index - 1].cameraId;
+      } else {
+        if (this.cameras.length == 1) {
+          previouseSlide = "noImage";
+        } else {
+          previouseSlide = this.cameras[this.cameras.length - 1].cameraId;
+        }
+      }
       console.log("index:", index);
       console.log("previouseSlide:", previouseSlide);
       this.removeDevice(camera);
 
-      this.setCameraSlide(previouseSlide);
+      this.setselectedCameraID(previouseSlide);
     },
-    setCameraSlide(slide) {
-      this.cameraSlide = slide;
+    setselectedCameraID(slide) {
+      this.selectedCameraID = slide;
     },
-
-    test() {},
-
     async push() {
-      let newPic = ["https://placeimg.com/640/480/any"];
-
+      let random1 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+      let random2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
+      let newPic = [`https://picsum.photos/${random1}/${random2}`];
       if (this.slide == 1) {
         this.arr2 = newPic.concat(this.arr1.slice(0, 3));
       } else {
@@ -219,15 +252,26 @@ export default {
       this.sleep(150).then(() => {
         this.autoplay = false;
       });
+    },
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
     }
   },
   watch: {
-    faceDetection: function() {
-      this.enableFaceDetection(this.selectedCamera);
-    },
-    faceRecognition: function() {
-      this.enableFaceRecognition(this.selectedCamera);
-    }
+    // screenToShow: function() {
+    //   console.log("this.screenToShow:", this.screenToShow);
+    //   if (this.screenToShow != null) {
+    //     this.setselectedCameraID(this.screenToShow);
+    //     this.$store.commit("facialCamera/resetSelectedCameraIndex");
+    //   }
+    // },
+    // Set Carosel on first camera if no other exists
+    // cameras: function() {
+    //   console.log("selectedCameraIndex", this.selectedCameraIndex);
+    //   if (this.cameras.length == 1) {
+    //     this.selectedCameraID = this.cameras[0].cameraId;
+    //   }
+    // }
   }
 };
 </script>
