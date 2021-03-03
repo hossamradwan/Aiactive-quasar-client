@@ -4,7 +4,7 @@
     <tool-bar :moduleName="moduleName" />
     <q-card class="settings-tabs">
       <!-- TABS -->
-      <q-tabs
+      <!-- <q-tabs
         v-model="tab"
         dense
         class="text-grey"
@@ -18,7 +18,7 @@
         <q-tab name="record" icon="device_hub" :label="$t('Record')" />
       </q-tabs>
 
-      <q-separator />
+      <q-separator /> -->
 
       <q-tab-panels v-model="tab" animated>
         <!-- Report Tab Container -->
@@ -37,87 +37,12 @@
 
 <script>
 export default {
-  name: "PageSettings",
+  name: "PageFacial",
 
   data() {
     return {
       moduleName: "facial-module",
-      series: [75],
-      chartOptions: {
-        chart: {
-          toolbar: {
-            show: false
-          }
-        },
-        title: {
-          text: "Radial Bar",
-          align: "left",
-          style: {
-            color: "#FFF"
-          }
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 225,
-            hollow: {
-              margin: 0,
-              size: "70%",
-              background: "#424242",
-              position: "front",
-              dropShadow: {
-                enabled: true,
-                top: 3,
-                left: 0,
-                blur: 4,
-                opacity: 0.24
-              }
-            },
-            track: {
-              background: "#424242",
-              strokeWidth: "67%",
-              margin: 0, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: -3,
-                left: 0,
-                blur: 4,
-                opacity: 0.35
-              }
-            },
-            dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                formatter: function(val) {
-                  return val + "%";
-                },
-                color: "#FFF",
-                fontSize: "15px",
-                show: true,
-                offsetY: 5
-              }
-            }
-          }
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            type: "horizontal",
-            shadeIntensity: 0.5,
-            gradientToColors: ["#FCCF31", "#FCCF31"],
-            inverseColors: true,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 100]
-          }
-        },
-        stroke: {
-          lineCap: "round"
-        }
-      },
+
       tab: "record",
       slide: 1,
       autoplay: false,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="fit column   ">
+    <div class="fit column" v-if="false">
       <!-- Row 1 -->
       <div class="full-width row  justify-between  ">
         <!-- Row 1 > Column 1 -->
@@ -244,7 +244,7 @@
         <new-person-dialog />
       </q-dialog>
     </div>
-    <video-feed />
+    <video-feed v-else />
   </div>
 </template>
 <script>
@@ -482,10 +482,9 @@ export default {
   },
   watch: {
     selectedCameraIndex: function() {
-      console.log("selectedCameraIndex", this.selectedCameraIndex);
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);
-        this.$store.commit("facialCamera/resetSelectedCameraIndex");
+        // this.$store.commit("facialCamera/resetSelectedCameraIndex");
       }
     },
 

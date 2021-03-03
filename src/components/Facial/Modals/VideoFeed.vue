@@ -17,7 +17,7 @@
               icon="menu"
             />
             <q-btn icon="psychology" round color="primary" @click="push" />
-            <q-toolbar-title>Camera Name</q-toolbar-title>
+            <q-toolbar-title>Camera {{ selectedCameraID }}</q-toolbar-title>
             <div
               class="row  justify-center  "
               v-if="selectedCameraID != 'noImage'"
@@ -99,6 +99,32 @@
             </div>
           </q-scroll-area>
         </q-drawer>
+        <q-drawer
+          side="right"
+          v-model="drawerRight"
+          bordered
+          :width="200"
+          :breakpoint="300"
+        >
+          <q-scroll-area class="fit">
+            <div class="q-pa-sm">
+              <q-list>
+                <q-item
+                  clickable
+                  v-close-popup
+                  v-for="camera in cameras"
+                  :key="camera.cameraId"
+                  @click="setselectedCameraID(camera.cameraId)"
+                >
+                  <!-- @click="setStreamUrl(camera.videoFeedUrl)" -->
+                  <q-item-section>
+                    <q-item-label>Camera {{ camera.cameraId }}</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+          </q-scroll-area>
+        </q-drawer>
 
         <q-page-container>
           <q-page class="q-pa-md">
@@ -110,7 +136,6 @@
               control-color="primary"
               padding
               infinite
-              arrows
             >
               <q-carousel-slide name="noImage">
                 <template>
@@ -147,6 +172,7 @@ export default {
   data() {
     return {
       drawerLeft: true,
+      drawerRight: true,
       selectedCameraID: "noImage",
       videoStatus: "play",
       slide: 1,
@@ -169,7 +195,7 @@ export default {
       this.selectedCameraID = this.cameras[0].cameraId;
   },
   computed: {
-    ...mapState("facialCamera", ["cameras", "screenToShow"]),
+    ...mapState("facialCamera", ["cameras", "selectedCameraIndex"]),
     detection: {
       get() {
         let index = this.cameras.findIndex(
@@ -258,20 +284,20 @@ export default {
     }
   },
   watch: {
-    // screenToShow: function() {
-    //   console.log("this.screenToShow:", this.screenToShow);
-    //   if (this.screenToShow != null) {
-    //     this.setselectedCameraID(this.screenToShow);
-    //     this.$store.commit("facialCamera/resetSelectedCameraIndex");
-    //   }
-    // },
+    selectedCameraIndex: function() {
+      console.log("this.selectedCameraIndex:", this.selectedCameraIndex);
+      if (this.selectedCameraIndex != null) {
+        this.setselectedCameraID(this.selectedCameraIndex);
+        this.$store.commit("facialCamera/resetSelectedCameraIndex");
+      }
+    },
+
     // Set Carosel on first camera if no other exists
-    // cameras: function() {
-    //   console.log("selectedCameraIndex", this.selectedCameraIndex);
-    //   if (this.cameras.length == 1) {
-    //     this.selectedCameraID = this.cameras[0].cameraId;
-    //   }
-    // }
+    cameras: function() {
+      if (this.cameras.length == 1) {
+        this.selectedCameraID = this.cameras[0].cameraId;
+      }
+    }
   }
 };
 </script>

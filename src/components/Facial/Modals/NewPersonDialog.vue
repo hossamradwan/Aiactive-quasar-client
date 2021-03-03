@@ -1,10 +1,10 @@
 <template>
-  <q-card>
-    <q-card-section>
+  <q-item>
+    <q-item-section>
       <div class="text-h6">Add New Person</div>
-    </q-card-section>
+    </q-item-section>
 
-    <q-card-section style="max-height: 50vh" class="scroll">
+    <q-item-section style="max-height: 50vh" class="scroll">
       <q-uploader
         url="http://localhost:4444/upload"
         label="Attach Images"
@@ -15,9 +15,9 @@
         @rejected="onRejected"
         auto-upload
       />
-    </q-card-section>
+    </q-item-section>
     <form @submit.prevent="submitForm">
-      <q-card-section>
+      <q-item-section>
         <facial-new-person-Id :id.sync="userData.id" :label="'ID'" />
         <facial-new-person-name :name.sync="userData.name" :label="'Name'" />
         <facial-new-person-email
@@ -28,14 +28,14 @@
           :phone.sync="userData.phone"
           :label="'Phone'"
         />
-      </q-card-section>
+      </q-item-section>
 
-      <q-card-actions align="right">
+      <q-item-actions align="right">
         <q-btn flat label="Cancel" color="primary" v-close-popup />
         <q-btn flat label="Submit" color="primary" v-close-popup />
-      </q-card-actions>
+      </q-item-actions>
     </form>
-  </q-card>
+  </q-item>
 </template>
 <script>
 export default {

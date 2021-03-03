@@ -24,6 +24,11 @@
       <search
         v-if="search.includes(moduleName)"
        :moduleName='moduleName' />
+       
+        <facial-options
+        v-if="facial.includes(moduleName)"
+        :moduleName="moduleName"
+      />
     </template>
 
     <filters-dropdown
@@ -66,6 +71,8 @@ export default {
         'average-speed-module',
         'toll-gates-module'
       ],
+
+       facial: ["facial-module"],
     };
   },
   components: {    
@@ -75,6 +82,7 @@ export default {
     'search': require("./Shared/Search").default,
     'date-time': require("./Shared/DateTime").default,
     'filters-dropdown': require("./Shared/FiltersDropdown").default,
+    "facial-options": require("./Shared/FacialOptions").default
   }
 };
 </script>
