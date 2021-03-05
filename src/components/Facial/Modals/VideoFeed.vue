@@ -7,53 +7,9 @@
         style="height: 500px"
         class="bg-grey-3"
       >
-        <q-header class="bg-black">
-          <q-toolbar>
-            <q-btn
-              flat
-              @click="drawerLeft = !drawerLeft"
-              round
-              dense
-              icon="menu"
-            />
-            <q-btn icon="psychology" round color="primary" @click="push" />
-            <q-toolbar-title>Camera {{ selectedCameraID }}</q-toolbar-title>
-            <div
-              class="row  justify-center  "
-              v-if="selectedCameraID != 'noImage'"
-            >
-              <q-toggle
-                toggle-indeterminate
-                v-model="detection"
-                color="green"
-                :label="
-                  detection
-                    ? 'Face Recognition'
-                    : detection == null
-                    ? 'Face Detection'
-                    : 'Disabled'
-                "
-              />
-              <q-btn
-                v-if="videoStatus == 'play'"
-                icon="pause"
-                color="positive"
-                @click="pauseFeed(selectedCameraID)"
-              />
-              <q-btn
-                v-if="videoStatus == 'pause'"
-                icon="play_arrow"
-                color="positive"
-                @click="palyFeed(selectedCameraID)"
-              />
-              <q-btn
-                icon="stop"
-                color="positive"
-                @click="stopCamera(selectedCameraID)"
-              />
-            </div>
-          </q-toolbar>
-        </q-header>
+        <!-- <q-header class="bg-black transparent"> -->
+
+        <!-- </q-header> -->
 
         <q-drawer v-model="drawerLeft" bordered :width="200" :breakpoint="300">
           <q-scroll-area class="fit">
@@ -156,7 +112,68 @@
                   :ratio="1"
                   style="overflow: auto; max-height:100%; "
                   class="col-7"
+                  @mouseover="show = true"
+                  @mouseleave="show = false"
                 >
+                  <q-toolbar v-if="show">
+                    <q-btn
+                      flat
+                      @click="drawerLeft = !drawerLeft"
+                      round
+                      dense
+                      icon="menu"
+                    />
+                    <q-btn
+                      icon="psychology"
+                      round
+                      color="primary"
+                      @click="push"
+                    />
+                    <q-toolbar-title
+                      >Camera {{ selectedCameraID }}</q-toolbar-title
+                    >
+                    <div
+                      class="row  justify-center  "
+                      v-if="selectedCameraID != 'noImage'"
+                    >
+                      <q-toggle
+                        toggle-indeterminate
+                        v-model="detection"
+                        color="green"
+                        :label="
+                          detection
+                            ? 'Face Recognition'
+                            : detection == null
+                            ? 'Face Detection'
+                            : 'Disabled'
+                        "
+                      />
+                      <q-btn
+                        v-if="videoStatus == 'play'"
+                        icon="pause"
+                        round
+                        @click="pauseFeed(selectedCameraID)"
+                      />
+                      <q-btn
+                        v-if="videoStatus == 'pause'"
+                        icon="play_arrow"
+                        round
+                        @click="palyFeed(selectedCameraID)"
+                      />
+                      <q-btn
+                        icon="stop"
+                        round
+                        @click="stopCamera(selectedCameraID)"
+                      />
+                    </div>
+                    <q-btn
+                      flat
+                      @click="drawerRight = !drawerRight"
+                      round
+                      dense
+                      icon="menu"
+                    />
+                  </q-toolbar>
                 </q-img>
               </q-carousel-slide>
             </q-carousel>
@@ -171,8 +188,9 @@ import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      drawerLeft: true,
-      drawerRight: true,
+      show: false,
+      drawerLeft: false,
+      drawerRight: false,
       selectedCameraID: "noImage",
       videoStatus: "play",
       slide: 1,
@@ -297,6 +315,15 @@ export default {
       if (this.cameras.length == 1) {
         this.selectedCameraID = this.cameras[0].cameraId;
       }
+    },
+    detection: function() {
+      console.log("asdfasdfasf");
+      if (!this.detection) {
+        this.drawerLeft = false;
+      } else {
+        this.drawerLeft = true;
+      }
+      // this.drawerLeft = !this.detection ? true : false;
     }
   }
 };

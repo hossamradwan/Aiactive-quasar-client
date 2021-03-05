@@ -12,7 +12,7 @@ const state = {
   selectedCameraIndex: null,
   cameras: [
     {
-      cameraId: -1,
+      cameraId: 0,
       url: 1,
       videoFeedUrl: "https://picsum.photos/536/974",
       faceDetection: false,

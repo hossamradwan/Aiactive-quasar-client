@@ -1,5 +1,17 @@
 <template>
   <div>
+    <q-slider
+      v-model="standard"
+      snap
+      label
+      label-always
+      markers
+      :min="1"
+      :step="1"
+      :max="cameras.length - 1"
+      style="max-width:200px"
+    />
+
     <div class="fit column" v-if="false">
       <!-- Row 1 -->
       <div class="full-width row  justify-between  ">
@@ -244,7 +256,9 @@
         <new-person-dialog />
       </q-dialog>
     </div>
-    <video-feed v-else />
+    <div v-else class="row">
+      <video-feed :class="flex" v-for="x in cameras.length" :key="x" />
+    </div>
   </div>
 </template>
 <script>
@@ -254,6 +268,8 @@ export default {
 
   data() {
     return {
+      standard: 1,
+      flex: `col-${12}`,
       faceDetection: false,
       faceRecognition: false,
       videoStatus: "play",
@@ -481,6 +497,9 @@ export default {
     }
   },
   watch: {
+    standard: function() {
+      this.flex = `col-${12 / this.standard}`;
+    },
     selectedCameraIndex: function() {
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);
