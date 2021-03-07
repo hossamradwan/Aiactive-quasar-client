@@ -257,7 +257,14 @@
       </q-dialog>
     </div>
     <div v-else class="row">
-      <video-feed :class="flex" v-for="x in cameras.length" :key="x" />
+      <video-feed
+        :class="flex"
+        v-for="(camera, index) in cameras"
+        :key="camera.cameraId"
+        :index="index"
+        :flex="standard"
+      />
+      <!-- <morph-view /> -->
     </div>
   </div>
 </template>
@@ -268,6 +275,7 @@ export default {
 
   data() {
     return {
+      showToolbar: false,
       standard: 1,
       flex: `col-${12}`,
       faceDetection: false,
@@ -517,7 +525,8 @@ export default {
   components: {
     "new-person-dialog": require("components/Facial/Modals/NewPersonDialog")
       .default,
-    "video-feed": require("components/Facial/Modals/VideoFeed").default
+    "video-feed": require("components/Facial/Modals/VideoFeed").default,
+    "morph-view": require("components/Facial/Modals/MorphView").default
   }
 };
 </script>

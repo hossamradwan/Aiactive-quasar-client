@@ -1,27 +1,35 @@
 <template>
   <card-base>
-    <apexchart ref="realtimeChart" type="line" height="200" :options="chartOptions" :series="series" />
+    <apexchart
+      ref="realtimeChart"
+      type="line"
+      height="200"
+      :options="chartOptions"
+      :series="series"
+    />
   </card-base>
 </template>
 
 <script>
-import CardBase from 'components/Dashboard/CardBase'
+import CardBase from "components/Dashboard/CardBase";
 export default {
-  name: 'ApexLine',
+  name: "ApexLine",
   components: {
     CardBase
   },
-  data () {
+  data() {
     return {
-      series: [{
-        name: 'Desktops',
-        data: [10, 41, 35, 51, 49, 62, 69, 91, 99]
-      }],
+      series: [
+        {
+          name: "Desktops",
+          data: [10, 41, 35, 51, 49, 62, 69, 91, 99]
+        }
+      ],
       chartOptions: {
-        colors: ['#FCCF31', '#17ead9', '#f02fc2'],
+        colors: ["#FCCF31", "#17ead9", "#f02fc2"],
         chart: {
           height: 350,
-          type: 'line'
+          type: "line"
         },
         grid: {
           show: true,
@@ -33,7 +41,7 @@ export default {
           }
         },
         stroke: {
-          curve: 'smooth'
+          curve: "smooth"
         },
         dropShadow: {
           enabled: true,
@@ -46,49 +54,65 @@ export default {
           enabled: false
         },
         title: {
-          text: 'Line',
-          align: 'left',
+          text: "Line",
+          align: "left",
           style: {
-            color: '#FFF'
+            color: "#FFF"
           }
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep"
+          ],
           labels: {
             style: {
-              colors: '#fff'
+              colors: "#fff"
             }
           }
         },
         yaxis: {
           labels: {
             style: {
-              colors: '#fff'
+              colors: "#fff"
             }
           }
         }
       }
-    }
+    };
   },
-  mounted () {
-    this.setDataLineChart()
+  mounted() {
+    this.setDataLineChart();
   },
   methods: {
-    getRandomArbitrary (min, max) {
-      return Math.floor(Math.random() * 99)
+    getRandomArbitrary(min, max) {
+      return Math.floor(Math.random() * 99);
     },
-    setDataLineChart () {
+    setDataLineChart() {
       setInterval(() => {
-        this.series[0].data.splice(0, 1)
-        this.series[0].data.push(this.getRandomArbitrary(0, 99))
-        this.updateSeriesLine()
-      }, 3000)
+        // this.series[0].data.splice(0, 1)
+        // this.series[0].data.push(this.getRandomArbitrary(0, 99))
+        // this.updateSeriesLine()
+      }, 3000);
     },
-    updateSeriesLine () {
-      this.$refs.realtimeChart.updateSeries([{
-        data: this.series[0].data
-      }], false, true)
+    updateSeriesLine() {
+      // this.$refs.realtimeChart.updateSeries(
+      //   [
+      //     {
+      //       data: this.series[0].data
+      //     }
+      //   ],
+      //   false,
+      //   true
+      // );
     }
   }
-}
+};
 </script>

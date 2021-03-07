@@ -42,8 +42,8 @@ import { colors } from "quasar";
 export default {
   data() {
     return {
-      lang: localStorage.getItem("Language") || "en-us",
-      color: localStorage.getItem("ThemeColor") || "#027be3",
+      lang: localStorage.getItem("Language"),
+      color: localStorage.getItem("ThemeColor") || "#005a7ee3",
       langOptions: [],
       submitResult: []
     };

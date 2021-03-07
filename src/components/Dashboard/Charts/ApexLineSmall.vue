@@ -5,16 +5,22 @@
         Line
       </div>
       <div class="col-12">
-      <apexchart ref="realtimeChart" type="line" height="90" :options="chartOptions" :series="series" />
+        <apexchart
+          ref="realtimeChart"
+          type="line"
+          height="90"
+          :options="chartOptions"
+          :series="series"
+        />
       </div>
     </div>
   </card-base>
 </template>
 
 <script>
-import CardBase from 'components/Dashboard/CardBase'
+import CardBase from "components/Dashboard/CardBase";
 export default {
-  name: 'ApexLine',
+  name: "ApexLine",
   components: {
     CardBase
   },
@@ -23,13 +29,15 @@ export default {
       type: String
     }
   },
-  data () {
+  data() {
     return {
-      series: [{
-        data: [10, 41, 35, 51, 260, 62, 69, 91, 600]
-      }],
+      series: [
+        {
+          data: [10, 41, 35, 51, 260, 62, 69, 91, 600]
+        }
+      ],
       chartOptions: {
-        colors: ['#FFF', '#17ead9', '#f02fc2'],
+        colors: ["#FFF", "#17ead9", "#f02fc2"],
         chart: {
           toolbar: {
             show: false
@@ -39,7 +47,7 @@ export default {
           show: false
         },
         stroke: {
-          curve: 'smooth',
+          curve: "smooth",
           width: 4
         },
         xaxis: {
@@ -50,7 +58,7 @@ export default {
           labels: {
             show: false,
             style: {
-              colors: '#fff'
+              colors: "#fff"
             }
           }
         },
@@ -58,32 +66,38 @@ export default {
           labels: {
             show: false,
             style: {
-              color: '#fff'
+              color: "#fff"
             }
           }
         }
       }
-    }
+    };
   },
-  mounted () {
+  mounted() {
     // this.setDataLineChart()
   },
   methods: {
-    getRandomArbitrary (min, max) {
-      return Math.floor(Math.random() * 99)
+    getRandomArbitrary(min, max) {
+      return Math.floor(Math.random() * 99);
     },
-    setDataLineChart () {
+    setDataLineChart() {
       setInterval(() => {
-        this.series[0].data.splice(0, 1)
-        this.series[0].data.push(this.getRandomArbitrary(0, 99))
-        this.updateSeriesLine()
-      }, 3000)
+        // this.series[0].data.splice(0, 1)
+        // this.series[0].data.push(this.getRandomArbitrary(0, 99))
+        // this.updateSeriesLine()
+      }, 3000);
     },
-    updateSeriesLine () {
-      this.$refs.realtimeChart.updateSeries([{
-        data: this.series[0].data
-      }], false, true)
+    updateSeriesLine() {
+      // this.$refs.realtimeChart.updateSeries(
+      //   [
+      //     {
+      //       data: this.series[0].data
+      //     }
+      //   ],
+      //   false,
+      //   true
+      // );
     }
   }
-}
+};
 </script>

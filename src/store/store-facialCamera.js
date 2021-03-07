@@ -14,7 +14,28 @@ const state = {
     {
       cameraId: 0,
       url: 1,
-      videoFeedUrl: "https://picsum.photos/536/974",
+      videoFeedUrl: "https://picsum.photos/576/222",
+      faceDetection: false,
+      faceRecognition: false
+    },
+    {
+      cameraId: 1,
+      url: 1,
+      videoFeedUrl: "https://picsum.photos/333/975",
+      faceDetection: false,
+      faceRecognition: false
+    },
+    {
+      cameraId: 2,
+      url: 1,
+      videoFeedUrl: "https://picsum.photos/536/444",
+      faceDetection: false,
+      faceRecognition: false
+    },
+    {
+      cameraId: 3,
+      url: 1,
+      videoFeedUrl: "https://picsum.photos/555/974",
       faceDetection: false,
       faceRecognition: false
     }

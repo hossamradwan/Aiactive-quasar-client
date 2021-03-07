@@ -1,73 +1,48 @@
 <template>
-  <div class="q-pa-md">
+  <div @mouseover="showToolbar = true" @mouseleave="showToolbar = false">
     <div>
-      <q-layout
-        view="hHh Lpr lfr"
-        container
-        style="height: 500px"
-        class="bg-grey-3"
+      <!-- Cameras -->
+      <q-scroll-area class="fit" v-model="drawerRight">
+        <div class="q-pa-sm"></div>
+      </q-scroll-area>
+
+      <!-- Video Feed -->
+
+      <q-carousel
+        v-model="selectedCameraID"
+        transition-prev="slide-right"
+        transition-next="slide-left"
+        animated
+        control-color="primary"
+        padding
+        infinite
       >
-        <!-- <q-header class="bg-black transparent"> -->
-
-        <!-- </q-header> -->
-
-        <q-drawer v-model="drawerLeft" bordered :width="200" :breakpoint="300">
-          <q-scroll-area class="fit">
-            <div class="q-pa-sm">
-              <q-carousel
-                v-model="slide"
-                vertical
-                transition-prev="slide-up"
-                transition-next="slide-down"
-                animated
-                swipeable
-                height=" 450px"
-                :autoplay="autoplay"
-                infinite
-                class="col-2 overflow-hidden "
-                style="overflow: auto;"
-              >
-                <q-carousel-slide :name="1" class="row no-wrap">
-                  <div
-                    class="column fit justify-start items-center q-gutter-xs q-col-gutter no-wrap"
-                  >
-                    <q-img
-                      v-for="image in arr1"
-                      :key="image.index"
-                      class="rounded-borders  "
-                      style="height: 200px; max-width: 300px"
-                      :src="image"
-                    />
-                  </div>
-                </q-carousel-slide>
-                <q-carousel-slide :name="2" class="row no-wrap">
-                  <div class="column fit justify-start items-center  no-wrap">
-                    <q-img
-                      v-for="image in arr2"
-                      :key="image.index"
-                      class="rounded-borders  "
-                      style="height: 200px; max-width: 300px"
-                      :src="image"
-                    />
-                  </div>
-                </q-carousel-slide>
-              </q-carousel>
+        <!-- No Image Slide -->
+        <q-carousel-slide name="noImage">
+          <template>
+            <div class="absolute-full flex flex-center bg-negative text-white">
+              No Cameras Added Yet
             </div>
-          </q-scroll-area>
-        </q-drawer>
-        <q-drawer
-          side="right"
-          v-model="drawerRight"
-          bordered
-          :width="200"
-          :breakpoint="300"
+          </template>
+        </q-carousel-slide>
+
+        <!-- Video Carousel -->
+        <q-carousel-slide
+          v-for="camera in cameras"
+          :key="camera.cameraId"
+          :name="camera.cameraId"
         >
-          <q-scroll-area class="fit">
-            <div class="q-pa-sm">
+          <!-- Video Feed -->
+          <q-img
+            :src="camera.videoFeedUrl"
+            :ratio="1"
+            style="overflow: auto; max-height:100%; "
+            class="col-7"
+          >
+            <q-menu touch-position context-menu>
               <q-list>
                 <q-item
                   clickable
-                  v-close-popup
                   v-for="camera in cameras"
                   :key="camera.cameraId"
                   @click="setselectedCameraID(camera.cameraId)"
@@ -78,129 +53,141 @@
                   </q-item-section>
                 </q-item>
               </q-list>
-            </div>
-          </q-scroll-area>
-        </q-drawer>
+            </q-menu>
 
-        <q-page-container>
-          <q-page class="q-pa-md">
-            <q-carousel
-              v-model="selectedCameraID"
-              transition-prev="slide-right"
-              transition-next="slide-left"
-              animated
-              control-color="primary"
-              padding
-              infinite
+            <!-- Faces -->
+            <div
+              style="min-height:100%;width:20% ;background-color: transparent"
+              v-if="flex < 3"
             >
-              <q-carousel-slide name="noImage">
-                <template>
-                  <div
-                    class="absolute-full flex flex-center bg-negative text-white"
-                  >
-                    No Cameras Added Yet
-                  </div>
-                </template>
-              </q-carousel-slide>
-              <q-carousel-slide
-                v-for="camera in cameras"
-                :key="camera.cameraId"
-                :name="camera.cameraId"
+              <div
+                class="q-py-xl"
+                style="background-color: transparent ;"
+                v-if="facesDrawer"
               >
-                <q-img
-                  :src="camera.videoFeedUrl"
-                  :ratio="1"
-                  style="overflow: auto; max-height:100%; "
-                  class="col-7"
-                  @mouseover="show = true"
-                  @mouseleave="show = false"
+                <q-carousel
+                  v-model="slide"
+                  vertical
+                  transition-prev="slide-up"
+                  transition-next="slide-down"
+                  animated
+                  swipeable
+                  :autoplay="autoplay"
+                  infinite
+                  class="col-2 overflow-hidden "
+                  style="overflow: auto; float: left; background-color: transparent"
                 >
-                  <q-toolbar v-if="show">
-                    <q-btn
-                      flat
-                      @click="drawerLeft = !drawerLeft"
-                      round
-                      dense
-                      icon="menu"
-                    />
-                    <q-btn
-                      icon="psychology"
-                      round
-                      color="primary"
-                      @click="push"
-                    />
-                    <q-toolbar-title
-                      >Camera {{ selectedCameraID }}</q-toolbar-title
-                    >
-                    <div
-                      class="row  justify-center  "
-                      v-if="selectedCameraID != 'noImage'"
-                    >
-                      <q-toggle
-                        toggle-indeterminate
-                        v-model="detection"
-                        color="green"
-                        :label="
-                          detection
-                            ? 'Face Recognition'
-                            : detection == null
-                            ? 'Face Detection'
-                            : 'Disabled'
-                        "
-                      />
-                      <q-btn
-                        v-if="videoStatus == 'play'"
-                        icon="pause"
-                        round
-                        @click="pauseFeed(selectedCameraID)"
-                      />
-                      <q-btn
-                        v-if="videoStatus == 'pause'"
-                        icon="play_arrow"
-                        round
-                        @click="palyFeed(selectedCameraID)"
-                      />
-                      <q-btn
-                        icon="stop"
-                        round
-                        @click="stopCamera(selectedCameraID)"
-                      />
+                  <q-carousel-slide :name="1" class="row no-wrap">
+                    <div class="column fit  items-center  no-wrap">
+                      <q-avatar
+                        size="4rem"
+                        v-for="image in arr1"
+                        :key="image.index"
+                      >
+                        <q-img class="rounded-borders  " :src="image"> </q-img>
+                        <q-tooltip>Person Name</q-tooltip>
+                      </q-avatar>
                     </div>
-                    <q-btn
-                      flat
-                      @click="drawerRight = !drawerRight"
-                      round
-                      dense
-                      icon="menu"
-                    />
-                  </q-toolbar>
-                </q-img>
-              </q-carousel-slide>
-            </q-carousel>
-          </q-page>
-        </q-page-container>
-      </q-layout>
+                  </q-carousel-slide>
+                  <q-carousel-slide :name="2" class="row no-wrap">
+                    <div class="column fit justify-start items-center  no-wrap">
+                      <q-avatar
+                        size="4em"
+                        v-for="image in arr2"
+                        :key="image.index"
+                      >
+                        <q-img class="rounded-borders  " :src="image" />
+                      </q-avatar>
+                    </div>
+                  </q-carousel-slide>
+                </q-carousel>
+              </div>
+            </div>
+
+            <!-- Video Toolbar -->
+            <q-toolbar v-if="showToolbar" style="zoom: 80%; ">
+              <q-btn
+                flat
+                @click="facesDrawer = !facesDrawer"
+                round
+                dense
+                icon="menu"
+              />
+              <!-- Test Button -->
+              <!-- <q-btn icon="psychology" round color="primary" @click="push" /> -->
+
+              <!-- Title -->
+              <q-toolbar-title style="font-size:1.5em">
+                {{ index }}
+              </q-toolbar-title>
+              <div
+                class="row absolute-center  "
+                v-if="selectedCameraID != 'noImage'"
+              >
+                <!-- Pause -->
+                <q-btn
+                  v-if="videoStatus == 'play'"
+                  icon="pause"
+                  text-color="yellow"
+                  round
+                  @click="pauseFeed(selectedCameraID)"
+                />
+                <!-- Play -->
+                <q-btn
+                  v-if="videoStatus == 'pause'"
+                  icon="play_arrow"
+                  text-color="green"
+                  round
+                  @click="palyFeed(selectedCameraID)"
+                />
+                <!-- Stop -->
+                <q-btn
+                  icon="stop"
+                  round
+                  text-color="red"
+                  @click="stopCamera(selectedCameraID)"
+                />
+              </div>
+              <!-- Face Recognition Button -->
+              <q-toggle
+                toggle-indeterminate
+                v-model="detection"
+                color="green"
+                shrink
+                :label="
+                  detection
+                    ? 'Face Recognition Enabled'
+                    : detection == null
+                    ? 'Face Detection Enabled'
+                    : 'Face Recognition Disabled'
+                "
+              />
+            </q-toolbar>
+          </q-img>
+        </q-carousel-slide>
+      </q-carousel>
     </div>
   </div>
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
 export default {
+  props: ["index", "flex"],
   data() {
     return {
-      show: false,
-      drawerLeft: false,
+      showToolbar: false,
+      facesDrawer: false,
       drawerRight: false,
       selectedCameraID: "noImage",
       videoStatus: "play",
       slide: 1,
       autoplay: false,
       images: [
-        "https://picsum.photos/123/456",
-        "https://picsum.photos/789/987",
-        "https://picsum.photos/321/213",
-        "https://picsum.photos/486/654",
-        "https://picsum.photos/756/255"
+        "https://randomuser.me/api/portraits/men/63.jpg",
+        "https://randomuser.me/api/portraits/women/55.jpg",
+        "https://randomuser.me/api/portraits/men/33.jpg",
+        "https://randomuser.me/api/portraits/women/22.jpg",
+        "https://randomuser.me/api/portraits/men/10.jpg"
       ],
       arr1: [],
       arr2: []
@@ -210,7 +197,7 @@ export default {
   mounted() {
     this.arr1 = this.images.slice(0, 4);
     if (this.cameras.length > 0)
-      this.selectedCameraID = this.cameras[0].cameraId;
+      this.selectedCameraID = this.cameras[this.index].cameraId;
   },
   computed: {
     ...mapState("facialCamera", ["cameras", "selectedCameraIndex"]),
@@ -221,13 +208,16 @@ export default {
         );
         let selectedCamera = this.$store.getters["facialCamera/cameras"][index];
         if (selectedCamera.faceRecognition) {
+          this.facesDrawer = true;
           return true;
         } else if (
           selectedCamera.faceDetection == true &&
           selectedCamera.faceRecognition == false
         ) {
+          this.facesDrawer = true;
           return null;
         } else {
+          this.facesDrawer = false;
           return false;
         }
       },
@@ -283,9 +273,8 @@ export default {
       this.selectedCameraID = slide;
     },
     async push() {
-      let random1 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-      let random2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-      let newPic = [`https://picsum.photos/${random1}/${random2}`];
+      let random1 = Math.floor(Math.random() * (99 - 10 + 1) + 10);
+      let newPic = [`https://randomuser.me/api/portraits/men/${random1}.jpg`];
       if (this.slide == 1) {
         this.arr2 = newPic.concat(this.arr1.slice(0, 3));
       } else {
@@ -315,15 +304,6 @@ export default {
       if (this.cameras.length == 1) {
         this.selectedCameraID = this.cameras[0].cameraId;
       }
-    },
-    detection: function() {
-      console.log("asdfasdfasf");
-      if (!this.detection) {
-        this.drawerLeft = false;
-      } else {
-        this.drawerLeft = true;
-      }
-      // this.drawerLeft = !this.detection ? true : false;
     }
   }
 };
