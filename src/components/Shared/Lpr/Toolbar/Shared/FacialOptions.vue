@@ -1,5 +1,26 @@
 <template>
   <div class="q-pa-sm" style="max-width: 300px">
+    <!-- Layout Slider -->
+    <q-btn color="primary" :label="devicesPerRow + ' devices per row'">
+      <q-menu transition-show="jump-down" transition-hide="jump-up">
+        <q-list style="min-width: 200px ">
+          <q-item class="q-pt-lg">
+            <q-item-section>
+              <q-slider
+                v-model="devicesPerRow"
+                snap
+                label
+                label-always
+                markers
+                :min="1"
+                :step="1"
+                :max="cameras.length"
+            /></q-item-section>
+          </q-item>
+        </q-list>
+      </q-menu>
+    </q-btn>
+
     <!-- Button Add New Person -->
     <q-btn icon="person_add" round color="primary">
       <q-menu fit anchor="center right" self="center left">
@@ -37,12 +58,14 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   props: ["moduleName"],
   data() {
     return {
+      standard: 1,
+
       showDialog: false,
       payload: {
         url: 0,
@@ -56,7 +79,17 @@ export default {
     ...mapActions("facialCamera", ["addDevice"])
   },
   mounted() {},
-  computed: {},
+  computed: {
+    ...mapState("facialCamera", ["cameras", "devicesPerRow"]),
+    devicesPerRow: {
+      get() {
+        return this.$store.getters["facialCamera/devicesPerRow"];
+      },
+      set(value) {
+        this.$store.commit("facialCamera/updateDevicesPerRow", value);
+      }
+    }
+  },
   components: {
     "new-person-dialog": require("components/Facial/Modals/NewPersonDialog")
       .default

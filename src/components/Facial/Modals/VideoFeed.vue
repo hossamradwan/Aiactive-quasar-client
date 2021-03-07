@@ -38,7 +38,9 @@
             :ratio="1"
             style="overflow: auto; max-height:100%; "
             class="col-7"
+            @dblclick="$emit('clicked', camera.cameraId)"
           >
+            <!-- Choose Camera Right Click Menu -->
             <q-menu touch-position context-menu>
               <q-list>
                 <q-item
@@ -150,10 +152,10 @@
               </div>
               <!-- Face Recognition Button -->
               <q-toggle
+                style="word-wrap: normal; text-size:40%"
                 toggle-indeterminate
                 v-model="detection"
                 color="green"
-                shrink
                 :label="
                   detection
                     ? 'Face Recognition Enabled'

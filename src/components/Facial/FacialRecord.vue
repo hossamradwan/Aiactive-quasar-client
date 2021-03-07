@@ -1,17 +1,5 @@
 <template>
   <div>
-    <q-slider
-      v-model="standard"
-      snap
-      label
-      label-always
-      markers
-      :min="1"
-      :step="1"
-      :max="cameras.length - 1"
-      style="max-width:200px"
-    />
-
     <div class="fit column" v-if="false">
       <!-- Row 1 -->
       <div class="full-width row  justify-between  ">
@@ -262,10 +250,28 @@
         v-for="(camera, index) in cameras"
         :key="camera.cameraId"
         :index="index"
-        :flex="standard"
+        :flex="devicesPerRow"
+        @clicked="showCameraDialog"
       />
+
       <!-- <morph-view /> -->
     </div>
+
+    <q-dialog v-model="cameraDialog" persistent :maximized="maximizedToggle">
+      <q-card class="bg-primary text-white">
+        <q-bar>
+          <q-space />
+
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip content-class="bg-white text-primary">Close</q-tooltip>
+          </q-btn>
+        </q-bar>
+
+        <q-card-section class="q-pt-none">
+          <video-feed :index="cameraid" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 <script>
@@ -275,8 +281,9 @@ export default {
 
   data() {
     return {
+      maximizedToggle: true,
+      cameraDialog: false,
       showToolbar: false,
-      standard: 1,
       flex: `col-${12}`,
       faceDetection: false,
       faceRecognition: false,
@@ -291,111 +298,29 @@ export default {
       },
       showDialog: false,
       series: [75],
-      chartOptions: {
-        chart: {
-          toolbar: {
-            show: false
-          }
-        },
-        title: {
-          text: "Radial Bar",
-          align: "left",
-          style: {
-            color: "#FFF"
-          }
-        },
-        plotOptions: {
-          radialBar: {
-            startAngle: -135,
-            endAngle: 225,
-            hollow: {
-              margin: 0,
-              size: "70%",
-              background: "#424242",
-              position: "front",
-              dropShadow: {
-                enabled: true,
-                top: 3,
-                left: 0,
-                blur: 4,
-                opacity: 0.24
-              }
-            },
-            track: {
-              background: "#424242",
-              strokeWidth: "67%",
-              margin: 0, // margin is in pixels
-              dropShadow: {
-                enabled: true,
-                top: -3,
-                left: 0,
-                blur: 4,
-                opacity: 0.35
-              }
-            },
-            dataLabels: {
-              name: {
-                show: false
-              },
-              value: {
-                formatter: function(val) {
-                  return val + "%";
-                },
-                color: "#FFF",
-                fontSize: "15px",
-                show: true,
-                offsetY: 5
-              }
-            }
-          }
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shade: "dark",
-            type: "horizontal",
-            shadeIntensity: 0.5,
-            gradientToColors: ["#FCCF31", "#FCCF31"],
-            inverseColors: true,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 100]
-          }
-        },
-        stroke: {
-          lineCap: "round"
-        }
-      },
+
       slide: 1,
       selectedCameraID: "noImage",
       autoplay: false,
-      images: [
-        "https://picsum.photos/123/456",
-        "https://picsum.photos/789/987",
-        "https://picsum.photos/321/213",
-        "https://picsum.photos/486/654",
-        "https://picsum.photos/756/255"
-      ],
-      arr1: [],
-      arr2: [],
 
       timestamp: "",
       date: "",
       time: "",
       settingsLoading: false,
-      messages: false
+      messages: false,
+      cameraid: -1
     };
   },
-  mounted() {
-    this.arr1 = this.images.slice(0, 4);
-    if (this.cameras.length > 0)
-      this.selectedCameraID = this.cameras[0].cameraId;
-  },
+  mounted() {},
   created() {
     setInterval(this.getNow, 1000);
   },
   computed: {
-    ...mapState("facialCamera", ["cameras", "selectedCameraIndex"]),
+    ...mapState("facialCamera", [
+      "cameras",
+      "selectedCameraIndex",
+      "devicesPerRow"
+    ]),
     detection: {
       get() {
         let index = this.cameras.findIndex(
@@ -435,6 +360,10 @@ export default {
       "updateMessage"
     ]),
 
+    showCameraDialog(cameraId) {
+      this.cameraDialog = true;
+      this.cameraid = cameraId;
+    },
     pauseFeed(camera) {
       this.videoStatus = "pause";
       this.pauseDevice(camera);
@@ -505,9 +434,11 @@ export default {
     }
   },
   watch: {
-    standard: function() {
-      this.flex = `col-${12 / this.standard}`;
+    // Dynamic Flex Box Watcher
+    devicesPerRow: function() {
+      this.flex = `col-${12 / this.devicesPerRow}`;
     },
+
     selectedCameraIndex: function() {
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);

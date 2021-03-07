@@ -3,85 +3,86 @@
     <template class="absolute-left">
       <toggel-update
         v-if="toggelUpdate.includes(moduleName)"
-        :moduleName='moduleName' />
-    </template>
-
-    <template class="align-center">
-      <q-space />
-
-      <reporting-module-print
-        v-if="selectReportingModule.includes(moduleName)"
-        :moduleName='moduleName' />
-
-      <reporting-module-select
-        v-if="selectReportingModule.includes(moduleName)"
-        :moduleName='moduleName' />
-
-      <date-time
-        v-if="dateTime.includes(moduleName)"
-        :moduleName='moduleName' />
-      
-      <search
-        v-if="search.includes(moduleName)"
-       :moduleName='moduleName' />
-       
-        <facial-options
-        v-if="facial.includes(moduleName)"
         :moduleName="moduleName"
       />
     </template>
 
+    <template class="align-center">
+      <facial-options
+        v-if="facial.includes(moduleName)"
+        :moduleName="moduleName"
+      />
+      <q-space />
+
+      <reporting-module-print
+        v-if="selectReportingModule.includes(moduleName)"
+        :moduleName="moduleName"
+      />
+
+      <reporting-module-select
+        v-if="selectReportingModule.includes(moduleName)"
+        :moduleName="moduleName"
+      />
+
+      <date-time
+        v-if="dateTime.includes(moduleName)"
+        :moduleName="moduleName"
+      />
+
+      <search v-if="search.includes(moduleName)" :moduleName="moduleName" />
+    </template>
+
     <filters-dropdown
       v-if="filters.includes(moduleName)"
-      :moduleName='moduleName'
-      class="absolute-right" />
+      :moduleName="moduleName"
+      class="absolute-right"
+    />
   </q-toolbar>
 </template>
 <script>
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
       toggelUpdate: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'reporting-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "reporting-module",
+        "toll-gates-module"
       ],
 
-      selectReportingModule: [
-        'reporting-module'
-      ],
+      selectReportingModule: ["reporting-module"],
 
       dateTime: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'reporting-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "reporting-module",
+        "toll-gates-module"
       ],
 
       search: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "toll-gates-module"
       ],
 
       filters: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "toll-gates-module"
       ],
 
-       facial: ["facial-module"],
+      facial: ["facial-module"]
     };
   },
-  components: {    
-    'toggel-update': require("./Shared/ToggelUpdate").default,
-    'reporting-module-select': require("./Shared/SelectReportingModule").default,
-    'reporting-module-print': require("./Shared/PrintReportingModule").default,
-    'search': require("./Shared/Search").default,
-    'date-time': require("./Shared/DateTime").default,
-    'filters-dropdown': require("./Shared/FiltersDropdown").default,
+  components: {
+    "toggel-update": require("./Shared/ToggelUpdate").default,
+    "reporting-module-select": require("./Shared/SelectReportingModule")
+      .default,
+    "reporting-module-print": require("./Shared/PrintReportingModule").default,
+    search: require("./Shared/Search").default,
+    "date-time": require("./Shared/DateTime").default,
+    "filters-dropdown": require("./Shared/FiltersDropdown").default,
     "facial-options": require("./Shared/FacialOptions").default
   }
 };

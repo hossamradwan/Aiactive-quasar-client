@@ -10,6 +10,7 @@ const state = {
   port: 5006,
   screenToShow: null,
   selectedCameraIndex: null,
+  devicesPerRow: 1,
   cameras: [
     {
       cameraId: 0,
@@ -101,6 +102,11 @@ const mutations = {
   enableFaceRecognition(state, payload) {
     let index = state.cameras.findIndex(x => x.cameraId === payload.cameraId);
     state.cameras[index].faceRecognition = true;
+  },
+
+  // Update Cameras per row (dynamic Flex Box)
+  updateDevicesPerRow(state, payload) {
+    state.devicesPerRow = payload;
   }
 };
 
@@ -258,7 +264,8 @@ const actions = {
 
 const getters = {
   cameras: state => state.cameras,
-  message: state => state.message
+  message: state => state.message,
+  devicesPerRow: state => state.devicesPerRow
 };
 
 export default {
