@@ -81,12 +81,12 @@
       </template>
     </q-table>
 
-    <!-- Add User Modal -->
+    <!-- Add Device Modal -->
     <q-dialog v-model="addDeviceModal">
       <add-device @close="addDeviceModal = false" />
     </q-dialog>
 
-    <!-- Edit User Modal -->
+    <!-- Edit Device Modal -->
     <q-dialog v-model="editDeviceModal" @hide="closeEditDevice">
       <edit-device
         @close="closeEditDevice"

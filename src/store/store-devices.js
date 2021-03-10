@@ -27,6 +27,11 @@ const state = {
       label: 'Toll Gates Module',
       value : 'toll-gates-module',
       devices: []
+    },
+    {
+      label: "VMS",
+      value: "facial-module",
+      devices: []
     }
   ],
   showAddDeviceModal: false,

@@ -1,90 +1,115 @@
 <template>
-	<q-card class="add-device-modal">
-    
-        <modal-header>Add Device</modal-header>
+  <q-card class="add-device-modal">
 
-		<form @submit.prevent="submitForm">
+    <modal-header>Add Device</modal-header>
 
-			<div class="text-title text-center text-bold">Device Info..</div>
-			<q-card-section class="row q-pb-none">
-				<modal-device-name 
-					:deviceName.sync="deviceData.deviceName"
-					ref="modalDeviceName" />
-					
-
-				<q-space />
-
-				<modal-device-type
-					:deviceType.sync="deviceData.deviceType" />
-			</q-card-section>
-
-			<q-card-section class="row q-pb-none">
-				<modal-device-zone
-					:deviceZone.sync="devicesZones" />
-
-				<q-space />
-
-				<modal-device-status
-					:deviceStatus.sync="deviceData.deviceStatus" />
-			</q-card-section>
+    <form @submit.prevent="submitForm">
+     
+      <div class="text-title text-center text-bold">Device Info..</div>
+      <q-card-section class="row q-pb-none">
+        <!-- Device Name -->
+        <modal-device-name
+          :deviceName.sync="deviceData.deviceName"
+          ref="modalDeviceName" />
 
 
-			<q-card-section class="row q-pb-none" style="justify-content:center">
-				<modal-device-belongTo
-				  :deviceBelongTo.sync="belongToModules" />
-			</q-card-section>
+        <q-space />
+
+        <!-- Device Type -->
+        <modal-device-type
+         :deviceType.sync="deviceData.deviceType" />
+      </q-card-section>
+
+      <q-card-section class="row q-pb-none">
+        <!-- Device Zone -->
+        <modal-device-zone 
+        :deviceZone.sync="devicesZones" />
+
+        <q-space />
+
+        <!-- Device Status -->
+        <modal-device-status 
+        :deviceStatus.sync="deviceData.deviceStatus" />
+      </q-card-section>
+
+      <!-- Belongs To -->
+      <q-card-section class="row q-pb-none" style="justify-content:center">
+        <modal-device-belongTo 
+        :deviceBelongTo.sync="belongToModules" />
+      </q-card-section>
 
 
-			<div class="q-mt-lg text-title text-center text-bold">Device Connection Info..</div>
-			<q-card-section class="row q-pb-none">
-					<modal-device-ip 
-						:deviceIp.sync="deviceData.deviceIp"
-						ref="modalDeviceIp" />
-						
+      <div class="q-mt-lg text-title text-center text-bold">Device Connection Info..</div>
 
-					<q-space />
+      <!-- VMS -->
+      <q-card-section
+        class="row q-pb-none"
+        style="justify-content:center"
+        v-if="belongsTo('VMS')"
+      >
+        <modal-device-url
+          :deviceURL.sync="deviceData.vms.deviceURL"
+          :deviceWidth.sync="deviceData.vms.deviceWidth"
+          :deviceHeight.sync="deviceData.vms.deviceHeight"
+          ref="modalDeviceURL"
+        />
+      </q-card-section>
 
-					<modal-device-port
-						:devicePort.sync="deviceData.devicePort"
-						ref="modalDevicePort" />
-			</q-card-section>
-
-			<q-card-section class="row q-pb-none">
-					<modal-device-username 
-						:userName.sync="deviceData.userName"
-						ref="modalUserName" />
-
-					<q-space />
-
-					<modal-device-password
-						:userPassword.sync="deviceData.userPassword"
-						ref="modalUserPassword" />
-			</q-card-section>
+      <q-card-section class="row q-pb-none">
+        <!-- Device Ip -->
+        <modal-device-ip
+          :deviceIp.sync="deviceData.deviceIp"
+          ref="modalDeviceIp" />
 
 
-			<div class="q-mt-lg text-title text-center text-bold">Device Location Info..</div>
-			<q-card-section class="row q-pb-none">
-					<modal-device-location-name 
-						:locationName.sync="deviceData.locationName"
-						ref="modalDeviceLocationName" />
-						
-						
-					<modal-device-location-latitude 
-						:locationLatitude.sync="deviceData.locationLatitude"
-						ref="modalDeviceLocationLatitude" />
-						
+        <q-space />
 
-					<modal-device-location-longtude 
-						:locationLongtude.sync="deviceData.locationLongtude"
-						ref="modalDeviceLocationLongtude" />
-						
+        <!-- Device Port -->
+        <modal-device-port
+          :devicePort.sync="deviceData.devicePort"
+          ref="modalDevicePort" />
+      </q-card-section>
 
-			</q-card-section>
+      <q-card-section class="row q-pb-none">
+        <!-- Deviec Username -->
+        <modal-device-username
+          :userName.sync="deviceData.userName"
+          ref="modalUserName" />
+
+        <q-space />
+
+        <!-- Deviec Password -->
+        <modal-device-password
+          :userPassword.sync="deviceData.userPassword"
+          ref="modalUserPassword" />
+      </q-card-section>
+
+      
+      <div class="q-mt-lg text-title text-center text-bold">Device Location Info..</div>
+      <q-card-section class="row q-pb-none">
+        <!-- Device Location Name -->
+        <modal-device-location-name
+          :locationName.sync="deviceData.locationName"
+          ref="modalDeviceLocationName" />
+
+        <!-- Device Location Latitude -->
+        <modal-device-location-latitude
+          :locationLatitude.sync="deviceData.locationLatitude"
+          ref="modalDeviceLocationLatitude" />
 
 
-			<modal-buttons></modal-buttons>	    
+        <!-- Device Location Longtude -->
+        <modal-device-location-longtude
+          :locationLongtude.sync="deviceData.locationLongtude"
+          ref="modalDeviceLocationLongtude" />
 
-		</form>
+
+      </q-card-section>
+
+
+      <modal-buttons></modal-buttons>
+
+    </form>
 
   </q-card>
 </template>
@@ -107,11 +132,16 @@ import { mapActions, mapGetters } from 'vuex'
 					userPassword: '',
 					locationName: '',
 					locationLatitude: '27.1974137',
-					locationLongtude: '33.8381997'
-				}
-			}
-		},
-		watch: {
+					locationLongtude: '33.8381997',
+        vms: {
+          deviceURL: "",
+          deviceWidth: 720,
+          deviceHeight: 320
+        }
+      }
+    };
+  },
+ watch: {
 
 		},
         components: {
@@ -128,12 +158,28 @@ import { mapActions, mapGetters } from 'vuex'
 			'modal-device-location-name': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationName').default,
 			'modal-device-location-latitude': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLatitude').default,
 			'modal-device-location-longtude': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLongtude').default,
-			'modal-buttons': require('components/Settings/UsersSettings/Modals/Shared/ModalButtons').default
-        },
-		methods: {
-			...mapActions('devices', ['addDevice']),
-            
-			submitForm() {
+			'modal-buttons': require('components/Settings/UsersSettings/Modals/Shared/ModalButtons').default,
+    "modal-device-url": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceURL")
+      .default
+  },
+  methods: {
+    		  ...mapActions('devices', ['addDevice']),
+
+
+    // Show Section If Belongs to Module name
+    belongsTo(moduleName) {
+      let status = false;
+      if (this.deviceData.belongTo.length > 0) {
+        let belongs = JSON.parse(this.deviceData.belongTo);
+        belongs.map(module => {
+          if (module.label == moduleName) {
+            status = true;
+          }
+        });
+      }
+      return status;
+    },
+   submitForm() {
 				let deviceNameValidation = this.$refs.modalDeviceName.$refs.modalDeviceName
 					deviceNameValidation.validate()
 

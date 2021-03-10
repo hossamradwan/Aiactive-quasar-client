@@ -46,7 +46,12 @@
 					{
 						label: 'Hanwha Face Detection',
 						value: 'hanwha-face-detection'
-					}
+					},
+          {
+          label: 'ONVIF',
+          value: 'onvif'
+        }
+     
 				]
 			}
 		},

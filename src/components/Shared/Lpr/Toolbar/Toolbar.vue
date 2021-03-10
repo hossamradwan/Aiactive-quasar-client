@@ -69,7 +69,8 @@ export default {
       filters: [
         "generic-lpr-module",
         "average-speed-module",
-        "toll-gates-module"
+        "toll-gates-module",
+        "facial-module"
       ],
 
       facial: ["facial-module"]
