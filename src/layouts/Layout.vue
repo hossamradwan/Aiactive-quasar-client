@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh Lpr lff">
     <q-header>
       <q-toolbar>
         <server-status />
@@ -44,10 +44,17 @@
       v-model="leftDrawerOpen"
       :breakpoint="767"
       :width="220"
-      bordered
+      show-if-above
+      :mini="miniState"
+      @mouseover="miniState = false"
+      @mouseout="miniState = true"
       content-class="bg-primary"
     >
-      <drawer-header-user :userData="userData" />
+      <drawer-header-user
+        :userData="userData"
+        :miniState="miniState"
+        v-if="!miniState"
+      />
 
       <div style="height: calc(100% - 150px); margin-top: 150px;">
         <q-list dark padding>
@@ -101,6 +108,7 @@ export default {
   name: "MyLayout",
   data() {
     return {
+      miniState: true,
       lang: localStorage.getItem("Language"),
       leftDrawerOpen: this.$q.platform.is.desktop,
       navs: [
