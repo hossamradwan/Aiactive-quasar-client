@@ -13,6 +13,7 @@
       flat
       hide-bottom
     >
+      <!-- Button Add Device -->
       <template v-slot:top>
         <q-btn
           outline
@@ -25,6 +26,7 @@
 
         <q-space />
 
+        <!-- Search Bar -->
         <q-input
           bordered
           dense
@@ -52,6 +54,9 @@
           </q-td>
           <q-td key="deviceZone" :props="props">
             {{ props.row.deviceZone }}
+          </q-td>
+          <q-td key="deviceUrl" :props="props">
+            {{ props.row.device_streamUrl }}
           </q-td>
           <q-td key="device_ip" :props="props">
             {{ props.row.device_ip }}
@@ -142,6 +147,12 @@ export default {
           align: "center",
           label: this.$t("Zone"),
           field: "deviceZone"
+        },
+        {
+          name: "deviceUrl",
+          align: "center",
+          label: this.$t("Url"),
+          field: "deviceUrl"
         },
         { name: "device_ip", align: "center", label: "IP", field: "device_ip" },
         { name: "actions", align: "center", label: this.$t("Actions") }

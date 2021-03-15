@@ -1,38 +1,22 @@
 <template>
-  <div class="q-mb-sm device-url row">
+  <div class="q-mb-sm device-url row fit ">
     <q-input
       outlined
-      :value="deviceURL"
-      @input="$emit('update:deviceURL', $event)"
+      :value="streamUrl"
+      @input="$emit('update:streamUrl', $event)"
       ref="modalDeviceURL"
-      label="Device URL"
+      label="Stream URL"
       stack-label
-      class="col"
+      class="col-12"
       clearable
     >
     </q-input>
-    <q-input
-      v-model.number="deviceWidth"
-      type="number"
-      outlined
-      label="Width"
-      stack-label
-      class="col-2"
-    />
-    <q-input
-      v-model.number="deviceHeight"
-      type="number"
-      outlined
-      label="Height"
-      stack-label
-      class="col-2"
-    />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["deviceURL", "deviceWidth", "deviceHeight"],
+  props: ["streamUrl"],
 
   methods: {}
 };
