@@ -245,17 +245,45 @@
       </q-dialog>
     </div>
     <div v-else class="row">
-      <video-feed
+      <!-- <video-feed
         :class="flex"
         v-for="(camera, index) in cameras"
         :key="camera.cameraId"
         :index="index"
         :flex="devicesPerRow"
         @clicked="showCameraDialog"
-      />
-
-      <!-- <morph-view /> -->
+      /> -->
     </div>
+
+    <grid-layout
+      :layout.sync="cameras"
+      :col-num="20"
+      :row-height="3"
+      :is-draggable="true"
+      :is-resizable="true"
+      :is-mirrored="true"
+      :vertical-compact="true"
+      :margin="[10, 10]"
+      :use-css-transforms="true"
+    >
+      <grid-item
+        v-for="(item, index) in cameras"
+        :x="item.x"
+        :y="item.y"
+        :w="item.w"
+        :h="item.h"
+        :i="item.i"
+        :key="item.i"
+        style="border-style:dashed"
+      >
+        <video-feed
+          :class="flex"
+          :index="index"
+          :flex="devicesPerRow"
+          @clicked="showCameraDialog"
+        />
+      </grid-item>
+    </grid-layout>
 
     <q-dialog v-model="cameraDialog" persistent :maximized="maximizedToggle">
       <q-card class="bg-primary text-white">
@@ -276,11 +304,17 @@
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from "vuex";
+import VueGridLayout from "vue-grid-layout";
 export default {
   name: "ComponentFacialRecord",
 
   data() {
     return {
+      layout: [
+        { x: 0, y: 0, w: 2, h: 2, i: "0", s: "hello" },
+        { x: 2, y: 0, w: 2, h: 4, i: "1", s: "hiiiii" }
+      ],
+      activeStoreDevices: [],
       maximizedToggle: true,
       cameraDialog: false,
       showToolbar: false,
@@ -311,7 +345,9 @@ export default {
       cameraid: -1
     };
   },
-  mounted() {},
+  mounted() {
+    // this.activeStoreDevices = this.activeDevices
+  },
   created() {
     setInterval(this.getNow, 1000);
   },
@@ -319,7 +355,8 @@ export default {
     ...mapState("facialCamera", [
       "cameras",
       "selectedCameraIndex",
-      "devicesPerRow"
+      "devicesPerRow",
+      "activeDevices"
     ]),
     detection: {
       get() {
@@ -451,13 +488,19 @@ export default {
       if (this.cameras.length == 1) {
         this.selectedCameraID = this.cameras[0].cameraId;
       }
+    },
+
+    activeDevices: function() {
+      //search for this name on
     }
   },
   components: {
     "new-person-dialog": require("components/Facial/Modals/NewPersonDialog")
       .default,
     "video-feed": require("components/Facial/Modals/VideoFeed").default,
-    "morph-view": require("components/Facial/Modals/MorphView").default
+    "morph-view": require("components/Facial/Modals/MorphView").default,
+    GridLayout: VueGridLayout.GridLayout,
+    GridItem: VueGridLayout.GridItem
   }
 };
 </script>
