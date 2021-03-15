@@ -16,7 +16,8 @@
         :lprData="lprData"
         class="matching-card  q-mt-md q-gutter-lg"
       /> -->
-      <lpr-table />
+      <lpr-table v-if="lprData.length" />
+      <empty-state v-else />
     </q-scroll-area>
 
     <!-- <pagination
@@ -39,7 +40,8 @@ export default {
     "lpr-table": require("components/TollGates/Shared/LprTable").default,
     "no-data": require("components/Lpr/NoData").default,
     loading: require("components/Lpr/Loading").default,
-    pagination: require("components/Lpr/Pagination").default
+    pagination: require("components/Lpr/Pagination").default,
+    "empty-state": require("layouts/EmptyState.vue").default
   },
   watch: {
     autoUpdateTransits: function(newVal, oldVal) {

@@ -180,7 +180,15 @@ module.exports = function(/* ctx */) {
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
-
+      chainWebpack: config => {
+        config.module
+          .rule("vue")
+          .use("vue-svg-inline-loader")
+          .loader("vue-svg-inline-loader")
+          .options({
+            /* ... */
+          });
+      },
       extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack
