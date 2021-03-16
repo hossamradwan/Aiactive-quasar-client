@@ -10,40 +10,43 @@ const state = {
   port: 5006,
   screenToShow: null,
   selectedCameraIndex: null,
-  devicesPerRow: 1,
+  devicesPerRow: 2,
   cameras: [
-    {
-      cameraId: 0,
-      url: 1,
-      videoFeedUrl: "https://picsum.photos/576/222",
-      faceDetection: false,
-      faceRecognition: false
-    },
-    {
-      cameraId: 1,
-      url: 1,
-      videoFeedUrl: "https://picsum.photos/333/975",
-      faceDetection: false,
-      faceRecognition: false
-    },
-    {
-      cameraId: 2,
-      url: 1,
-      videoFeedUrl: "https://picsum.photos/536/444",
-      faceDetection: false,
-      faceRecognition: false
-    },
-    {
-      cameraId: 3,
-      url: 1,
-      videoFeedUrl: "https://picsum.photos/555/974",
-      faceDetection: false,
-      faceRecognition: false
-    }
+    // {
+    //   cameraId: 0,
+    //   url: 1,
+    //   videoFeedUrl: 'https://picsum.photos/576/222',
+    //   faceDetection: false,
+    //   faceRecognition: false
+    // },
+    // {
+    //   cameraId: 1,
+    //   url: 1,
+    //   videoFeedUrl: 'https://picsum.photos/333/975',
+    //   faceDetection: false,
+    //   faceRecognition: false
+    // },
+    // {
+    //   cameraId: 2,
+    //   url: 1,
+    //   videoFeedUrl: 'https://picsum.photos/536/444',
+    //   faceDetection: false,
+    //   faceRecognition: false
+    // },
+    // {
+    //   cameraId: 3,
+    //   url: 1,
+    //   videoFeedUrl: 'https://picsum.photos/555/974',
+    //   faceDetection: false,
+    //   faceRecognition: false
+    // }
   ]
 };
 
 const mutations = {
+  updateCamera(state, payload) {
+    state.cameras = payload;
+  },
   // Add New Camera to state if not exists
   addCamera(state, payload) {
     let exists = state.cameras.find(
@@ -67,8 +70,10 @@ const mutations = {
 
   // Remove Stopped Camera from State
   removeCamera(state, payload) {
+    console.log("removeCamera");
     let index = state.cameras.findIndex(x => x.cameraId === payload);
     state.cameras.splice(index, 1);
+    console.log("Removed");
   },
 
   resetSelectedCameraIndex(state) {
@@ -113,7 +118,7 @@ const mutations = {
 const actions = {
   // Add New Camera or Play Previously Paused Camera
   addDevice({ commit }, payload) {
-    // console.log("Action payload:", payload);
+    console.log("Add Action payload:", payload);
     let newDevice, status;
 
     // If Adding New Camera
@@ -172,15 +177,17 @@ const actions = {
 
   // Stop and Remove a Camera
   removeDevice({ commit }, payload) {
-    // console.log("Action payload:", payload);
+    console.log("Action payload:", payload);
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
         let api = state.host + state.port + "/terminate/" + payload;
 
+        console.log("removeDevice beforeThen");
         Axios.get(api)
           .then(response => {
             // console.log("payload.cameraId:", payload);
+            console.log("removeDevice then");
             commit("removeCamera", payload);
           })
           .catch(error => {
@@ -244,6 +251,11 @@ const actions = {
     }, 500);
   },
 
+  // Toolbar Devices Filter
+  setDeviceFilter({ commit }, payload) {
+    commit("setDeviceFilter", payload);
+  },
+
   // Train Dataset on new faces
   trainDataset() {
     Loading.show();
@@ -265,7 +277,8 @@ const actions = {
 const getters = {
   cameras: state => state.cameras,
   message: state => state.message,
-  devicesPerRow: state => state.devicesPerRow
+  devicesPerRow: state => state.devicesPerRow,
+  activeDevices: state => state.cameras.map(camera => camera.deviceName)
 };
 
 export default {
