@@ -83,8 +83,7 @@ export default {
     "reporting-module-print": require("./Shared/PrintReportingModule").default,
     search: require("./Shared/Search").default,
     "date-time": require("./Shared/DateTime").default,
-    "filters-dropdown": require("./Shared/FiltersDropdown").default,
-    "facial-options": require("./Shared/FacialOptions").default
+    "filters-dropdown": require("./Shared/FiltersDropdown").default
   }
 };
 </script>
