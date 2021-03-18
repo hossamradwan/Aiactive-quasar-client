@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import { GridLayout, GridItem } from "vue-grid-layout";
-import { mapActions, mapState, mapGetters } from "vuex";
+import { GridLayout, GridItem } from 'vue-grid-layout';
+import { mapActions, mapState, mapGetters } from 'vuex';
 export default {
   components: {
     GridLayout,
     GridItem,
-    "new-person-dialog": require("components/Facial/Modals/NewPersonDialog")
+    'new-person-dialog': require('components/facial/Modals/NewPersonDialog')
       .default,
-    "video-feed": require("components/Facial/Modals/VideoFeed").default
+    'video-feed': require('components/facial/Modals/VideoFeed').default
   },
   data() {
     return {
@@ -61,25 +61,25 @@ export default {
       flex: `col-${12}`,
       faceDetection: false,
       faceRecognition: false,
-      videoStatus: "play",
+      videoStatus: 'play',
       payload: {
         url: 0,
         width: 480,
         height: 320
       },
       selectedCamera: {
-        videoFeedUrl: "https://picsum.photos/536/978"
+        videoFeedUrl: 'https://picsum.photos/536/978'
       },
       showDialog: false,
       series: [75],
 
       slide: 1,
-      selectedCameraID: "noImage",
+      selectedCameraID: 'noImage',
       autoplay: false,
 
-      timestamp: "",
-      date: "",
-      time: "",
+      timestamp: '',
+      date: '',
+      time: '',
       settingsLoading: false,
       messages: false,
       cameraid: -1
@@ -109,13 +109,13 @@ export default {
       const index = this.layout.map(item => item.i).indexOf(val);
       this.layout.splice(index, 1);
     },
-    ...mapActions("facialCamera", [
-      "addDevice",
-      "removeDevice",
-      "enableFaceRecognition",
-      "enableFaceDetection",
-      "pauseDevice",
-      "updateMessage"
+    ...mapActions('VMS', [
+      'addDevice',
+      'removeDevice',
+      'enableFaceRecognition',
+      'enableFaceDetection',
+      'pauseDevice',
+      'updateMessage'
     ]),
 
     showCameraDialog(cameraId) {
@@ -123,11 +123,11 @@ export default {
       this.cameraid = cameraId;
     },
     pauseFeed(camera) {
-      this.videoStatus = "pause";
+      this.videoStatus = 'pause';
       this.pauseDevice(camera);
     },
     palyFeed(camera) {
-      this.videoStatus = "play";
+      this.videoStatus = 'play';
       this.addDevice(camera);
     },
     stopCamera(camera) {
@@ -137,7 +137,7 @@ export default {
         previouseSlide = this.cameras[index - 1].cameraId;
       } else {
         if (this.cameras.length == 1) {
-          previouseSlide = "noImage";
+          previouseSlide = 'noImage';
         } else {
           previouseSlide = this.cameras[this.cameras.length - 1].cameraId;
         }
@@ -172,19 +172,19 @@ export default {
     }
   },
   computed: {
-    ...mapState("facialCamera", [
-      "cameras",
-      "selectedCameraIndex",
-      "devicesPerRow",
-      "activeDevices",
-      "url"
+    ...mapState('VMS', [
+      'cameras',
+      'selectedCameraIndex',
+      'devicesPerRow',
+      'activeDevices',
+      'url'
     ]),
     detection: {
       get() {
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        let selectedCamera = this.$store.getters["facialCamera/cameras"][index];
+        let selectedCamera = this.$store.getters['VMS/cameras'][index];
         if (selectedCamera.faceRecognition) {
           return true;
         } else if (
@@ -200,7 +200,7 @@ export default {
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        this.$store.dispatch("facialCamera/updateFaceDetection", {
+        this.$store.dispatch('VMS/updateFaceDetection', {
           index,
           value,
           cameraId: this.selectedCameraID
@@ -217,7 +217,7 @@ export default {
     selectedCameraIndex: function() {
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);
-        // this.$store.commit("facialCamera/resetSelectedCameraIndex");
+        // this.$store.commit("VMS/resetSelectedCameraIndex");
       }
     },
 

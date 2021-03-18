@@ -1,6 +1,6 @@
 <template>
   <div class="column items-center filter">
-    <div class="text-h6 text-center q-mb-md">{{ $t("Devices") }}</div>
+    <div class="text-h6 text-center q-mb-md">{{ $t('Devices') }}</div>
 
     <q-tree
       :nodes="devicesTree"
@@ -14,24 +14,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from "vuex";
+import { mapGetters, mapActions, mapState } from 'vuex';
 export default {
-  props: ["moduleName"],
+  props: ['moduleName'],
   data() {
     return {
       simple: [
         {
-          label: "Devices Zone",
+          label: 'Devices Zone',
           //avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-          icon: "gps_fixed",
+          icon: 'gps_fixed',
           children: [
             {
-              label: "Device_one",
-              icon: "videocam"
+              label: 'Device_one',
+              icon: 'videocam'
             },
             {
-              label: "Device_two",
-              icon: "videocam",
+              label: 'Device_two',
+              icon: 'videocam',
               disabled: false
             }
           ]
@@ -44,13 +44,13 @@ export default {
   watch: {
     ticked: function(newVal, oldVal) {
       if (newVal) {
-        if (this.moduleName == "average-speed-module") {
+        if (this.moduleName == 'average-speed-module') {
           this.setAverageSpeedDeviceFilter(newVal);
           return;
         }
         this.setDeviceFilter(newVal);
 
-        if (this.moduleName == "facial-module") {
+        if (this.moduleName == 'facial-module') {
           // Function To Get Difference Between Two Arrays
           function arr_diff(a1, a2) {
             var a = [],
@@ -90,8 +90,8 @@ export default {
 
             // If Checked
             if (inNewVal != -1) {
-              console.log("Add", difference);
-              console.log("facialDeviceIndex:", facialDeviceIndex);
+              console.log('Add', difference);
+              console.log('facialDeviceIndex:', facialDeviceIndex);
               if (facialDeviceIndex == -1)
                 this.addDevice({
                   height: 320,
@@ -103,7 +103,7 @@ export default {
             // If Unchecked
             let inOldVal = oldVal.indexOf(difference);
             if (inOldVal != -1) {
-              console.log("Delete", difference);
+              console.log('Delete', difference);
               let index = this.cameras.findIndex(x => x.url === deviceUrl);
               let cameraId = this.cameras[index].cameraId;
               this.removeDevice(cameraId);
@@ -116,20 +116,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions("lpr", ["setDeviceFilter"]),
-    ...mapActions("averageSpeedResult", {
-      setAverageSpeedDeviceFilter: "setDeviceFilter"
+    ...mapActions('lpr', ['setDeviceFilter']),
+    ...mapActions('averageSpeedResult', {
+      setAverageSpeedDeviceFilter: 'setDeviceFilter'
     }),
-    ...mapActions("facialCamera", ["addDevice", "removeDevice"])
+    ...mapActions('VMS', ['addDevice', 'removeDevice'])
   },
   mounted() {
     setTimeout(() => {
-      if (this.moduleName == "average-speed-module") {
+      if (this.moduleName == 'average-speed-module') {
         this.ticked = Array.from(this.activeTraps);
         return;
       }
 
-      if (this.moduleName == "facial-module") {
+      if (this.moduleName == 'facial-module') {
         this.ticked = Array.from(this.activeVMS);
         // console.log(this.ticked);
         return;
@@ -139,16 +139,16 @@ export default {
     }, 200);
   },
   computed: {
-    ...mapState("lpr", ["activeDevices"]),
-    ...mapState("facialCamera", {
-      cameras: "cameras"
+    ...mapState('lpr', ['activeDevices']),
+    ...mapState('VMS', {
+      cameras: 'cameras'
     }),
-    ...mapState("devices", ["devicesList"]),
-    ...mapState("averageSpeedResult", ["activeTraps"]),
-    ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
-    ...mapGetters("facialCamera", { activeVMS: "activeDevices" }),
+    ...mapState('devices', ['devicesList']),
+    ...mapState('averageSpeedResult', ['activeTraps']),
+    ...mapGetters('devices', ['getDevicesTree', 'getAverageSpeedDevicesTree']),
+    ...mapGetters('VMS', { activeVMS: 'activeDevices' }),
     devicesTree() {
-      if (this.moduleName == "average-speed-module")
+      if (this.moduleName == 'average-speed-module')
         return this.getAverageSpeedDevicesTree;
 
       return this.getDevicesTree(this.moduleName);

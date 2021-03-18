@@ -172,24 +172,24 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapState, mapGetters } from 'vuex';
 export default {
-  props: ["index", "flex"],
+  props: ['index', 'flex'],
   data() {
     return {
       showToolbar: false,
       facesDrawer: false,
       drawerRight: false,
-      selectedCameraID: "noImage",
-      videoStatus: "play",
+      selectedCameraID: 'noImage',
+      videoStatus: 'play',
       slide: 1,
       autoplay: false,
       images: [
-        "https://randomuser.me/api/portraits/men/63.jpg",
-        "https://randomuser.me/api/portraits/women/55.jpg",
-        "https://randomuser.me/api/portraits/men/33.jpg",
-        "https://randomuser.me/api/portraits/women/22.jpg",
-        "https://randomuser.me/api/portraits/men/10.jpg"
+        'https://randomuser.me/api/portraits/men/63.jpg',
+        'https://randomuser.me/api/portraits/women/55.jpg',
+        'https://randomuser.me/api/portraits/men/33.jpg',
+        'https://randomuser.me/api/portraits/women/22.jpg',
+        'https://randomuser.me/api/portraits/men/10.jpg'
       ],
       arr1: [],
       arr2: []
@@ -202,13 +202,13 @@ export default {
       this.selectedCameraID = this.cameras[this.index].cameraId;
   },
   computed: {
-    ...mapState("facialCamera", ["cameras", "selectedCameraIndex"]),
+    ...mapState('VMS', ['cameras', 'selectedCameraIndex']),
     detection: {
       get() {
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        let selectedCamera = this.$store.getters["facialCamera/cameras"][index];
+        let selectedCamera = this.$store.getters['VMS/cameras'][index];
         if (selectedCamera.faceRecognition) {
           this.facesDrawer = true;
           return true;
@@ -224,11 +224,11 @@ export default {
         }
       },
       set(value) {
-        console.log("value:", value);
+        console.log('value:', value);
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        this.$store.dispatch("facialCamera/updateFaceDetection", {
+        this.$store.dispatch('VMS/updateFaceDetection', {
           index,
           value,
           cameraId: this.selectedCameraID
@@ -237,20 +237,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions("facialCamera", [
-      "addDevice",
-      "removeDevice",
-      "enableFaceRecognition",
-      "enableFaceDetection",
-      "pauseDevice",
-      "updateMessage"
+    ...mapActions('VMS', [
+      'addDevice',
+      'removeDevice',
+      'enableFaceRecognition',
+      'enableFaceDetection',
+      'pauseDevice',
+      'updateMessage'
     ]),
     pauseFeed(camera) {
-      this.videoStatus = "pause";
+      this.videoStatus = 'pause';
       this.pauseDevice(camera);
     },
     palyFeed(camera) {
-      this.videoStatus = "play";
+      this.videoStatus = 'play';
       this.addDevice(camera);
     },
     stopCamera(camera) {
@@ -260,13 +260,13 @@ export default {
         previouseSlide = this.cameras[index - 1].cameraId;
       } else {
         if (this.cameras.length == 1) {
-          previouseSlide = "noImage";
+          previouseSlide = 'noImage';
         } else {
           previouseSlide = this.cameras[this.cameras.length - 1].cameraId;
         }
       }
-      console.log("index:", index);
-      console.log("previouseSlide:", previouseSlide);
+      console.log('index:', index);
+      console.log('previouseSlide:', previouseSlide);
       this.removeDevice(camera);
 
       this.setselectedCameraID(previouseSlide);
@@ -294,10 +294,10 @@ export default {
   },
   watch: {
     selectedCameraIndex: function() {
-      console.log("this.selectedCameraIndex:", this.selectedCameraIndex);
+      console.log('this.selectedCameraIndex:', this.selectedCameraIndex);
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);
-        this.$store.commit("facialCamera/resetSelectedCameraIndex");
+        this.$store.commit('VMS/resetSelectedCameraIndex');
       }
     },
 

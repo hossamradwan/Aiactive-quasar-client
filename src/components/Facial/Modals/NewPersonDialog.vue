@@ -42,28 +42,28 @@ export default {
   data() {
     return {
       userData: {
-        name: "",
-        email: "",
-        phone: ""
+        name: '',
+        email: '',
+        phone: ''
       }
     };
   },
   methods: {
     onRejected(rejectedEntries) {
       this.$q.notify({
-        type: "negative",
+        type: 'negative',
         message: `${rejectedEntries.length} file(s) are not Images Format`
       });
     }
   },
   components: {
-    FacialNewPersonId: require("components/Facial/Modals/Shared/FacialNewPersonId")
+    FacialNewPersonId: require('components/facial/Modals/Shared/FacialNewPersonId')
       .default,
-    FacialNewPersonName: require("components/Facial/Modals/Shared/FacialNewPersonName")
+    FacialNewPersonName: require('components/facial/Modals/Shared/FacialNewPersonName')
       .default,
-    FacialNewPersonEmail: require("components/Facial/Modals/Shared/FacialNewPersonEmail")
+    FacialNewPersonEmail: require('components/facial/Modals/Shared/FacialNewPersonEmail')
       .default,
-    FacialNewPersonPhone: require("components/Facial/Modals/Shared/FacialNewPersonPhone")
+    FacialNewPersonPhone: require('components/facial/Modals/Shared/FacialNewPersonPhone')
       .default
   }
 };

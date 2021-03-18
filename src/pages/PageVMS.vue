@@ -12,7 +12,7 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 export default {
-  name: 'PageFacial',
+  name: 'PageVMS',
 
   data() {
     return {
@@ -24,12 +24,12 @@ export default {
     this.getDevices();
   },
   computed: {
-    ...mapState('facialCamera', ['cameras'])
+    ...mapState('VMS', ['cameras'])
   },
   methods: { ...mapActions('devices', ['getDevices']) },
   components: {
     'tool-bar': require('components/Shared/Lpr/Toolbar/Toolbar').default,
-    'facial-record': require('components/Facial/FacialRecord').default,
+    'facial-record': require('components/facial/VMSRecord').default,
     'empty-state': require('layouts/EmptyState.vue').default
   }
 };
