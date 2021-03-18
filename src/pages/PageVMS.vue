@@ -3,7 +3,7 @@
     <!-- ToolBar  -->
     <tool-bar :moduleName="moduleName" />
     <q-card class="settings-tabs col" v-if="cameras.length">
-      <facial-record />
+      <VMS-record />
     </q-card>
     <empty-state v-else />
   </q-page>
@@ -16,7 +16,7 @@ export default {
 
   data() {
     return {
-      moduleName: 'facial-module'
+      moduleName: 'VMS-module'
     };
   },
 
@@ -29,7 +29,7 @@ export default {
   methods: { ...mapActions('devices', ['getDevices']) },
   components: {
     'tool-bar': require('components/Shared/Lpr/Toolbar/Toolbar').default,
-    'facial-record': require('components/facial/VMSRecord').default,
+    'VMS-record': require('components/facial/VMSRecord').default,
     'empty-state': require('layouts/EmptyState.vue').default
   }
 };

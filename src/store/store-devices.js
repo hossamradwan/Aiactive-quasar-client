@@ -30,7 +30,7 @@ const state = {
     },
     {
       label: 'VMS',
-      value: 'facial-module',
+      value: 'VMS-module',
       devices: []
     }
   ],
@@ -87,7 +87,7 @@ const actions = {
           Loading.hide();
         })
         .catch(error => {
-          //console.log(error);
+          // console.log(error);
           showErrorMessage(error.message);
         });
     }, 500);

@@ -50,7 +50,7 @@ export default {
         }
         this.setDeviceFilter(newVal);
 
-        if (this.moduleName == 'facial-module') {
+        if (this.moduleName == 'VMS-module') {
           // Function To Get Difference Between Two Arrays
           function arr_diff(a1, a2) {
             var a = [],
@@ -82,7 +82,7 @@ export default {
             let deviceIndex = this.devicesList.findIndex(function(device) {
               return device.deviceName === difference;
             });
-            let facialDeviceIndex = this.cameras.findIndex(function(device) {
+            let VMSDeviceIndex = this.cameras.findIndex(function(device) {
               return device.deviceName === difference;
             });
 
@@ -91,8 +91,8 @@ export default {
             // If Checked
             if (inNewVal != -1) {
               console.log('Add', difference);
-              console.log('facialDeviceIndex:', facialDeviceIndex);
-              if (facialDeviceIndex == -1)
+              console.log('VMSDeviceIndex:', VMSDeviceIndex);
+              if (VMSDeviceIndex == -1)
                 this.addDevice({
                   height: 320,
                   width: 480,
@@ -129,7 +129,7 @@ export default {
         return;
       }
 
-      if (this.moduleName == 'facial-module') {
+      if (this.moduleName == 'VMS-module') {
         this.ticked = Array.from(this.activeVMS);
         // console.log(this.ticked);
         return;
