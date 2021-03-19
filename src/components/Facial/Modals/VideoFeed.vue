@@ -107,21 +107,25 @@
             </div>
 
             <!-- Video Toolbar -->
-            <q-toolbar v-if="showToolbar" style="zoom: 80%; ">
-              <q-btn
+            <div
+              class="absolute-bottom text-subtitle1 "
+              v-if="showToolbar"
+              style="zoom: 80%; "
+            >
+              <!-- <q-btn
                 flat
                 @click="facesDrawer = !facesDrawer"
                 round
                 dense
                 icon="menu"
-              />
+              /> -->
               <!-- Test Button -->
               <!-- <q-btn icon="psychology" round color="primary" @click="push" /> -->
 
               <!-- Title -->
-              <q-toolbar-title style="font-size:1.5em">
+              <!-- <q-toolbar-title style="font-size:1.5em">
                 {{ index }}
-              </q-toolbar-title>
+              </q-toolbar-title> -->
               <div
                 class="row absolute-center  "
                 v-if="selectedCameraID != 'noImage'"
@@ -130,6 +134,7 @@
                 <q-btn
                   v-if="videoStatus == 'play'"
                   icon="pause"
+                  color="primary"
                   text-color="yellow"
                   round
                   @click="pauseFeed(selectedCameraID)"
@@ -138,6 +143,7 @@
                 <q-btn
                   v-if="videoStatus == 'pause'"
                   icon="play_arrow"
+                  color="primary"
                   text-color="green"
                   round
                   @click="palyFeed(selectedCameraID)"
@@ -146,6 +152,7 @@
                 <q-btn
                   icon="stop"
                   round
+                  color="primary"
                   text-color="red"
                   @click="stopCamera(selectedCameraID)"
                 />
@@ -164,7 +171,7 @@
                     : 'Face Recognition Disabled'
                 "
               />
-            </q-toolbar>
+            </div>
           </q-img>
         </q-carousel-slide>
       </q-carousel>

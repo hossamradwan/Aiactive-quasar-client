@@ -12,9 +12,8 @@
       :use-css-transforms="true"
     >
       <grid-item
-        v-for="item in layout"
+        v-for="(item, index) in layout"
         :key="item.i"
-        :static="item.static"
         :x="item.x"
         :y="item.y"
         :w="item.w"
@@ -23,8 +22,8 @@
         :minH="5"
         :preserveAspectRatio="false"
       >
-        <q-img :src="cameras[item.i].videoFeedUrl" style="height: 100%" />
-        <span class="remove" @click="removeItem(item.i)">x</span>
+        <video-feed :flex="1" :index="index" />
+        <!-- <q-img :src="cameras[index].videoFeedUrl" style="height: 100%" /> -->
       </grid-item>
     </grid-layout>
   </div>
@@ -173,12 +172,12 @@ export default {
   },
   computed: {
     ...mapState('VMS', [
-      'cameras',
       'selectedCameraIndex',
       'devicesPerRow',
       'activeDevices',
       'url'
     ]),
+    ...mapGetters('VMS', ['cameras']),
     detection: {
       get() {
         let index = this.cameras.findIndex(
@@ -223,6 +222,7 @@ export default {
 
     // Set Carosel on first camera if no other exists
     cameras: function() {
+      console.log('this.cameras:', this.cameras);
       if (this.cameras.length > this.layout.length) {
         this.addItem();
       } else if (this.cameras.length < this.layout.length) {

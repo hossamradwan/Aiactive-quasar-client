@@ -90,8 +90,6 @@ export default {
 
             // If Checked
             if (inNewVal != -1) {
-              console.log('Add', difference);
-              console.log('VMSDeviceIndex:', VMSDeviceIndex);
               if (VMSDeviceIndex == -1)
                 this.addDevice({
                   height: 320,
@@ -100,10 +98,10 @@ export default {
                   deviceName: difference
                 });
             }
+
             // If Unchecked
             let inOldVal = oldVal.indexOf(difference);
             if (inOldVal != -1) {
-              console.log('Delete', difference);
               let index = this.cameras.findIndex(x => x.url === deviceUrl);
               let cameraId = this.cameras[index].cameraId;
               this.removeDevice(cameraId);
