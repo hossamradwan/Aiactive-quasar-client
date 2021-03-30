@@ -1,58 +1,49 @@
+//vms record
 <template>
   <div>
-    <input type="checkbox" v-model="draggable" /> Draggable
-    <input type="checkbox" v-model="resizable" /> Resizable
     <grid-layout
       :layout.sync="layout"
       :col-num="colNum"
       :row-height="30"
+      :responsive="true"
       :is-draggable="draggable"
       :is-resizable="resizable"
-      :vertical-compact="true"
+      :vertical-compact="false"
       :use-css-transforms="true"
+      :autoSize="true"
+      :maxRows="12 / Math.sqrt(devicesPerRow)"
     >
       <grid-item
         v-for="(item, index) in layout"
-        :key="item.i"
+        :key="index"
         :x="item.x"
         :y="item.y"
         :w="item.w"
         :h="item.h"
         :i="item.i"
-        :minH="5"
-        :preserveAspectRatio="false"
       >
-        <video-feed :flex="1" :index="index" />
-        <!-- <q-img :src="cameras[index].videoFeedUrl" style="height: 100%" /> -->
+        <video-feed :index="index" />
       </grid-item>
     </grid-layout>
   </div>
 </template>
 
 <script>
-import { GridLayout, GridItem } from 'vue-grid-layout';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { GridLayout, GridItem } from "vue-grid-layout";
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   components: {
     GridLayout,
     GridItem,
-    'new-person-dialog': require('components/facial/Modals/NewPersonDialog')
-      .default,
-    'video-feed': require('components/facial/Modals/VideoFeed').default
+    "video-feed": require("components/facial/Modals/VideoFeed").default
   },
   data() {
     return {
-      layout: [
-        // { x: 0, y: 0, w: 2, h: 5, i: "0" },
-        // { x: 2, y: 0, w: 2, h: 5, i: "1" },
-        // { x: 4, y: 0, w: 2, h: 5, i: "2" },
-        // { x: 6, y: 0, w: 2, h: 5, i: "3" }
-      ],
+      layout: [{ x: 0, y: 0, w: 12, h: 12, i: 0 }],
       draggable: true,
       resizable: true,
       colNum: 12,
       index: 0,
-
       activeStoreDevices: [],
       maximizedToggle: true,
       cameraDialog: false,
@@ -60,25 +51,25 @@ export default {
       flex: `col-${12}`,
       faceDetection: false,
       faceRecognition: false,
-      videoStatus: 'play',
+      videoStatus: "play",
       payload: {
         url: 0,
         width: 480,
         height: 320
       },
       selectedCamera: {
-        videoFeedUrl: 'https://picsum.photos/536/978'
+        videoFeedUrl: "https://picsum.photos/536/978"
       },
       showDialog: false,
       series: [75],
 
       slide: 1,
-      selectedCameraID: 'noImage',
+      selectedCameraID: "noImage",
       autoplay: false,
 
-      timestamp: '',
-      date: '',
-      time: '',
+      timestamp: "",
+      date: "",
+      time: "",
       settingsLoading: false,
       messages: false,
       cameraid: -1
@@ -86,152 +77,90 @@ export default {
   },
   mounted() {
     // this.$gridlayout.load();
-    for (var i = 0; i < this.cameras.length; i++) {
-      this.addItem();
-    }
     this.index = this.layout.length;
+  },
+  computed: {
+    ...mapState("VMS", [
+      "selectedCameraIndex",
+      "devicesPerRow",
+      "activeDevices",
+      "url"
+    ]),
+    ...mapGetters("VMS", ["cameras"])
   },
   methods: {
     addItem: function() {
       // Add a new item. It must have a unique key!
+      let lastItem = this.layout[this.layout.length - 1];
+      let x = lastItem.x + lastItem.w < 12 ? lastItem.x + lastItem.w : 0;
+      let y =
+        lastItem.x + lastItem.w >= 12 ? lastItem.y + lastItem.h : lastItem.y;
+
       this.layout.push({
-        x: (this.layout.length * 2) % (this.colNum || 12),
-        y: this.layout.length + (this.colNum || 12), // puts it at the bottom
-        w: 2,
-        h: 5,
+        x: x,
+        y: y, // puts it at the bottom
+        w: this.layout[0].w,
+        h: this.layout[0].h,
         i: this.index
       });
       // Increment the counter to ensure key is always unique.
       this.index++;
     },
+
     removeItem: function(val) {
       const index = this.layout.map(item => item.i).indexOf(val);
       this.layout.splice(index, 1);
     },
-    ...mapActions('VMS', [
-      'addDevice',
-      'removeDevice',
-      'enableFaceRecognition',
-      'enableFaceDetection',
-      'pauseDevice',
-      'updateMessage'
-    ]),
+    setGrid() {
+      //Resize and Modify Location Function
+      let resize = () => {
+        for (var i = 0; i < this.layout.length; i++) {
+          // Resize
+          // Divide Total (Row or Hieght) numbers over the square root of the total number of items
+          this.layout[i].h = 12 / Math.sqrt(this.devicesPerRow);
+          this.layout[i].w = 12 / Math.sqrt(this.devicesPerRow);
 
-    showCameraDialog(cameraId) {
-      this.cameraDialog = true;
-      this.cameraid = cameraId;
-    },
-    pauseFeed(camera) {
-      this.videoStatus = 'pause';
-      this.pauseDevice(camera);
-    },
-    palyFeed(camera) {
-      this.videoStatus = 'play';
-      this.addDevice(camera);
-    },
-    stopCamera(camera) {
-      let index = this.cameras.findIndex(x => x.cameraId === camera);
-      let previouseSlide;
-      if (index != 0) {
-        previouseSlide = this.cameras[index - 1].cameraId;
-      } else {
-        if (this.cameras.length == 1) {
-          previouseSlide = 'noImage';
-        } else {
-          previouseSlide = this.cameras[this.cameras.length - 1].cameraId;
+          // Relocate
+          // Locate new item after last item position
+          // If Last item is at the end then locate the new item to a new line
+          if (i != 0) {
+            let previousItem = this.layout[i - 1];
+            this.layout[i].x =
+              previousItem.x + previousItem.w < 12
+                ? previousItem.x + previousItem.w
+                : 0;
+            this.layout[i].y =
+              previousItem.x + previousItem.w > 11
+                ? previousItem.y + previousItem.h
+                : previousItem.y;
+          }
         }
-      }
-
-      this.removeDevice(camera);
-
-      this.setselectedCameraID(previouseSlide);
-    },
-    setselectedCameraID(slide) {
-      this.selectedCameraID = slide;
-    },
-
-    sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    },
-
-    async push() {
-      let random1 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-      let random2 = Math.floor(Math.random() * (999 - 100 + 1) + 100);
-      let newPic = [`https://picsum.photos/${random1}/${random2}`];
-      if (this.slide == 1) {
-        this.arr2 = newPic.concat(this.arr1.slice(0, 3));
-      } else {
-        this.arr1 = newPic.concat(this.arr2.slice(0, 3));
-      }
-
-      this.autoplay = 100;
-      this.sleep(150).then(() => {
-        this.autoplay = false;
-      });
-    }
-  },
-  computed: {
-    ...mapState('VMS', [
-      'selectedCameraIndex',
-      'devicesPerRow',
-      'activeDevices',
-      'url'
-    ]),
-    ...mapGetters('VMS', ['cameras']),
-    detection: {
-      get() {
-        let index = this.cameras.findIndex(
-          x => x.cameraId === this.selectedCameraID
-        );
-        let selectedCamera = this.$store.getters['VMS/cameras'][index];
-        if (selectedCamera.faceRecognition) {
-          return true;
-        } else if (
-          selectedCamera.faceDetection == true &&
-          selectedCamera.faceRecognition == false
-        ) {
-          return null;
-        } else {
-          return false;
+      };
+      let difference = this.devicesPerRow - this.layout.length;
+      if (difference > 0) {
+        resize();
+        // Add
+        for (var i = 0; i < difference; i++) {
+          this.addItem();
         }
-      },
-      set(value) {
-        let index = this.cameras.findIndex(
-          x => x.cameraId === this.selectedCameraID
-        );
-        this.$store.dispatch('VMS/updateFaceDetection', {
-          index,
-          value,
-          cameraId: this.selectedCameraID
-        });
+      } else if (difference < 0) {
+        // Delete
+        this.layout.splice(difference);
+        resize();
       }
-    }
+    },
+    ...mapActions("VMS", [
+      "addDevice",
+      "removeDevice",
+      "enableFaceRecognition",
+      "enableFaceDetection",
+      "pauseDevice",
+      "updateMessage"
+    ])
   },
   watch: {
-    // Dynamic Flex Box Watcher
     devicesPerRow: function() {
-      this.flex = `col-${12 / this.devicesPerRow}`;
-    },
-
-    selectedCameraIndex: function() {
-      if (this.selectedCameraIndex != null) {
-        this.setselectedCameraID(this.selectedCameraIndex);
-        // this.$store.commit("VMS/resetSelectedCameraIndex");
-      }
-    },
-
-    // Set Carosel on first camera if no other exists
-    cameras: function() {
-      console.log('this.cameras:', this.cameras);
-      if (this.cameras.length > this.layout.length) {
-        this.addItem();
-      } else if (this.cameras.length < this.layout.length) {
-        this.removeItem(this.layout.length - 1);
-      }
-
-      if (this.cameras.length == 1) {
-        this.selectedCameraID = this.cameras[0].cameraId;
-      }
+      this.setGrid();
     }
   }
 };
@@ -257,11 +186,11 @@ export default {
   cursor: pointer;
 }
 .vue-grid-layout {
-  background: #eee;
+  /* background: #eee; */
 }
 .vue-grid-item:not(.vue-grid-placeholder) {
-  background: #ccc;
-  border: 1px solid black;
+  background: rgb(0, 0, 0);
+  /* border: 1px solid black; */
 }
 .vue-grid-item .resizing {
   opacity: 0.9;

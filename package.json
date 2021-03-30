@@ -29,6 +29,7 @@
     "vue-smooth-dnd": "^0.8.1",
     "vue-socket.io": "^3.0.7",
     "vue-svg-inline-loader": "^2.1.2",
+    "vue-videojs7": "^1.0.2",
     "vue-zoomer": "^0.3.6",
     "vuelidate": "^0.7.5"
   },

@@ -8,10 +8,6 @@
       @click="toUserProfilePage"
       class="cursor-pointer absolute-bottom bg-transparent"
     >
-      <q-avatar size="56px" class="q-mb-sm">
-        <img src="~/assets/avatar.jpg" />
-      </q-avatar>
-
       <div class="text-weight-bold user-data">
         {{ userData.userName }}
       </div>
@@ -23,11 +19,11 @@
 
 <script>
 export default {
-  props: ['userData'],
+  props: ["userData"],
   methods: {
     toUserProfilePage() {
-      if (this.$route.path !== '/userProfile')
-        this.$router.push('/userProfile');
+      if (this.$route.path !== "/userProfile")
+        this.$router.push("/userProfile");
     }
   }
 };

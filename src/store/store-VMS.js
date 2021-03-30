@@ -1,8 +1,8 @@
-import config from '@/../config/config';
-import { Loading, Notify } from 'quasar';
-import Axios from 'axios';
-import { showErrorMessage } from 'src/functions/function-show-error-message';
-import { responseErrorMessage } from './../functions/function-response-Error-Message';
+import config from "@/../config/config";
+import { Loading, Notify } from "quasar";
+import Axios from "axios";
+import { showErrorMessage } from "src/functions/function-show-error-message";
+import { responseErrorMessage } from "./../functions/function-response-Error-Message";
 
 const state = {
   // Removing Host Port
@@ -10,7 +10,7 @@ const state = {
   port: 5006,
   screenToShow: null,
   selectedCameraIndex: null,
-  devicesPerRow: 2,
+  devicesPerRow: 1,
   removeIndex: null,
   cameras: [
     // {
@@ -51,9 +51,9 @@ const mutations = {
       ({ cameraId }) => cameraId === payload.cameraId
     );
     if (!exists) {
-      state.cameras.push((window['camera_' + payload.cameraId] = payload));
+      state.cameras.push((window["camera_" + payload.cameraId] = payload));
     } else {
-      showErrorMessage('Already Exists');
+      showErrorMessage("Already Exists");
     }
     // Change View to Added Camera
     // state.screenToShow = state.cameras.findIndex(
@@ -71,7 +71,7 @@ const mutations = {
     let index = state.cameras.findIndex(x => x.cameraId === payload);
     state.removeIndex = index;
     state.cameras.splice(index, 1);
-    console.log('Removed', state.removeIndex);
+    // console.log("Removed", state.removeIndex);
   },
 
   resetSelectedCameraIndex(state) {
@@ -86,7 +86,7 @@ const mutations = {
   },
   // updateFaceDetection
   updateDetection(state, payload) {
-    console.log('payload value:', payload.value);
+    // console.log("payload value:", payload.value);
     // console.log(state.cameras);
     if (payload.value) {
       // recognitioon
@@ -116,23 +116,23 @@ const mutations = {
 const actions = {
   // Add New Camera or Play Previously Paused Camera
   addDevice({ commit }, payload) {
-    console.log('Add Action payload:', payload);
+    // console.log("Add Action payload:", payload);
     let newDevice, status;
 
     // If Adding New Camera
-    if (typeof payload === 'object') {
-      status = 'add';
+    if (typeof payload === "object") {
+      status = "add";
       newDevice = payload;
       // If Playing Paused Camera
-    } else if (typeof payload == 'number') {
-      status = 'play';
+    } else if (typeof payload == "number") {
+      status = "play";
       let index = state.cameras.findIndex(x => x.cameraId === payload);
       newDevice = state.cameras[index];
     }
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
-        let api = state.host + state.port + '/add_device';
+        let api = state.host + state.port + "/add_device";
 
         Axios.post(api, newDevice)
           .then(response => {
@@ -141,14 +141,14 @@ const actions = {
               Notify.create(response.data.message);
             }
             //   Get number from response string
-            let responseId = response.data.data.replace(/[^\d.]/g, '');
+            let responseId = response.data.data.replace(/[^\d.]/g, "");
 
             //add responseId to the payload object
             let cameraId = parseInt(responseId);
 
             // add VideoFeed URL to the payload Object
             let videoFeedUrl =
-              state.host + state.port + '/video_feed/' + cameraId;
+              state.host + state.port + "/video_feed/" + cameraId;
 
             // Create A Camera Object in the state
             let newCamera = {
@@ -159,8 +159,8 @@ const actions = {
               faceRecognition: false
             };
             // Add New Camera To State
-            if (status == 'add') {
-              commit('addCamera', newCamera);
+            if (status == "add") {
+              commit("addCamera", newCamera);
             }
             // }
           })
@@ -175,18 +175,18 @@ const actions = {
 
   // Stop and Remove a Camera
   removeDevice({ commit }, payload) {
-    console.log('Action payload:', payload);
+    // console.log("Action payload:", payload);
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
-        let api = state.host + state.port + '/terminate/' + payload;
+        let api = state.host + state.port + "/terminate/" + payload;
 
-        console.log('removeDevice beforeThen');
+        console.log("removeDevice beforeThen");
         Axios.get(api)
           .then(response => {
             // console.log("payload.cameraId:", payload);
-            console.log('removeDevice then');
-            commit('removeCamera', payload);
+            console.log("removeDevice then");
+            commit("removeCamera", payload);
           })
           .catch(error => {
             responseErrorMessage(error);
@@ -204,7 +204,7 @@ const actions = {
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
-        let api = state.host + state.port + '/close/' + payload;
+        let api = state.host + state.port + "/close/" + payload;
 
         Axios.get(api)
           .then(response => {
@@ -221,24 +221,24 @@ const actions = {
 
   // FaceDetection & FaceRecognition Update
   updateFaceDetection({ commit }, payload) {
-    console.log('Action payload:', payload);
+    // console.log("Action payload:", payload);
     // payload >> {index: 0, value: true, cameraId: -1}
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
         let api = state.host + state.port;
         if (payload.value) {
-          api += '/face_recognition/';
+          api += "/face_recognition/";
         } else if (payload.value == null) {
-          api += '/face_detection/';
+          api += "/face_detection/";
         } else {
-          api += '/remove_facial/';
+          api += "/remove_facial/";
         }
         api += payload.cameraId;
         Axios.get(api)
           .then(response => {
             // console.log("payload.cameraId:", payload);
-            commit('updateDetection', payload);
+            commit("updateDetection", payload);
           })
           .catch(error => {
             responseErrorMessage(error);
@@ -251,7 +251,7 @@ const actions = {
 
   // Toolbar Devices Filter
   setDeviceFilter({ commit }, payload) {
-    commit('setDeviceFilter', payload);
+    commit("setDeviceFilter", payload);
   },
 
   // Train Dataset on new faces
@@ -259,7 +259,7 @@ const actions = {
     Loading.show();
     setTimeout(() => {
       return new Promise((resolve, reject) => {
-        let api = state.host + state.port + '/train_dataset';
+        let api = state.host + state.port + "/train_dataset";
         Axios.get(api)
           .then(response => {})
           .catch(error => {

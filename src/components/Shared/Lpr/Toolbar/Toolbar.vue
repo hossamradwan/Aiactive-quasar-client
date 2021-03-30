@@ -8,6 +8,7 @@
     </template>
 
     <template class="align-center">
+      <vms-options v-if="vms.includes(moduleName)" :moduleName="moduleName" />
       <q-space />
 
       <reporting-module-print
@@ -37,47 +38,50 @@
 </template>
 <script>
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
       toggelUpdate: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'reporting-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "reporting-module",
+        "toll-gates-module"
       ],
 
-      selectReportingModule: ['reporting-module'],
+      selectReportingModule: ["reporting-module"],
 
       dateTime: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'reporting-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "reporting-module",
+        "toll-gates-module"
       ],
 
       search: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'toll-gates-module'
+        "generic-lpr-module",
+        "average-speed-module",
+        "toll-gates-module"
       ],
 
       filters: [
-        'generic-lpr-module',
-        'average-speed-module',
-        'toll-gates-module',
-        'VMS-module'
-      ]
+        "generic-lpr-module",
+        "average-speed-module",
+        "toll-gates-module",
+        "VMS-module"
+      ],
+
+      vms: ["VMS-module"]
     };
   },
   components: {
-    'toggel-update': require('./Shared/ToggelUpdate').default,
-    'reporting-module-select': require('./Shared/SelectReportingModule')
+    "toggel-update": require("./Shared/ToggelUpdate").default,
+    "reporting-module-select": require("./Shared/SelectReportingModule")
       .default,
-    'reporting-module-print': require('./Shared/PrintReportingModule').default,
-    search: require('./Shared/Search').default,
-    'date-time': require('./Shared/DateTime').default,
-    'filters-dropdown': require('./Shared/FiltersDropdown').default
+    "reporting-module-print": require("./Shared/PrintReportingModule").default,
+    search: require("./Shared/Search").default,
+    "date-time": require("./Shared/DateTime").default,
+    "filters-dropdown": require("./Shared/FiltersDropdown").default,
+    "vms-options": require("./Shared/VMSOptions").default
   }
 };
 </script>
