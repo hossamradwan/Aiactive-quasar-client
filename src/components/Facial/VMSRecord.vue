@@ -111,6 +111,7 @@ export default {
       const index = this.layout.map(item => item.i).indexOf(val);
       this.layout.splice(index, 1);
     },
+
     setGrid() {
       //Resize and Modify Location Function
       let resize = () => {

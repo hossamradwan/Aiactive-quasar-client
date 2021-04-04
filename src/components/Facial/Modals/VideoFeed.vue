@@ -20,6 +20,8 @@
           v-if="showToolbar"
           style="zoom: 80%; "
         >
+          <span>{{ index }}</span>
+          <br />
           <!-- Pause -->
           <q-btn
             v-if="videoStatus == 'play'"
@@ -125,7 +127,7 @@ export default {
 
     const src =
       "http://192.168.1.26:8080/22e479f60aacb86ba8531979f250d892/hls/dnU07P50ws/AgbX42cQ8b80/s.m3u8";
-    this.playVideo(src);
+    // this.playVideo(src);
   },
   computed: {
     ...mapState("VMS", ["cameras", "selectedCameraIndex"]),

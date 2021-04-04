@@ -21,11 +21,15 @@ export default {
 
   mounted() {
     this.getDevices();
+    this.getMonitors();
   },
   computed: {
     ...mapState("VMS", ["cameras"])
   },
-  methods: { ...mapActions("devices", ["getDevices"]) },
+  methods: {
+    ...mapActions("devices", ["getDevices"]),
+    ...mapActions("shinobi", ["getMonitors"])
+  },
   components: {
     "tool-bar": require("components/Shared/Lpr/Toolbar/Toolbar").default,
     "VMS-record": require("components/facial/VMSRecord").default,
