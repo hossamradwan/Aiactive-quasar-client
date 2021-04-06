@@ -95,41 +95,46 @@ const actions = {
   addDevice({ dispatch }, payload) {
     Loading.show();
 
-    setTimeout(() => {
-      const host = config.API_URL + "/devices";
-      const userToken = LocalStorage.getItem("loggedInUserToken");
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userToken}`
-      };
+    const promise = new Promise(function(resolve, reject) {
+      setTimeout(() => {
+        const host = config.API_URL + "/devices";
+        const userToken = LocalStorage.getItem("loggedInUserToken");
+        const headers = {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`
+        };
 
-      Axios.post(host, payload, {
-        headers: headers
-      })
-        .then(response => {
-          Loading.hide();
-          dispatch("setAddDeviceModal", false);
-          dispatch("getDevices");
-          Notify.create("Device Added!");
+        Axios.post(host, payload, {
+          headers: headers
         })
-        .catch(error => {
-          if (error.message == "Network Error") {
-            showErrorMessage("Server Offline");
-            return;
-          }
+          .then(response => {
+            Loading.hide();
+            dispatch("setAddDeviceModal", false);
+            dispatch("getDevices");
+            Notify.create("Device Added!");
+            resolve(response);
+          })
+          .catch(error => {
+            if (error.message == "Network Error") {
+              showErrorMessage("Server Offline");
+              return;
+            }
 
-          if (error.response.status === 401) {
-            showErrorMessage(error.response.data.message);
-            return;
-          } else if (error.response.status === 404) {
-            showErrorMessage(error.response.data.message);
-            return;
-          } else if (error.response.status === 500) {
-            showErrorMessage(error.response.data.message);
-            return;
-          }
-        });
-    }, 500);
+            if (error.response.status === 401) {
+              showErrorMessage(error.response.data.message);
+              return;
+            } else if (error.response.status === 404) {
+              showErrorMessage(error.response.data.message);
+              return;
+            } else if (error.response.status === 500) {
+              showErrorMessage(error.response.data.message);
+              return;
+            }
+            reject();
+          });
+      }, 500);
+    });
+    return promise;
   },
   updateDevice({ dispatch }, payload) {
     Loading.show();

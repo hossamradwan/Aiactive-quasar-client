@@ -3,13 +3,15 @@ import { Loading, Notify } from "quasar";
 import axios from "axios";
 import { showErrorMessage } from "src/functions/function-show-error-message";
 import { responseErrorMessage } from "../functions/function-response-Error-Message";
+import shionbiAddApi from "./shinobi-key";
 const state = {
   ip: `192.168.1.26`,
   port: 8080,
   credentials: { mail: "marco@aiactive.com", pass: "MAR@2021#ai" },
-
-  API_KEY: null,
-  GROUP_KEY: null,
+  keys: {
+    API_KEY: null,
+    GROUP_KEY: null
+  },
   monitors: []
 };
 const shinobiApi = axios.create({
@@ -18,10 +20,10 @@ const shinobiApi = axios.create({
 
 const mutations = {
   setApiKey(state, payload) {
-    state.API_KEY = payload;
+    state.keys.API_KEY = payload;
   },
   setGroupKey(state, payload) {
-    state.GROUP_KEY = payload;
+    state.keys.GROUP_KEY = payload;
   },
   setMonitors(state, payload) {
     // todo: check if not previously added
@@ -30,6 +32,7 @@ const mutations = {
 };
 
 const actions = {
+  // Login on boot
   login({ commit }) {
     setTimeout(() => {
       return new Promise((resolve, reject) => {
@@ -39,7 +42,32 @@ const actions = {
           .post(api, body)
           .then(response => {
             commit("setApiKey", response.data.$user.auth_token);
+            // console.log("login.keys.API_KEY:", state.keys.API_KEY);
             commit("setGroupKey", response.data.$user.ke);
+          })
+          .catch(error => {
+            responseErrorMessage(error, "Shinobi ");
+          })
+          .finally();
+      });
+    }, 500);
+  },
+
+  // Get All Monitors
+  getMonitors({ commit }) {
+    setTimeout(() => {
+      return new Promise((resolve, reject) => {
+        let api = `${state.keys.API_KEY}/monitor/${state.keys.GROUP_KEY}`;
+
+        shinobiApi
+          .get(api)
+          .then(response => {
+            // console.log("get response:", response.data[0]);
+            let monitors = [];
+            response.data.map(monitor => {
+              monitors.push({ name: monitor.name, id: monitor.mid });
+            });
+            commit("setMonitors", monitors);
           })
           .catch(error => {
             responseErrorMessage(error);
@@ -48,24 +76,34 @@ const actions = {
       });
     }, 500);
   },
-  getMonitors({ commit }) {
+
+  // Add/Update Monitor
+  addMonitor({ dispatch }, payload) {
+    console.log("payload:", payload);
     setTimeout(() => {
       return new Promise((resolve, reject) => {
-        let api = `${state.API_KEY}/monitor/${state.GROUP_KEY}`;
+        // Shinobi Add API
+        /* Payload Example {
+              id: 12,
+              name: "Test",
+              host: "192.168.1.160",
+              port: 554,
+              username: "root",
+              password: 123456
+    }*/
 
+        let api = shionbiAddApi({ ...state.keys, ...payload });
         shinobiApi
           .get(api)
           .then(response => {
-            let monitors = [];
-            response.data.map(monitor => {
-              monitors.push({ name: monitor.name, id: monitor.mid });
-            });
-            console.log("monitors:", monitors);
-            commit("setMonitors", monitors);
+            // get all monitors again
+            dispatch("getMonitors");
           })
+
           .catch(error => {
             responseErrorMessage(error);
           })
+
           .finally();
       });
     }, 500);

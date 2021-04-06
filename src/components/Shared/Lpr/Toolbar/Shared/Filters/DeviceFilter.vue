@@ -1,6 +1,6 @@
 <template>
   <div class="column items-center filter">
-    <div class="text-h6 text-center q-mb-md">{{ $t('Devices') }}</div>
+    <div class="text-h6 text-center q-mb-md">{{ $t("Devices") }}</div>
 
     <q-tree
       :nodes="devicesTree"
@@ -14,24 +14,24 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapActions, mapState } from "vuex";
 export default {
-  props: ['moduleName'],
+  props: ["moduleName"],
   data() {
     return {
       simple: [
         {
-          label: 'Devices Zone',
+          label: "Devices Zone",
           //avatar: 'https://cdn.quasar.dev/img/boy-avatar.png',
-          icon: 'gps_fixed',
+          icon: "gps_fixed",
           children: [
             {
-              label: 'Device_one',
-              icon: 'videocam'
+              label: "Device_one",
+              icon: "videocam"
             },
             {
-              label: 'Device_two',
-              icon: 'videocam',
+              label: "Device_two",
+              icon: "videocam",
               disabled: false
             }
           ]
@@ -40,17 +40,61 @@ export default {
       ticked: []
     };
   },
-  components: {},
+
+  methods: {
+    ...mapActions("lpr", ["setDeviceFilter"]),
+    ...mapActions("averageSpeedResult", {
+      setAverageSpeedDeviceFilter: "setDeviceFilter"
+    }),
+    ...mapActions("VMS", ["addDevice", "removeDevice"]),
+    ...mapActions("shinobi", ["getMonitors"])
+  },
+
+  computed: {
+    ...mapState("lpr", { lprActiveDevices: "activeDevices" }),
+    ...mapState("VMS", { cameras: "cameras" }),
+    ...mapState("shinobi", ["monitors"]),
+    ...mapState("devices", ["devicesList"]),
+    ...mapState("averageSpeedResult", ["activeTraps"]),
+    ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
+    ...mapGetters("VMS", { activeVMS: "activeDevices" }),
+
+    devicesTree() {
+      if (this.moduleName == "average-speed-module")
+        return this.getAverageSpeedDevicesTree;
+
+      return this.getDevicesTree(this.moduleName);
+    }
+  },
+
+  mounted() {
+    setTimeout(() => {
+      if (this.moduleName == "average-speed-module") {
+        this.ticked = Array.from(this.activeTraps);
+        return;
+      }
+
+      if (this.moduleName == "VMS-module") {
+        // Get Previously Ticked devices
+        // this.ticked = Array.from(this.activeVMS);
+        // console.log("ticked", this.ticked);
+        return;
+      }
+
+      this.ticked = Array.from(this.lprActiveDevices);
+    }, 200);
+  },
+
   watch: {
     ticked: function(newVal, oldVal) {
       if (newVal) {
-        if (this.moduleName == 'average-speed-module') {
+        if (this.moduleName == "average-speed-module") {
           this.setAverageSpeedDeviceFilter(newVal);
           return;
         }
         this.setDeviceFilter(newVal);
 
-        if (this.moduleName == 'VMS-module') {
+        if (this.moduleName == "VMS-module") {
           // Function To Get Difference Between Two Arrays
           function arr_diff(a1, a2) {
             var a = [],
@@ -111,45 +155,6 @@ export default {
           return;
         }
       }
-    }
-  },
-  methods: {
-    ...mapActions('lpr', ['setDeviceFilter']),
-    ...mapActions('averageSpeedResult', {
-      setAverageSpeedDeviceFilter: 'setDeviceFilter'
-    }),
-    ...mapActions('VMS', ['addDevice', 'removeDevice'])
-  },
-  mounted() {
-    setTimeout(() => {
-      if (this.moduleName == 'average-speed-module') {
-        this.ticked = Array.from(this.activeTraps);
-        return;
-      }
-
-      if (this.moduleName == 'VMS-module') {
-        this.ticked = Array.from(this.activeVMS);
-        // console.log(this.ticked);
-        return;
-      }
-
-      this.ticked = Array.from(this.activeDevices);
-    }, 200);
-  },
-  computed: {
-    ...mapState('lpr', ['activeDevices']),
-    ...mapState('VMS', {
-      cameras: 'cameras'
-    }),
-    ...mapState('devices', ['devicesList']),
-    ...mapState('averageSpeedResult', ['activeTraps']),
-    ...mapGetters('devices', ['getDevicesTree', 'getAverageSpeedDevicesTree']),
-    ...mapGetters('VMS', { activeVMS: 'activeDevices' }),
-    devicesTree() {
-      if (this.moduleName == 'average-speed-module')
-        return this.getAverageSpeedDevicesTree;
-
-      return this.getDevicesTree(this.moduleName);
     }
   }
 };

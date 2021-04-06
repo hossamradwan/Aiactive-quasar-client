@@ -115,20 +115,20 @@ export default {
   data() {
     return {
       deviceData: {
-        deviceName: "",
+        deviceName: "hello",
         deviceType: "",
         deviceZone: "",
         deviceStatus: "",
         belongTo: "",
-        deviceIp: "192.168.1.100",
-        devicePort: 80,
-        userName: "",
-        userPassword: "",
+        deviceIp: "192.168.1.160",
+        devicePort: 554,
+        userName: "root",
+        userPassword: "123456",
         locationName: "",
         locationLatitude: "27.1974137",
         locationLongtude: "33.8381997",
 
-        streamUrl: ""
+        streamUrl: "rtsp://192.168.1.160:554/axis-media/media.amp?profile1"
       }
     };
   },
@@ -167,6 +167,7 @@ export default {
   },
   methods: {
     ...mapActions("devices", ["addDevice"]),
+    ...mapActions("shinobi", ["addMonitor"]),
 
     // Show Section If Belongs to Module name
     belongsTo(moduleName) {
@@ -191,7 +192,16 @@ export default {
 
       if (!deviceNameValidation.hasError && !deviceIpValidation.hasError) {
         console.log("submitting data", this.deviceData);
-        this.addDevice(this.deviceData);
+        this.addDevice(this.deviceData).then(response => {
+          this.addMonitor({
+            id: response.data.id,
+            name: response.data.name,
+            host: this.deviceData.deviceIp,
+            port: this.deviceData.devicePort,
+            username: this.deviceData.userName,
+            password: this.deviceData.userPassword
+          });
+        });
       }
     }
   },
