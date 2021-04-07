@@ -76,7 +76,7 @@ export default {
 
       if (this.moduleName == "VMS-module") {
         // Get Previously Ticked devices
-        // this.ticked = Array.from(this.activeVMS);
+        this.ticked = Array.from(this.activeVMS);
         // console.log("ticked", this.ticked);
         return;
       }
