@@ -9,7 +9,7 @@ import devices from "./store-devices";
 import averageSpeed from "./store-averageSpeed";
 import averageSpeedResult from "./store-averageSpeedResult";
 import reporting from "./store-reporting";
-import VMS from "./store-VMS";
+import facial from "./store-facial";
 import shinobi from "./store-shinobi";
 
 Vue.use(Vuex);
@@ -30,7 +30,7 @@ export default function(/* { ssrContext } */) {
       averageSpeed,
       averageSpeedResult,
       reporting,
-      VMS,
+      facial,
       shinobi
     },
 

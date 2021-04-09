@@ -24,7 +24,7 @@ export default {
     this.getMonitors();
   },
   computed: {
-    ...mapState("VMS", ["cameras"])
+    ...mapState("facial", ["cameras"])
   },
   methods: {
     ...mapActions("devices", ["getDevices"]),

@@ -73,7 +73,7 @@ export default {
     this.playVideo(src);
   },
   computed: {
-    ...mapState("VMS", ["cameras", "selectedCameraIndex"]),
+    ...mapState("facial", ["cameras", "selectedCameraIndex"]),
     ...mapState("shinobi", ["ip", "port", "keys", "monitors"]),
 
     detection: {
@@ -81,7 +81,7 @@ export default {
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        let selectedCamera = this.$store.getters["VMS/cameras"][index];
+        let selectedCamera = this.$store.getters["facial/cameras"][index];
         if (selectedCamera.faceRecognition) {
           this.facesDrawer = true;
           return true;
@@ -101,7 +101,7 @@ export default {
         let index = this.cameras.findIndex(
           x => x.cameraId === this.selectedCameraID
         );
-        this.$store.dispatch("VMS/updateFaceDetection", {
+        this.$store.dispatch("facial/updateFaceDetection", {
           index,
           value,
           cameraId: this.selectedCameraID
@@ -114,7 +114,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("VMS", [
+    ...mapActions("facial", [
       "addDevice",
       "removeDevice",
       "enableFaceRecognition",
@@ -204,7 +204,7 @@ export default {
       // console.log("this.selectedCameraIndex:", this.selectedCameraIndex);
       if (this.selectedCameraIndex != null) {
         this.setselectedCameraID(this.selectedCameraIndex);
-        this.$store.commit("VMS/resetSelectedCameraIndex");
+        this.$store.commit("facial/resetSelectedCameraIndex");
       }
     },
 

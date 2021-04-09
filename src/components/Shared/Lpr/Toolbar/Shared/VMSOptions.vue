@@ -60,7 +60,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions("VMS", ["addDevice"]),
+    ...mapActions("facial", ["addDevice"]),
     // Dynamic options depending on available cameras
     layoutOptions() {
       // this.gridOptions = [];
@@ -79,13 +79,13 @@ export default {
     this.layoutOptions();
   },
   computed: {
-    ...mapState("VMS", ["cameras", "devicesPerRow"]),
+    ...mapState("facial", ["cameras", "devicesPerRow"]),
     devicesPerRow: {
       get() {
-        return this.$store.getters["VMS/devicesPerRow"];
+        return this.$store.getters["facial/devicesPerRow"];
       },
       set(value) {
-        this.$store.commit("VMS/updateDevicesPerRow", value);
+        this.$store.commit("facial/updateDevicesPerRow", value);
       }
     }
   },

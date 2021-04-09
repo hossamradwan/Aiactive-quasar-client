@@ -80,13 +80,13 @@ export default {
     this.index = this.layout.length;
   },
   computed: {
-    ...mapState("VMS", [
+    ...mapState("facial", [
       "selectedCameraIndex",
       "devicesPerRow",
       "activeDevices",
       "url"
     ]),
-    ...mapGetters("VMS", ["cameras"])
+    ...mapGetters("facial", ["cameras"])
   },
   methods: {
     addItem: function() {
@@ -150,7 +150,7 @@ export default {
         resize();
       }
     },
-    ...mapActions("VMS", [
+    ...mapActions("facial", [
       "addDevice",
       "removeDevice",
       "enableFaceRecognition",

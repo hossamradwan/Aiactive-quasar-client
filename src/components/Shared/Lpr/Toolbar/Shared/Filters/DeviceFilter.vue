@@ -46,18 +46,18 @@ export default {
     ...mapActions("averageSpeedResult", {
       setAverageSpeedDeviceFilter: "setDeviceFilter"
     }),
-    ...mapActions("VMS", ["addDevice", "removeDevice"]),
+    ...mapActions("facial", ["addDevice", "removeDevice"]),
     ...mapActions("shinobi", ["getMonitors"])
   },
 
   computed: {
     ...mapState("lpr", { lprActiveDevices: "activeDevices" }),
-    ...mapState("VMS", { cameras: "cameras" }),
+    ...mapState("facial", { cameras: "cameras" }),
     ...mapState("shinobi", ["monitors"]),
     ...mapState("devices", ["devicesList"]),
     ...mapState("averageSpeedResult", ["activeTraps"]),
     ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
-    ...mapGetters("VMS", { activeVMS: "activeDevices" }),
+    ...mapGetters("facial", { activeVMS: "activeDevices" }),
 
     devicesTree() {
       if (this.moduleName == "average-speed-module")
