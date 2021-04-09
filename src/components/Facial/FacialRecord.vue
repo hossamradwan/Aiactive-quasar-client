@@ -1,4 +1,3 @@
-//vms record
 <template>
   <div>
     <grid-layout

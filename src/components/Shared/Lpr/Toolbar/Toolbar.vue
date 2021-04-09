@@ -8,7 +8,10 @@
     </template>
 
     <template class="align-center">
-      <vms-options v-if="vms.includes(moduleName)" :moduleName="moduleName" />
+      <facial-options
+        v-if="vms.includes(moduleName)"
+        :moduleName="moduleName"
+      />
       <q-space />
 
       <reporting-module-print
@@ -81,7 +84,7 @@ export default {
     search: require("./Shared/Search").default,
     "date-time": require("./Shared/DateTime").default,
     "filters-dropdown": require("./Shared/FiltersDropdown").default,
-    "vms-options": require("./Shared/VMSOptions").default
+    "facial-options": require("./Shared/VMSOptions").default
   }
 };
 </script>

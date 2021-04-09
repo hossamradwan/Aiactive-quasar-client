@@ -3,7 +3,7 @@
     <!-- ToolBar  -->
     <tool-bar :moduleName="moduleName" />
     <q-card class="settings-tabs col">
-      <VMS-record />
+      <facial-record />
     </q-card>
   </q-page>
 </template>
@@ -32,7 +32,7 @@ export default {
   },
   components: {
     "tool-bar": require("components/Shared/Lpr/Toolbar/Toolbar").default,
-    "VMS-record": require("components/facial/VMSRecord").default,
+    "facial-record": require("components/facial/FacialRecord").default,
     "empty-state": require("layouts/EmptyState.vue").default
   }
 };
