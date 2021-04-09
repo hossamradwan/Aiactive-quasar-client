@@ -79,7 +79,7 @@ const actions = {
 
   // Add/Update Monitor
   addMonitor({ dispatch }, payload) {
-    console.log("payload:", payload);
+    console.log("addMonitor payload:", payload);
     setTimeout(() => {
       return new Promise((resolve, reject) => {
         // Shinobi Add API
@@ -93,6 +93,7 @@ const actions = {
     }*/
 
         let api = shionbiAddApi({ ...state.keys, ...payload });
+        console.log("api:", api);
         shinobiApi
           .get(api)
           .then(response => {

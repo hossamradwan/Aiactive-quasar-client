@@ -131,15 +131,18 @@ export default {
             });
 
             let deviceUrl = this.devicesList[deviceIndex].device_streamUrl;
+            let deviceId = this.devicesList[deviceIndex].id;
 
             // If Checked
             if (inNewVal != -1) {
+              console.log("deviceId:", deviceId);
               if (VMSDeviceIndex == -1)
                 this.addDevice({
                   height: 320,
                   width: 480,
                   url: deviceUrl,
-                  deviceName: difference
+                  deviceName: difference,
+                  deviceId
                 });
             }
 

@@ -6,73 +6,16 @@
       v-if="index < cameras.length"
       style="height:100%"
     >
-      <!-- Video Feed -->
-
-      <q-img
-        ref="feed"
-        :src="cameras[index].videoFeedUrl"
-        @dblclick="fullscreen"
-        style="height:100%"
-      >
-        <!-- :ratio="16 / 9" -->
-        <div
-          class="absolute-bottom text-subtitle1 "
-          v-if="showToolbar"
-          style="zoom: 80%; "
-        >
-          <span>{{ index }}</span>
-          <br />
-          <!-- Pause -->
-          <q-btn
-            v-if="videoStatus == 'play'"
-            icon="pause"
-            color="primary"
-            text-color="yellow"
-            round
-            @click="pauseFeed(selectedCameraID)"
-          />
-          <!-- Play -->
-          <q-btn
-            v-if="videoStatus == 'pause'"
-            icon="play_arrow"
-            color="primary"
-            text-color="green"
-            round
-            @click="palyFeed(selectedCameraID)"
-          />
-          <!-- Stop -->
-          <q-btn
-            icon="stop"
-            round
-            color="primary"
-            text-color="red"
-            @click="stopCamera(selectedCameraID)"
-          />
-          <q-btn icon="volume_up" round color="primary" />
-          <q-btn icon="local_see" round color="primary" />
-          <q-btn icon="power" round color="primary" />
-
-          <q-btn icon="settings" round color="primary" />
-          <!-- Face Recognition Button -->
-          <!-- <q-toggle
-            style="word-wrap: normal; text-size:40%"
-            toggle-indeterminate
-            v-model="detection"
-            color="green"
-          /> -->
-        </div>
-      </q-img>
-
       <!-- m3u8 player -->
-      <!-- <div class="player">
-    <video-player
-      ref="videoPlayer"
-      class="vjs-custom-skin"
-      :options="playerOptions"
-      @play="onPlayerPlay($event)"
-      @ready="onPlayerReady($event)"
-    />
-  </div> -->
+      <div class="player">
+        <video-player
+          ref="videoPlayer"
+          class="vjs-custom-skin"
+          :options="playerOptions"
+          @play="onPlayerPlay($event)"
+          @ready="onPlayerReady($event)"
+        />
+      </div>
     </div>
     <span v-else style=" color: white;">No Content</span>
   </div>
@@ -125,12 +68,14 @@ export default {
     if (this.cameras.length > 0)
       this.selectedCameraID = this.cameras[this.index].cameraId;
 
-    const src =
-      "http://192.168.1.26:8080/22e479f60aacb86ba8531979f250d892/hls/dnU07P50ws/AgbX42cQ8b80/s.m3u8";
-    // this.playVideo(src);
+    let monitorId = this.cameras[this.index].deviceId;
+    const src = `http://${this.ip}:${this.port}/${this.keys.API_KEY}/hls/${this.keys.GROUP_KEY}/${monitorId}/s.m3u8`;
+    this.playVideo(src);
   },
   computed: {
     ...mapState("VMS", ["cameras", "selectedCameraIndex"]),
+    ...mapState("shinobi", ["ip", "port", "keys", "monitors"]),
+
     detection: {
       get() {
         let index = this.cameras.findIndex(

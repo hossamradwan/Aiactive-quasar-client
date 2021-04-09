@@ -116,9 +116,9 @@ const mutations = {
 const actions = {
   // Add New Camera or Play Previously Paused Camera
   addDevice({ commit }, payload) {
-    // console.log("Add Action payload:", payload);
+    console.log("Add Action payload:", payload);
     let newDevice, status;
-
+    console.log("payload:", payload);
     // If Adding New Camera
     if (typeof payload === "object") {
       status = "add";
