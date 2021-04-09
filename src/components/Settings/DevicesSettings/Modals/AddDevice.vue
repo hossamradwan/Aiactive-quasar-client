@@ -36,7 +36,7 @@
         Device Connection Info..
       </div>
 
-      <!-- VMS -->
+      <!-- Facial -->
       <q-card-section
         class="row q-pb-none"
         style="justify-content:center"

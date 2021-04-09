@@ -9,7 +9,7 @@
 
     <template class="align-center">
       <facial-options
-        v-if="vms.includes(moduleName)"
+        v-if="facial.includes(moduleName)"
         :moduleName="moduleName"
       />
       <q-space />
@@ -73,7 +73,7 @@ export default {
         "VMS-module"
       ],
 
-      vms: ["VMS-module"]
+      facial: ["VMS-module"]
     };
   },
   components: {

@@ -57,7 +57,7 @@ export default {
     ...mapState("devices", ["devicesList"]),
     ...mapState("averageSpeedResult", ["activeTraps"]),
     ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
-    ...mapGetters("facial", { activeVMS: "activeDevices" }),
+    ...mapGetters("facial", { activeFacialDevices: "activeDevices" }),
 
     devicesTree() {
       if (this.moduleName == "average-speed-module")
@@ -76,7 +76,7 @@ export default {
 
       if (this.moduleName == "VMS-module") {
         // Get Previously Ticked devices
-        this.ticked = Array.from(this.activeVMS);
+        this.ticked = Array.from(this.activeFacialDevices);
         // console.log("ticked", this.ticked);
         return;
       }
@@ -126,7 +126,7 @@ export default {
             let deviceIndex = this.devicesList.findIndex(function(device) {
               return device.deviceName === difference;
             });
-            let VMSDeviceIndex = this.cameras.findIndex(function(device) {
+            let facialDeviceIndex = this.cameras.findIndex(function(device) {
               return device.deviceName === difference;
             });
 
@@ -136,7 +136,7 @@ export default {
             // If Checked
             if (inNewVal != -1) {
               console.log("deviceId:", deviceId);
-              if (VMSDeviceIndex == -1)
+              if (facialDeviceIndex == -1)
                 this.addDevice({
                   height: 320,
                   width: 480,
