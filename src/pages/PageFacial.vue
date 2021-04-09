@@ -11,7 +11,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 export default {
-  name: "PageVMS",
+  name: "PageFacial",
 
   data() {
     return {

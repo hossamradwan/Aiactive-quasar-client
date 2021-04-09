@@ -138,9 +138,9 @@ export default {
           to: "/reportingModule"
         },
         {
-          label: "VMS",
+          label: "Facial",
           icon: "fas fa-users",
-          to: "/VMS"
+          to: "/facial"
         },
         {
           label: "Settings",
