@@ -38,6 +38,10 @@ const routes = [
       {
         path: "/facial",
         component: () => import("src/pages/PageFacial.vue")
+      },
+      {
+        path: "/VMS",
+        component: () => import("src/pages/PageVms.vue")
       }
     ]
   },

@@ -82,7 +82,7 @@ const actions = {
       })
         .then(response => {
           let devices = response.data;
-          // console.log('devices:', devices);
+          // console.log("devices:", devices);
           dispatch("handleStateDevices", devices);
           Loading.hide();
         })

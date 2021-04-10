@@ -1,3 +1,3 @@
-export default ({ app, router, store, Vue }) => {
+export default ({ store }) => {
   store.dispatch("shinobi/login");
 };

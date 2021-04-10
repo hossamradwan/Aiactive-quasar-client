@@ -33,9 +33,9 @@ const mutations = {
 
 const actions = {
   // Login on boot
-  login({ commit }) {
+  login({ commit, dispatch }) {
     setTimeout(() => {
-      return new Promise((resolve, reject) => {
+      const promise = new Promise((resolve, reject) => {
         let api = "/?json=true";
         let body = state.credentials;
         shinobiApi
@@ -44,19 +44,25 @@ const actions = {
             commit("setApiKey", response.data.$user.auth_token);
             // console.log("login.keys.API_KEY:", state.keys.API_KEY);
             commit("setGroupKey", response.data.$user.ke);
+            resolve(response);
+            console.log("Shinobi Loggedin");
+            dispatch("getMonitors");
           })
           .catch(error => {
             responseErrorMessage(error, "Shinobi ");
+            reject(error);
           })
           .finally();
       });
+      return promise;
     }, 500);
   },
 
   // Get All Monitors
   getMonitors({ commit }) {
+    console.log("getMonitors");
     setTimeout(() => {
-      return new Promise((resolve, reject) => {
+      const promise = new Promise((resolve, reject) => {
         let api = `${state.keys.API_KEY}/monitor/${state.keys.GROUP_KEY}`;
 
         shinobiApi
@@ -68,12 +74,15 @@ const actions = {
               monitors.push({ name: monitor.name, id: monitor.mid });
             });
             commit("setMonitors", monitors);
+            resolve(response);
+            console.log("monitors:", state.monitors);
           })
           .catch(error => {
             responseErrorMessage(error);
           })
           .finally();
       });
+      return promise;
     }, 500);
   },
 

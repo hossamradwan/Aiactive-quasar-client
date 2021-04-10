@@ -34,7 +34,7 @@ export default {
   components: {
     GridLayout,
     GridItem,
-    "video-feed": require("components/facial/Modals/VideoFeed").default
+    "video-feed": require("components/Vms/Modals/VideoFeed").default
   },
   data() {
     return {
@@ -42,36 +42,7 @@ export default {
       draggable: true,
       resizable: true,
       colNum: 12,
-      index: 0,
-      activeStoreDevices: [],
-      maximizedToggle: true,
-      cameraDialog: false,
-      showToolbar: false,
-      flex: `col-${12}`,
-      faceDetection: false,
-      faceRecognition: false,
-      videoStatus: "play",
-      payload: {
-        url: 0,
-        width: 480,
-        height: 320
-      },
-      selectedCamera: {
-        videoFeedUrl: "https://picsum.photos/536/978"
-      },
-      showDialog: false,
-      series: [75],
-
-      slide: 1,
-      selectedCameraID: "noImage",
-      autoplay: false,
-
-      timestamp: "",
-      date: "",
-      time: "",
-      settingsLoading: false,
-      messages: false,
-      cameraid: -1
+      index: 0
     };
   },
   mounted() {
@@ -148,15 +119,7 @@ export default {
         this.layout.splice(difference);
         resize();
       }
-    },
-    ...mapActions("facial", [
-      "addDevice",
-      "removeDevice",
-      "enableFaceRecognition",
-      "enableFaceDetection",
-      "pauseDevice",
-      "updateMessage"
-    ])
+    }
   },
   watch: {
     devicesPerRow: function() {

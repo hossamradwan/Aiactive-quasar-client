@@ -70,10 +70,11 @@ export default {
         "generic-lpr-module",
         "average-speed-module",
         "toll-gates-module",
-        "VMS-module"
+        "facial-module",
+        "Vms-module"
       ],
 
-      facial: ["VMS-module"]
+      facial: ["facial-module", "Vms-module"]
     };
   },
   components: {

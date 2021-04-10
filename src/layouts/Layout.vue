@@ -139,8 +139,13 @@ export default {
         },
         {
           label: "Facial",
-          icon: "fas fa-users",
+          icon: "photo_camera_front",
           to: "/facial"
+        },
+        {
+          label: "VMS",
+          icon: "switch_video",
+          to: "/VMS"
         },
         {
           label: "Settings",

@@ -63,6 +63,9 @@ export default {
       if (this.moduleName == "average-speed-module")
         return this.getAverageSpeedDevicesTree;
 
+      // Todo : remove the condition
+      if (this.moduleName == "facial-module" || this.moduleName == "Vms-module")
+        return this.getDevicesTree("VMS-module");
       return this.getDevicesTree(this.moduleName);
     }
   },
@@ -74,7 +77,10 @@ export default {
         return;
       }
 
-      if (this.moduleName == "VMS-module") {
+      if (
+        this.moduleName == "facial-module" ||
+        this.moduleName == "Vms-module"
+      ) {
         // Get Previously Ticked devices
         this.ticked = Array.from(this.activeFacialDevices);
         // console.log("ticked", this.ticked);
@@ -94,7 +100,10 @@ export default {
         }
         this.setDeviceFilter(newVal);
 
-        if (this.moduleName == "VMS-module") {
+        if (
+          this.moduleName == "facial-module" ||
+          this.moduleName == "Vms-module"
+        ) {
           // Function To Get Difference Between Two Arrays
           function arr_diff(a1, a2) {
             var a = [],
