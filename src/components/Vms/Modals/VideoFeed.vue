@@ -1,9 +1,9 @@
 <template>
-  <div style="height:100%">
+  <div style="height:100%; border: 3px solid white;">
     <div
       @mouseover="showToolbar = true"
       @mouseleave="showToolbar = false"
-      v-if="index < cameras.length"
+      v-if="index < watchMonitors.length"
       style="height:100%"
     >
       <!-- m3u8 player -->
@@ -18,7 +18,9 @@
         </video-player>
       </div>
     </div>
-    <span v-else style=" color: white;">No Content</span>
+    <span v-else style=" color: white; font-size: large;"
+      >No Content {{ index }}</span
+    >
   </div>
 </template>
 <script>
@@ -51,7 +53,7 @@ export default {
   mounted() {},
   computed: {
     ...mapState("facial", ["cameras", "selectedCameraIndex"]),
-    ...mapState("shinobi", ["ip", "port", "keys", "monitors"]),
+    ...mapState("shinobi", ["ip", "port", "keys", "monitors", "watchMonitors"]),
 
     player() {
       return this.$refs.videoPlayer.player;
@@ -87,9 +89,11 @@ export default {
     },
     onPlayerReady(player) {
       this.player.play();
-
-      let monitorId = this.monitors[this.index].deviceId;
+      console.log("this.monitors:", this.monitors[this.index]);
+      let monitorId = this.watchMonitors[this.index];
+      console.log("monitorId:", monitorId);
       const src = `http://${this.ip}:${this.port}/${this.keys.API_KEY}/hls/${this.keys.GROUP_KEY}/${monitorId}/s.m3u8`;
+      console.log("src:", src);
       this.playVideo(src);
     },
     playVideo: function(source) {
@@ -115,11 +119,11 @@ export default {
 }
 
 .vjs-custom-skin {
-  height: 90% !important;
+  height: 100% !important;
 }
 
 .vjs-custom-skin /deep/ .video-js {
   width: 100% !important;
-  height: 90%;
+  height: 100%;
 }
 </style>

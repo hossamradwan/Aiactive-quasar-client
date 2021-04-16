@@ -47,13 +47,13 @@ export default {
       setAverageSpeedDeviceFilter: "setDeviceFilter"
     }),
     ...mapActions("facial", ["addDevice", "removeDevice"]),
-    ...mapActions("shinobi", ["getMonitors"])
+    ...mapActions("shinobi", ["getMonitors", "watchMonitor", "unwatchMonitor"])
   },
 
   computed: {
     ...mapState("lpr", { lprActiveDevices: "activeDevices" }),
     ...mapState("facial", { cameras: "cameras" }),
-    ...mapState("shinobi", ["monitors"]),
+    ...mapState("shinobi", ["monitors", "watchMonitors"]),
     ...mapState("devices", ["devicesList"]),
     ...mapState("averageSpeedResult", ["activeTraps"]),
     ...mapGetters("devices", ["getDevicesTree", "getAverageSpeedDevicesTree"]),
@@ -144,8 +144,7 @@ export default {
 
             // If Checked
             if (inNewVal != -1) {
-              console.log("deviceId:", deviceId);
-              if (facialDeviceIndex == -1)
+              if (facialDeviceIndex == -1) {
                 this.addDevice({
                   height: 320,
                   width: 480,
@@ -153,6 +152,9 @@ export default {
                   deviceName: difference,
                   deviceId
                 });
+                this.watchMonitor(deviceId);
+                // console.log("watchMonitor:", this.watchMonitors);
+              }
             }
 
             // If Unchecked
@@ -160,7 +162,12 @@ export default {
             if (inOldVal != -1) {
               let index = this.cameras.findIndex(x => x.url === deviceUrl);
               let cameraId = this.cameras[index].cameraId;
+              console.log("cameraId:", cameraId);
+              console.log("this.devicesList:", this.devicesList);
+              console.log("deviceId:", deviceId);
+              this.unwatchMonitor(deviceId);
               this.removeDevice(cameraId);
+              // console.log("watchMonitor:", this.watchMonitors);
             }
           });
 

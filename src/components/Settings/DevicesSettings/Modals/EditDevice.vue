@@ -117,6 +117,7 @@ export default {
   props: ["deviceData"],
   data() {
     return {
+      initialBelnogsTo: null
       // deviceData: {
       //     deviceName: '',
       //     deviceType: '',
@@ -167,6 +168,7 @@ export default {
   },
   methods: {
     ...mapActions("devices", ["updateDevice"]),
+    ...mapActions("shinobi", ["addMonitor"]),
 
     // Show Section If Belongs to Module name
     belongsTo(moduleName) {
@@ -177,6 +179,8 @@ export default {
         belongs.map(module => {
           if (module.label == moduleName) {
             status = true;
+          } else {
+            status = false;
           }
         });
       }
@@ -192,12 +196,28 @@ export default {
       deviceIpValidation.validate();
 
       if (!deviceNameValidation.hasError && !deviceIpValidation.hasError) {
-        this.updateDevice(this.deviceData);
+        this.updateDevice(this.deviceData).then(response => {
+          let belongsToVms = this.belongsTo("VMS");
+          console.log("belongsToVms:", belongsToVms);
+          if (belongsToVms) {
+            console.log("this.deviceData:", this.deviceData);
+            this.addMonitor({
+              id: this.deviceData.id,
+              name: this.deviceData.deviceName,
+              host: this.deviceData.device_ip,
+              port: this.deviceData.device_port,
+              username: this.deviceData.device_userName,
+              password: this.deviceData.device_userPassword
+            });
+          }
+        });
       }
     }
   },
   mounted() {
-    //console.log('device data', this.deviceData);
+    console.log("device data", this.deviceData);
+    this.initialBelnogsTo = this.deviceData.deviceBelongTo;
+    // Todo compare previous belongs to and new one then remove vms monitor if removed
   },
   computed: {
     ...mapGetters("devices", ["uniqueZones"]),

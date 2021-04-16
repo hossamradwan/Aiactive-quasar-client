@@ -39,14 +39,15 @@ export default {
   data() {
     return {
       layout: [{ x: 0, y: 0, w: 12, h: 12, i: 0 }],
-      draggable: true,
-      resizable: true,
+      draggable: false,
+      resizable: false,
       colNum: 12,
       index: 0
     };
   },
   mounted() {
     // this.$gridlayout.load();
+    this.setGrid();
     this.index = this.layout.length;
   },
   computed: {

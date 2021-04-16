@@ -12,7 +12,8 @@ const state = {
     API_KEY: null,
     GROUP_KEY: null
   },
-  monitors: []
+  monitors: [],
+  watchMonitors: []
 };
 const shinobiApi = axios.create({
   baseURL: `http://${state.ip}:${state.port}`
@@ -22,12 +23,31 @@ const mutations = {
   setApiKey(state, payload) {
     state.keys.API_KEY = payload;
   },
+
   setGroupKey(state, payload) {
     state.keys.GROUP_KEY = payload;
   },
+
   setMonitors(state, payload) {
     // todo: check if not previously added
     state.monitors = payload;
+  },
+  setWatchingMonitors(state, payload) {
+    let exists = state.watchMonitors.includes(payload);
+    console.log("exists:", exists);
+    if (!exists) {
+      state.watchMonitors.push(payload);
+    } else {
+      showErrorMessage("Already Watching");
+    }
+  },
+
+  unsetWatchingMonitors(state, payload) {
+    const index = state.watchMonitors.indexOf(payload);
+    // if exists
+    if (index > -1) {
+      state.watchMonitors.splice(index, 1);
+    }
   }
 };
 
@@ -60,7 +80,7 @@ const actions = {
 
   // Get All Monitors
   getMonitors({ commit }) {
-    console.log("getMonitors");
+    // console.log("getMonitors");
     setTimeout(() => {
       const promise = new Promise((resolve, reject) => {
         let api = `${state.keys.API_KEY}/monitor/${state.keys.GROUP_KEY}`;
@@ -75,7 +95,6 @@ const actions = {
             });
             commit("setMonitors", monitors);
             resolve(response);
-            console.log("monitors:", state.monitors);
           })
           .catch(error => {
             responseErrorMessage(error);
@@ -84,6 +103,16 @@ const actions = {
       });
       return promise;
     }, 500);
+  },
+
+  // Add Wathing Monitor ID to state
+  watchMonitor({ commit }, payload) {
+    commit("setWatchingMonitors", payload);
+  },
+
+  // Remove Wathing Monitor ID to state
+  unwatchMonitor({ commit }, payload) {
+    commit("unsetWatchingMonitors", payload);
   },
 
   // Add/Update Monitor
@@ -102,7 +131,7 @@ const actions = {
     }*/
 
         let api = shionbiAddApi({ ...state.keys, ...payload });
-        console.log("api:", api);
+        // console.log("api:", api);
         shinobiApi
           .get(api)
           .then(response => {
@@ -112,6 +141,34 @@ const actions = {
 
           .catch(error => {
             responseErrorMessage(error);
+          })
+
+          .finally();
+      });
+    }, 500);
+  },
+
+  // Delete Monitor from Shniobi Server
+  deleteMonitor({ dispatch }, payload) {
+    console.log("delete Monitor", payload);
+    setTimeout(() => {
+      return new Promise((resolve, reject) => {
+        // Shinobi Add API
+        /* Payload = Monitor ID*/
+
+        let api = `${state.keys.API_KEY}/configureMonitor/${state.keys.GROUP_KEY}/${payload}/delete`;
+        console.log("api:", api);
+        shinobiApi
+          .get(api)
+          .then(response => {
+            // get all monitors again
+            dispatch("getMonitors");
+            resolve();
+          })
+
+          .catch(error => {
+            responseErrorMessage(error);
+            reject();
           })
 
           .finally();

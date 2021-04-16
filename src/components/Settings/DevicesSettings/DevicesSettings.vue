@@ -182,6 +182,7 @@ export default {
       "setAddDeviceModal",
       "setEditDeviceModal"
     ]),
+    ...mapActions("shinobi", ["deleteMonitor"]),
     editDevice(deviceId) {
       let selectedDevice = this.devicesList.find(x => x.id === deviceId);
       this.modals.editDeviceData = Object.assign({}, selectedDevice);
@@ -199,7 +200,7 @@ export default {
           //persistent: true
         })
         .onOk(() => {
-          this.deleteDevice(deviceId);
+          this.deleteMonitor(deviceId).then(() => this.deleteDevice(deviceId));
         });
     },
 

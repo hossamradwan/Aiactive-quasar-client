@@ -116,9 +116,8 @@ const mutations = {
 const actions = {
   // Add New Camera or Play Previously Paused Camera
   addDevice({ commit }, payload) {
-    console.log("Add Action payload:", payload);
+    // console.log("Add Action payload:", payload);
     let newDevice, status;
-    console.log("payload:", payload);
     // If Adding New Camera
     if (typeof payload === "object") {
       status = "add";
@@ -180,13 +179,15 @@ const actions = {
     setTimeout(() => {
       return new Promise((resolve, reject) => {
         let api = state.host + state.port + "/terminate/" + payload;
+        // todo invert logic after solving server slow response
+        console.log("Removing Device...");
+        commit("removeCamera", payload);
 
-        console.log("removeDevice beforeThen");
         Axios.get(api)
           .then(response => {
-            // console.log("payload.cameraId:", payload);
-            console.log("removeDevice then");
-            commit("removeCamera", payload);
+            resolve(response);
+            console.log("Device Removed");
+            // commit("removeCamera", payload);
           })
           .catch(error => {
             responseErrorMessage(error);

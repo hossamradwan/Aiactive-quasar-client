@@ -464,7 +464,7 @@ const actions = {
   },
 
   handleStateLprData({ commit, dispatch, getters }, payload) {
-    console.log("payload", payload);
+    // console.log("payload", payload);
     payload.forEach(lpr => {
       // Commit only non-existing user with id
       if (!getters.lpr_id.includes(lpr.id)) {

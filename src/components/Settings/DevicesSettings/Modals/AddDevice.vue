@@ -177,6 +177,8 @@ export default {
         belongs.map(module => {
           if (module.label == moduleName) {
             status = true;
+          } else {
+            status = false;
           }
         });
       }
@@ -191,16 +193,18 @@ export default {
       deviceIpValidation.validate();
 
       if (!deviceNameValidation.hasError && !deviceIpValidation.hasError) {
-        console.log("submitting data", this.deviceData);
         this.addDevice(this.deviceData).then(response => {
-          this.addMonitor({
-            id: response.data.id,
-            name: response.data.name,
-            host: this.deviceData.deviceIp,
-            port: this.deviceData.devicePort,
-            username: this.deviceData.userName,
-            password: this.deviceData.userPassword
-          });
+          let belongsToVms = this.belongsTo("VMS");
+          if (belongsToVms) {
+            this.addMonitor({
+              id: response.data.id,
+              name: response.data.name,
+              host: this.deviceData.deviceIp,
+              port: this.deviceData.devicePort,
+              username: this.deviceData.userName,
+              password: this.deviceData.userPassword
+            });
+          }
         });
       }
     }
