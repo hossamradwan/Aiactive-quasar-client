@@ -31,7 +31,7 @@ export default {
   components: {
     VideoPlayer
   },
-  props: ["index", "monitorId"],
+  props: ["monitorId"],
   data() {
     return {
       showToolbar: false,
@@ -49,9 +49,7 @@ export default {
     };
   },
 
-  mounted() {
-    console.log("this.monitorId:", this.monitorId);
-  },
+  mounted() {},
   computed: {
     ...mapState("facial", ["cameras", "selectedCameraIndex"]),
     ...mapState("shinobi", ["ip", "port", "keys", "monitors", "watchMonitors"]),
