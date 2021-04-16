@@ -21,7 +21,7 @@
         :h="item.h"
         :i="item.i"
       >
-        <video-feed :index="index" />
+        <video-feed :index="index" :monitorId="watchMonitors[index]" />
       </grid-item>
     </grid-layout>
   </div>
@@ -57,6 +57,7 @@ export default {
       "activeDevices",
       "url"
     ]),
+    ...mapState("shinobi", ["watchMonitors"]),
     ...mapGetters("facial", ["cameras"])
   },
   methods: {

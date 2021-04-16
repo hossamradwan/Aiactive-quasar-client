@@ -77,13 +77,13 @@ export default {
         return;
       }
 
-      if (
-        this.moduleName == "facial-module" ||
-        this.moduleName == "Vms-module"
-      ) {
+      if (this.moduleName == "facial-module") {
         // Get Previously Ticked devices
         this.ticked = Array.from(this.activeFacialDevices);
-        // console.log("ticked", this.ticked);
+        return;
+      } else if (this.moduleName == "Vms-module") {
+        // Get Previously Ticked devices
+        this.ticked = Array.from(this.activeFacialDevices);
         return;
       }
 
@@ -153,7 +153,6 @@ export default {
                   deviceId
                 });
                 this.watchMonitor(deviceId);
-                // console.log("watchMonitor:", this.watchMonitors);
               }
             }
 
@@ -162,12 +161,8 @@ export default {
             if (inOldVal != -1) {
               let index = this.cameras.findIndex(x => x.url === deviceUrl);
               let cameraId = this.cameras[index].cameraId;
-              console.log("cameraId:", cameraId);
-              console.log("this.devicesList:", this.devicesList);
-              console.log("deviceId:", deviceId);
               this.unwatchMonitor(deviceId);
               this.removeDevice(cameraId);
-              // console.log("watchMonitor:", this.watchMonitors);
             }
           });
 

@@ -3,7 +3,7 @@
     <div
       @mouseover="showToolbar = true"
       @mouseleave="showToolbar = false"
-      v-if="index < watchMonitors.length"
+      v-if="typeof monitorId != 'undefined'"
       style="height:100%"
     >
       <!-- m3u8 player -->
@@ -14,12 +14,11 @@
           :options="playerOptions"
           @play="onPlayerPlay($event)"
           @ready="onPlayerReady($event)"
-        >
-        </video-player>
+        />
       </div>
     </div>
     <span v-else style=" color: white; font-size: large;"
-      >No Content {{ index }}</span
+      >No Content {{ monitorId }}</span
     >
   </div>
 </template>
@@ -32,7 +31,7 @@ export default {
   components: {
     VideoPlayer
   },
-  props: ["index"],
+  props: ["index", "monitorId"],
   data() {
     return {
       showToolbar: false,
@@ -50,7 +49,9 @@ export default {
     };
   },
 
-  mounted() {},
+  mounted() {
+    console.log("this.monitorId:", this.monitorId);
+  },
   computed: {
     ...mapState("facial", ["cameras", "selectedCameraIndex"]),
     ...mapState("shinobi", ["ip", "port", "keys", "monitors", "watchMonitors"]),
@@ -89,10 +90,7 @@ export default {
     },
     onPlayerReady(player) {
       this.player.play();
-      console.log("this.monitors:", this.monitors[this.index]);
-      let monitorId = this.watchMonitors[this.index];
-      console.log("monitorId:", monitorId);
-      const src = `http://${this.ip}:${this.port}/${this.keys.API_KEY}/hls/${this.keys.GROUP_KEY}/${monitorId}/s.m3u8`;
+      const src = `http://${this.ip}:${this.port}/${this.keys.API_KEY}/hls/${this.keys.GROUP_KEY}/${this.monitorId}/s.m3u8`;
       console.log("src:", src);
       this.playVideo(src);
     },
