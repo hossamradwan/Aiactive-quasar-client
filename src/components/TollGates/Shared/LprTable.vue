@@ -1,9 +1,12 @@
 <template>
   <div class="q-pa-md">
+    <!-- Hide Images Column if path = /gatesModule -->
     <q-table
       :data="lprData"
       :pagination.sync="paginationRename"
-      :columns="columns"
+      :columns="
+        $route.path != '/gatesModule' ? columns.concat(imageCol) : columns
+      "
       row-key="name"
       @request="onRequest"
     >
@@ -77,14 +80,14 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from 'vuex';
 
-import { exportFile } from "quasar";
+import { exportFile } from 'quasar';
 function wrapCsvValue(val, formatFn) {
   let formatted = formatFn !== void 0 ? formatFn(val) : val;
 
   formatted =
-    formatted === void 0 || formatted === null ? "" : String(formatted);
+    formatted === void 0 || formatted === null ? '' : String(formatted);
 
   formatted = formatted.split('"').join('""');
   /**
@@ -103,75 +106,76 @@ export default {
       activeCarousel: [],
       columns: [
         {
-          name: "ID",
+          name: 'ID',
           required: true,
-          label: this.$t("ID"),
+          label: this.$t('ID'),
           field: row => row.id,
-          align: "left",
+          align: 'left',
           format: val => `${val}`,
           sortable: true
         },
         {
-          name: "Plate No.",
+          name: 'Plate No.',
           required: true,
-          label: this.$t("PlateNo"),
+          label: this.$t('PlateNo'),
           field: row => row.plate_number,
-          align: "center",
-          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
+          align: 'center',
+          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(' ')}`,
           sortable: true,
-          style: "background-color:#ddd ; font-weight: bold;"
+          style: 'background-color:#ddd ; font-weight: bold;'
         },
         {
-          name: "Plate_Image",
-          label: this.$t("PlateImage"),
-          field: "plate_image",
-          style: "width: 5px"
+          name: 'Plate_Image',
+          label: this.$t('PlateImage'),
+          field: 'plate_image',
+          style: 'width: 5px'
         },
         {
-          name: "Date",
-          label: this.$t("Date"),
+          name: 'Date',
+          label: this.$t('Date'),
           field: row => row.date_time,
-          align: "center",
+          align: 'center',
           sortable: true
         },
         {
-          name: "Brand",
-          label: this.$t("Brand"),
+          name: 'Brand',
+          label: this.$t('Brand'),
           field: row => row.brand,
-          align: "center",
+          align: 'center',
           sortable: true
         },
         {
-          name: "Model",
-          label: this.$t("Model"),
+          name: 'Model',
+          label: this.$t('Model'),
           field: row => row.model,
-          align: "center",
+          align: 'center',
           sortable: true
         },
         {
-          name: "Color",
-          label: this.$t("Color"),
+          name: 'Color',
+          label: this.$t('Color'),
           field: row => row.color,
-          align: "center",
+          align: 'center',
           sortable: true
-        },
-
+        }
+      ],
+      imageCol: [
         {
-          name: "Image",
-          label: this.$t("Image"),
-          field: "image",
-          style: "width: 5px"
+          name: 'Image',
+          label: this.$t('Image'),
+          field: 'image',
+          style: 'width: 5px'
         }
       ]
     };
   },
 
   components: {
-    popupModal: require("./TablePopupModal").default
+    popupModal: require('./TablePopupModal').default
   },
 
   methods: {
-    ...mapActions("lpr", ["setPagination"]),
+    ...mapActions('lpr', ['setPagination']),
 
     setCarousel(data) {
       this.activeCarousel = data;
@@ -196,31 +200,31 @@ export default {
             this.columns
               .map(col =>
                 wrapCsvValue(
-                  typeof col.field === "function"
+                  typeof col.field === 'function'
                     ? col.field(row)
                     : row[col.field === void 0 ? col.name : col.field],
                   col.format
                 )
               )
-              .join(",")
+              .join(',')
           )
         )
-        .join("\r\n");
+        .join('\r\n');
 
-      const status = exportFile("table-export.csv", content, "text/csv");
+      const status = exportFile('table-export.csv', content, 'text/csv');
 
       if (status !== true) {
         this.$q.notify({
-          message: "Browser denied file download...",
-          color: "negative",
-          icon: "warning"
+          message: 'Browser denied file download...',
+          color: 'negative',
+          icon: 'warning'
         });
       }
     }
   },
 
   computed: {
-    ...mapGetters("lpr", ["sortedTransits", "paginationRename"]),
+    ...mapGetters('lpr', ['sortedTransits', 'paginationRename']),
 
     lprData() {
       return this.sortedTransits;

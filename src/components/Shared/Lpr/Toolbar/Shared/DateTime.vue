@@ -41,7 +41,7 @@ export default {
   props: ['moduleName'],
   data() {
     return {
-      lprModules: ['generic-lpr-module', 'toll-gates-module', 'gates-module'],
+      lprModules: ['generic-lpr-module', 'toll-gates-module'],
       dateTimeFormat: 'YYYY-MM-DD HH:mm',
       date: '2019-02-01 12:44',
       events: ['2019/07/01'],

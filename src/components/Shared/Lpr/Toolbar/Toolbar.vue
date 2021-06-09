@@ -48,8 +48,7 @@ export default {
         'generic-lpr-module',
         'average-speed-module',
         'reporting-module',
-        'toll-gates-module',
-        'gates-module'
+        'toll-gates-module'
       ],
 
       selectReportingModule: ['reporting-module'],
@@ -58,22 +57,20 @@ export default {
         'generic-lpr-module',
         'average-speed-module',
         'reporting-module',
-        'toll-gates-module',
-        'gates-module'
+        'toll-gates-module'
       ],
 
       search: [
         'generic-lpr-module',
         'average-speed-module',
-        'toll-gates-module',
-        'gates-module'
+        'toll-gates-module'
       ],
 
       filters: [
         'generic-lpr-module',
         'average-speed-module',
         'toll-gates-module',
-        'gates-module',
+
         'facial-module',
         'Vms-module'
       ],

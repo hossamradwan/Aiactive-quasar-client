@@ -33,7 +33,7 @@ const routes = [
       },
       {
         path: '/gatesModule',
-        component: () => import('pages/PageGatesModule.vue')
+        component: () => import('pages/PageTollGatesModule.vue')
       },
       {
         path: '/reportingModule',
