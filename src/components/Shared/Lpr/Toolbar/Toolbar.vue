@@ -13,6 +13,7 @@
         :moduleName="moduleName"
       />
       <q-space />
+      <gates-button v-if="$route.path == '/gatesModule'" />
 
       <reporting-module-print
         v-if="selectReportingModule.includes(moduleName)"
@@ -86,7 +87,8 @@ export default {
     search: require('./Shared/Search').default,
     'date-time': require('./Shared/DateTime').default,
     'filters-dropdown': require('./Shared/FiltersDropdown').default,
-    'facial-options': require('./Shared/FacialOptions').default
+    'facial-options': require('./Shared/FacialOptions').default,
+    'gates-button': require('./Shared/GatesButton').default
   }
 };
 </script>
