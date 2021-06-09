@@ -1,36 +1,36 @@
-import config from "@/../config/config";
-import Vue from "vue";
-import Axios from "axios";
-import { LocalStorage, Loading, Notify } from "quasar";
-import { showErrorMessage } from "src/functions/function-show-error-message";
+import config from '@/../config/config';
+import Vue from 'vue';
+import Axios from 'axios';
+import { LocalStorage, Loading, Notify } from 'quasar';
+import { showErrorMessage } from 'src/functions/function-show-error-message';
 
 const state = {
   Devices: [],
   devicesList: [],
   systemModules: [
     {
-      label: "Generic Lpr Module",
-      value: "generic-lpr-module",
+      label: 'Generic Lpr Module',
+      value: 'generic-lpr-module',
       devices: []
     },
     {
-      label: "Matching Lpr Module",
-      value: "match-module",
+      label: 'Matching Lpr Module',
+      value: 'match-module',
       devices: []
     },
     {
-      label: "Average Speed Module",
-      value: "average-speed-module",
+      label: 'Average Speed Module',
+      value: 'average-speed-module',
       devices: []
     },
     {
-      label: "Toll Gates Module",
-      value: "toll-gates-module",
+      label: 'Toll Gates Module',
+      value: 'toll-gates-module',
       devices: []
     },
     {
-      label: "VMS",
-      value: "VMS-module",
+      label: 'VMS',
+      value: 'VMS-module',
       devices: []
     }
   ],
@@ -70,10 +70,10 @@ const actions = {
   getDevices({ dispatch }) {
     Loading.show();
     setTimeout(() => {
-      const host = config.API_URL + "/devices";
-      const userToken = LocalStorage.getItem("loggedInUserToken");
+      const host = config.API_URL + '/devices';
+      const userToken = LocalStorage.getItem('loggedInUserToken');
       const headers = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userToken}`
       };
 
@@ -83,7 +83,7 @@ const actions = {
         .then(response => {
           let devices = response.data;
           // console.log("devices:", devices);
-          dispatch("handleStateDevices", devices);
+          dispatch('handleStateDevices', devices);
           Loading.hide();
         })
         .catch(error => {
@@ -97,10 +97,10 @@ const actions = {
 
     const promise = new Promise(function(resolve, reject) {
       setTimeout(() => {
-        const host = config.API_URL + "/devices";
-        const userToken = LocalStorage.getItem("loggedInUserToken");
+        const host = config.API_URL + '/devices';
+        const userToken = LocalStorage.getItem('loggedInUserToken');
         const headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${userToken}`
         };
 
@@ -109,14 +109,14 @@ const actions = {
         })
           .then(response => {
             Loading.hide();
-            dispatch("setAddDeviceModal", false);
-            dispatch("getDevices");
-            Notify.create("Device Added!");
+            dispatch('setAddDeviceModal', false);
+            dispatch('getDevices');
+            Notify.create('Device Added!');
             resolve(response);
           })
           .catch(error => {
-            if (error.message == "Network Error") {
-              showErrorMessage("Server Offline");
+            if (error.message == 'Network Error') {
+              showErrorMessage('Server Offline');
               return;
             }
 
@@ -140,10 +140,10 @@ const actions = {
     Loading.show();
     return new Promise(function(resolve, reject) {
       setTimeout(() => {
-        const host = config.API_URL + "/devices/" + payload.id;
-        const userToken = LocalStorage.getItem("loggedInUserToken");
+        const host = config.API_URL + '/devices/' + payload.id;
+        const userToken = LocalStorage.getItem('loggedInUserToken');
         const headers = {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${userToken}`
         };
 
@@ -152,14 +152,14 @@ const actions = {
         })
           .then(response => {
             Loading.hide();
-            dispatch("setEditDeviceModal", false);
-            dispatch("getDevices");
+            dispatch('setEditDeviceModal', false);
+            dispatch('getDevices');
             resolve(response);
-            Notify.create("Device Updated!");
+            Notify.create('Device Updated!');
           })
           .catch(error => {
-            if (error.message == "Network Error") {
-              showErrorMessage("Server Offline");
+            if (error.message == 'Network Error') {
+              showErrorMessage('Server Offline');
               return;
             }
 
@@ -182,10 +182,10 @@ const actions = {
     Loading.show();
 
     setTimeout(() => {
-      const host = config.API_URL + "/devices/" + deviceId;
-      const userToken = LocalStorage.getItem("loggedInUserToken");
+      const host = config.API_URL + '/devices/' + deviceId;
+      const userToken = LocalStorage.getItem('loggedInUserToken');
       const headers = {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${userToken}`
       };
 
@@ -194,12 +194,12 @@ const actions = {
       })
         .then(response => {
           Loading.hide();
-          dispatch("getDevices");
-          Notify.create("Device Deleted!");
+          dispatch('getDevices');
+          Notify.create('Device Deleted!');
         })
         .catch(error => {
-          if (error.message == "Network Error") {
-            showErrorMessage("Server Offline");
+          if (error.message == 'Network Error') {
+            showErrorMessage('Server Offline');
             return;
           }
 
@@ -220,19 +220,19 @@ const actions = {
     // clear system module devices data
 
     // clear device list
-    commit("clearDevicesData");
+    commit('clearDevicesData');
 
     // append new list
     devices.forEach(device => {
       // append device data to devices list
-      commit("addDeviceList", device);
+      commit('addDeviceList', device);
 
       let deviceName = device.deviceName;
       let deviceZone = device.deviceZone;
       let belongTo = device.deviceBelongTo;
       let deviceBelongTo = [];
 
-      if (typeof belongTo == "string") {
+      if (typeof belongTo == 'string') {
         let temp_belongTo = JSON.parse(belongTo);
         deviceBelongTo = Array.from(temp_belongTo);
         //let payload = {deviceBelongTo, deviceName}
@@ -242,7 +242,7 @@ const actions = {
           description: deviceZone,
           deviceModule: deviceBelongTo
         };
-        commit("addSystemModuleDevice", payload);
+        commit('addSystemModuleDevice', payload);
       }
 
       let payload = {
@@ -251,14 +251,14 @@ const actions = {
         description: deviceZone,
         deviceModule: deviceBelongTo
       };
-      commit("addDevice", payload);
+      commit('addDevice', payload);
     });
   },
   setAddDeviceModal({ commit }, value) {
-    commit("setAddDeviceModal", value);
+    commit('setAddDeviceModal', value);
   },
   setEditDeviceModal({ commit }, value) {
-    commit("setEditDeviceModal", value);
+    commit('setEditDeviceModal', value);
   }
 };
 
@@ -288,7 +288,7 @@ const getters = {
   },
 
   getAverageSpeedActiveTraps: (state, getters, rootState, rootGetters) => {
-    let averageSpeedTrapsList = rootGetters["averageSpeed/averageSpeedList"];
+    let averageSpeedTrapsList = rootGetters['averageSpeed/averageSpeedList'];
 
     averageSpeedTrapsList = averageSpeedTrapsList.map(
       trap => `Trap ${trap.trap_number}-${trap.id}`
@@ -316,8 +316,8 @@ const getters = {
     // Create Zone Name and Devices
     uniqueZones.forEach(zone => {
       let zoneObj = {
-        label: "",
-        icon: "gps_fixed",
+        label: '',
+        icon: 'gps_fixed',
         children: []
       };
 
@@ -326,15 +326,15 @@ const getters = {
       // get zone Devices
       moduleDevices.forEach(device => {
         let deviceObj = {
-          label: "",
-          value: "",
-          icon: "videocam"
+          label: '',
+          value: '',
+          icon: 'videocam'
         };
 
         if (device.description == zone) {
           deviceObj.label = device.label;
           deviceObj.value = device.value;
-          zoneObj["children"].push(deviceObj);
+          zoneObj['children'].push(deviceObj);
         }
       });
 
@@ -346,7 +346,7 @@ const getters = {
 
   getAverageSpeedDevicesTree: (state, getters, rootState, rootGetters) => {
     let devicesTree = [];
-    let averageSpeedRoadData = rootGetters["averageSpeed/averageSpeedSettings"];
+    let averageSpeedRoadData = rootGetters['averageSpeed/averageSpeedSettings'];
 
     // Get Road Name and Data
     averageSpeedRoadData.forEach(road => {
@@ -354,8 +354,8 @@ const getters = {
       //console.log('road name', roadName);
 
       let roadObj = {
-        label: "",
-        icon: "gps_fixed",
+        label: '',
+        icon: 'gps_fixed',
         children: []
       };
 
@@ -367,15 +367,15 @@ const getters = {
       // get Road Traps
       roadTraps.forEach(trap => {
         let trapObj = {
-          label: "",
-          value: "",
+          label: '',
+          value: '',
           disabled: true,
-          icon: "videocam"
+          icon: 'videocam'
         };
 
         trapObj.label = `Trap ${trap.trap_number}-${trap.id}`;
         trapObj.value = `Trap ${trap.trap_number}`;
-        roadObj["children"].push(trapObj);
+        roadObj['children'].push(trapObj);
       });
 
       devicesTree.push(roadObj);

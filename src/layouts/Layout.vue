@@ -100,98 +100,103 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
-import { openURL } from "quasar";
-import { colors } from "quasar";
+import { mapState, mapActions } from 'vuex';
+import { openURL } from 'quasar';
+import { colors } from 'quasar';
 
 export default {
-  name: "MyLayout",
+  name: 'MyLayout',
   data() {
     return {
       miniState: true,
-      lang: localStorage.getItem("Language"),
+      lang: localStorage.getItem('Language'),
       leftDrawerOpen: this.$q.platform.is.desktop,
       navs: [
         {
-          label: "Dashboard",
-          icon: "list",
-          to: "/"
+          label: 'Dashboard',
+          icon: 'list',
+          to: '/'
         },
         {
-          label: "FreeFlow",
-          icon: "time_to_leave",
-          to: "/freeFlowLprModule"
+          label: 'FreeFlow',
+          icon: 'time_to_leave',
+          to: '/freeFlowLprModule'
         },
         {
-          label: "AverageSpeed",
-          icon: "speed",
-          to: "/averageSpeedModule"
+          label: 'AverageSpeed',
+          icon: 'speed',
+          to: '/averageSpeedModule'
         },
         {
-          label: "TollGates",
-          icon: "policy",
-          to: "/tollGatesModule"
+          label: 'TollGates',
+          icon: 'policy',
+          to: '/tollGatesModule'
         },
         {
-          label: "Reporting",
-          icon: "fingerprint",
-          to: "/reportingModule"
+          label: 'Gates',
+          icon: 'store',
+          to: '/gatesModule'
         },
         {
-          label: "Facial",
-          icon: "photo_camera_front",
-          to: "/facial"
+          label: 'Reporting',
+          icon: 'fingerprint',
+          to: '/reportingModule'
         },
         {
-          label: "VMS",
-          icon: "switch_video",
-          to: "/VMS"
+          label: 'Facial',
+          icon: 'photo_camera_front',
+          to: '/facial'
         },
         {
-          label: "Settings",
-          icon: "settings",
-          to: "/settings"
+          label: 'VMS',
+          icon: 'switch_video',
+          to: '/VMS'
+        },
+        {
+          label: 'Settings',
+          icon: 'settings',
+          to: '/settings'
         }
       ]
     };
   },
   components: {
-    "drawer-header-user": require("components/Layout/Drawer/HeaderUser.vue")
+    'drawer-header-user': require('components/Layout/Drawer/HeaderUser.vue')
       .default,
-    "server-status": require("components/layout/Toolbar/ServerStatus.vue")
+    'server-status': require('components/layout/Toolbar/ServerStatus.vue')
       .default
   },
   computed: {
-    ...mapState("auth", ["loggedIn", "userData"])
+    ...mapState('auth', ['loggedIn', 'userData'])
   },
   methods: {
-    ...mapActions("auth", ["logoutUser"]),
+    ...mapActions('auth', ['logoutUser']),
     openURL,
     quitApp() {
       this.$q
         .dialog({
-          title: "Quit",
-          message: "Really quit?",
+          title: 'Quit',
+          message: 'Really quit?',
           cancel: true,
           persistent: true
         })
         .onOk(() => {
           if (this.$q.platform.is.electron)
-            require("electron").ipcRenderer.send("quit-app");
+            require('electron').ipcRenderer.send('quit-app');
         });
     }
   },
   mounted() {
     //Get Stored Theme
-    let ThemeColor = localStorage.getItem("ThemeColor");
+    let ThemeColor = localStorage.getItem('ThemeColor');
     const { setBrand } = colors;
     if (ThemeColor != null) {
-      setBrand("primary", ThemeColor);
+      setBrand('primary', ThemeColor);
     }
 
     //Change quasar language and RTL direction
-    let Language = localStorage.getItem("Language");
-    if (Language != null && Language != "undefined") {
+    let Language = localStorage.getItem('Language');
+    if (Language != null && Language != 'undefined') {
       this.$i18n.locale = Language;
       import(`quasar/lang/${Language}`).then(language => {
         this.$q.lang.set(language.default);
