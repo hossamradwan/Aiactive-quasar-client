@@ -109,65 +109,65 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
     return {
       deviceData: {
-        deviceName: "hello",
-        deviceType: "",
-        deviceZone: "",
-        deviceStatus: "",
-        belongTo: "",
-        deviceIp: "192.168.1.160",
+        deviceName: '',
+        deviceType: '',
+        deviceZone: '',
+        deviceStatus: '',
+        belongTo: '',
+        deviceIp: '192.168.1.160',
         devicePort: 554,
-        userName: "root",
-        userPassword: "123456",
-        locationName: "",
-        locationLatitude: "27.1974137",
-        locationLongtude: "33.8381997",
+        userName: '',
+        userPassword: '',
+        locationName: '',
+        locationLatitude: '27.1974137',
+        locationLongtude: '33.8381997',
 
-        streamUrl: "rtsp://192.168.1.160:554/axis-media/media.amp?profile1"
+        streamUrl: ''
       }
     };
   },
   watch: {},
   components: {
-    "modal-header": require("components/Settings/DevicesSettings/Modals/Shared/ModalHeader")
+    'modal-header': require('components/Settings/DevicesSettings/Modals/Shared/ModalHeader')
       .default,
-    "modal-device-name": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceName")
+    'modal-device-name': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceName')
       .default,
-    "modal-device-type": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceType")
+    'modal-device-type': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceType')
       .default,
-    "modal-device-zone": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceZone")
+    'modal-device-zone': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceZone')
       .default,
-    "modal-device-status": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceStatus")
+    'modal-device-status': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceStatus')
       .default,
-    "modal-device-belongTo": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceBelongTo")
+    'modal-device-belongTo': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceBelongTo')
       .default,
-    "modal-device-ip": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceIp")
+    'modal-device-ip': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceIp')
       .default,
-    "modal-device-port": require("components/Settings/DevicesSettings/Modals/Shared/ModalDevicePort")
+    'modal-device-port': require('components/Settings/DevicesSettings/Modals/Shared/ModalDevicePort')
       .default,
-    "modal-device-username": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceUserName")
+    'modal-device-username': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceUserName')
       .default,
-    "modal-device-password": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceUserPassword")
+    'modal-device-password': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceUserPassword')
       .default,
-    "modal-device-location-name": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationName")
+    'modal-device-location-name': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationName')
       .default,
-    "modal-device-location-latitude": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLatitude")
+    'modal-device-location-latitude': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLatitude')
       .default,
-    "modal-device-location-longtude": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLongtude")
+    'modal-device-location-longtude': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceLocationLongtude')
       .default,
-    "modal-buttons": require("components/Settings/UsersSettings/Modals/Shared/ModalButtons")
+    'modal-buttons': require('components/Settings/UsersSettings/Modals/Shared/ModalButtons')
       .default,
-    "modal-device-url": require("components/Settings/DevicesSettings/Modals/Shared/ModalDeviceURL")
+    'modal-device-url': require('components/Settings/DevicesSettings/Modals/Shared/ModalDeviceURL')
       .default
   },
   methods: {
-    ...mapActions("devices", ["addDevice"]),
-    ...mapActions("shinobi", ["addMonitor"]),
+    ...mapActions('devices', ['addDevice']),
+    ...mapActions('shinobi', ['addMonitor']),
 
     // Show Section If Belongs to Module name
     belongsTo(moduleName) {
@@ -194,7 +194,7 @@ export default {
 
       if (!deviceNameValidation.hasError && !deviceIpValidation.hasError) {
         this.addDevice(this.deviceData).then(response => {
-          let belongsToVms = this.belongsTo("VMS");
+          let belongsToVms = this.belongsTo('VMS');
           if (belongsToVms) {
             this.addMonitor({
               id: response.data.id,
@@ -211,7 +211,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters("devices", ["uniqueZones", "getSystemModules"]),
+    ...mapGetters('devices', ['uniqueZones', 'getSystemModules']),
     belongToModules: {
       get() {
         return this.getSystemModules;

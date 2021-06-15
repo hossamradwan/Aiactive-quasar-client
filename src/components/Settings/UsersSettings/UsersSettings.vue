@@ -11,7 +11,6 @@
       :pagination="pagination"
       bordered
       flat
-      hide-bottom
     >
       <template v-slot:top>
         <q-btn
@@ -98,7 +97,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -107,88 +106,88 @@ export default {
         editUserData: {}
       },
       loading: false,
-      filter: "",
+      filter: '',
       pagination: {
-        sortBy: "desc",
+        sortBy: 'desc',
         descending: false,
         //page: 2,
-        rowsPerPage: 0
+        rowsPerPage: 5
         // rowsNumber: xx if getting data from a server
       },
       columns: [
         {
-          name: "id",
+          name: 'id',
           required: true,
-          label: this.$t("ID"),
-          align: "left",
+          label: this.$t('ID'),
+          align: 'left',
           field: row => row.id,
           sortable: true
         },
         {
-          name: "userName",
-          align: "center",
-          label: this.$t("Username"),
-          field: "userName",
+          name: 'userName',
+          align: 'center',
+          label: this.$t('Username'),
+          field: 'userName',
           sortable: true
         },
         {
-          name: "email",
-          align: "center",
-          label: this.$t("Email"),
-          field: "email",
+          name: 'email',
+          align: 'center',
+          label: this.$t('Email'),
+          field: 'email',
           sortable: true
         },
         {
-          name: "permissions",
-          align: "center",
-          label: this.$t("Permission"),
-          field: "isAdmin"
+          name: 'permissions',
+          align: 'center',
+          label: this.$t('Permission'),
+          field: 'isAdmin'
         },
         {
-          name: "status",
-          align: "center",
-          label: this.$t("Status"),
-          field: "isActive"
+          name: 'status',
+          align: 'center',
+          label: this.$t('Status'),
+          field: 'isActive'
         },
-        { name: "actions", align: "center", label: this.$t("Actions") }
+        { name: 'actions', align: 'center', label: this.$t('Actions') }
       ],
       data: [
         {
           id: 1,
-          userName: "Baher Elnaggar",
-          email: "baher@aiactive.com",
-          isAdmin: "admin",
-          isActive: "enabled"
+          userName: 'Baher Elnaggar',
+          email: 'baher@aiactive.com',
+          isAdmin: 'admin',
+          isActive: 'enabled'
         },
         {
           id: 2,
-          userName: "Ahmed Helmy",
-          email: "ahme@aiactive.com",
-          isAdmin: "admin",
-          isActive: "enabled"
+          userName: 'Ahmed Helmy',
+          email: 'ahme@aiactive.com',
+          isAdmin: 'admin',
+          isActive: 'enabled'
         },
         {
           id: 3,
-          userName: "Sara H.",
-          email: "sara@aiactive.com",
-          isAdmin: "user",
-          isActive: "disabled"
+          userName: 'Sara H.',
+          email: 'sara@aiactive.com',
+          isAdmin: 'user',
+          isActive: 'disabled'
         }
       ]
     };
   },
   components: {
-    "add-user": require("components/Settings/UsersSettings/Modals/AddUser")
+    'add-user': require('components/Settings/UsersSettings/Modals/AddUser')
       .default,
-    "edit-user": require("components/Settings/UsersSettings/Modals/EditUser")
+    'edit-user': require('components/Settings/UsersSettings/Modals/EditUser')
       .default
   },
   methods: {
-    ...mapActions("users", [
-      "getUsers",
-      "deleteUser",
-      "setAddUserModal",
-      "setEditUserModal"
+    ...mapActions('users', [
+      'getUsers',
+      'deleteUser',
+      'setAddUserModal',
+      'setEditUserModal'
     ]),
     editUser(userId) {
       let selectedUser = this.users.find(x => x.id === userId);
@@ -198,8 +197,8 @@ export default {
     removeUser(userId) {
       this.$q
         .dialog({
-          title: "Confirm",
-          message: "Would you like to Delete this User?",
+          title: 'Confirm',
+          message: 'Would you like to Delete this User?',
           cancel: true
           //persistent: true
         })
@@ -216,8 +215,8 @@ export default {
     this.getUsers();
   },
   computed: {
-    ...mapState("users", ["users"]),
-    ...mapGetters("users", ["showAddUserModal", "showEditUserModal"]),
+    ...mapState('users', ['users']),
+    ...mapGetters('users', ['showAddUserModal', 'showEditUserModal']),
     addUserModal: {
       get() {
         return this.showAddUserModal;
@@ -237,12 +236,12 @@ export default {
   },
   filters: {
     isAdmin(value) {
-      if (value) return "admin";
-      else return "user";
+      if (value) return 'admin';
+      else return 'user';
     },
     isActive(value) {
-      if (value) return "enabled";
-      else return "disabled";
+      if (value) return 'enabled';
+      else return 'disabled';
     }
   }
 };
