@@ -1,8 +1,8 @@
-import { showErrorMessage } from "src/functions/function-show-error-message";
+import { showErrorMessage } from 'src/functions/function-show-error-message';
 
-export function responseErrorMessage(error, type = "") {
-  if (error.message == "Network Error") {
-    showErrorMessage(`${type}Server Offline`);
+export function responseErrorMessage(error, type = '') {
+  if (error.message == 'Network Error') {
+    console.error(`${type}Server Offline`);
     return;
   }
 
