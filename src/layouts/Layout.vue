@@ -108,6 +108,7 @@
 import { mapState, mapActions } from 'vuex';
 import { openURL } from 'quasar';
 import { colors } from 'quasar';
+import navigations from '../router/navs';
 
 export default {
   name: 'MyLayout',
@@ -116,53 +117,6 @@ export default {
       miniState: true,
       lang: localStorage.getItem('Language'),
       leftDrawerOpen: this.$q.platform.is.desktop,
-      navs: [
-        {
-          label: 'Dashboard',
-          icon: 'list',
-          to: '/'
-        },
-        {
-          label: 'FreeFlow',
-          icon: 'time_to_leave',
-          to: '/freeFlowLprModule'
-        },
-        {
-          label: 'AverageSpeed',
-          icon: 'speed',
-          to: '/averageSpeedModule'
-        },
-        {
-          label: 'TollGates',
-          icon: 'policy',
-          to: '/tollGatesModule'
-        },
-        {
-          label: 'Gates',
-          icon: 'store',
-          to: '/gatesModule'
-        },
-        {
-          label: 'Reporting',
-          icon: 'fingerprint',
-          to: '/reportingModule'
-        },
-        {
-          label: 'Facial',
-          icon: 'photo_camera_front',
-          to: '/facial'
-        },
-        {
-          label: 'VMS',
-          icon: 'switch_video',
-          to: '/VMS'
-        },
-        {
-          label: 'Settings',
-          icon: 'settings',
-          to: '/settings'
-        }
-      ],
       barStyle: {
         right: '2px',
         borderRadius: '9px',
@@ -179,10 +133,10 @@ export default {
       .default
   },
   computed: {
-    ...mapState('auth', ['loggedIn', 'userData'])
+    ...mapState('auth', ['navs', 'loggedIn', 'userData'])
   },
   methods: {
-    ...mapActions('auth', ['logoutUser']),
+    ...mapActions('auth', ['logoutUser', 'setNavs']),
     openURL,
     quitApp() {
       this.$q
@@ -197,6 +151,9 @@ export default {
             require('electron').ipcRenderer.send('quit-app');
         });
     }
+  },
+  created() {
+    // this.setNavs(navigations);
   },
   mounted() {
     //Get Stored Theme

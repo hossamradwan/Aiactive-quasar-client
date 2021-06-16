@@ -31,7 +31,8 @@
     "vue-svg-inline-loader": "^2.1.2",
     "vue-videojs7": "^1.0.2",
     "vue-zoomer": "^0.3.6",
-    "vuelidate": "^0.7.5"
+    "vuelidate": "^0.7.5",
+    "vuex-persistedstate": "^4.0.0-beta.3"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",
