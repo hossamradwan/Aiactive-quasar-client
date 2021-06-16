@@ -55,41 +55,46 @@
         :miniState="miniState"
         v-show="!miniState"
       />
-
       <div style="height: calc(100% - 150px); margin-top: 150px;">
-        <q-list dark padding>
-          <q-item
-            v-for="nav in navs"
-            :key="nav.label"
-            :to="nav.to"
-            class="text-blue-grey-3"
-            exact
-            clickable
-          >
-            <q-item-section avatar>
-              <q-icon :name="nav.icon" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>
-                {{ $t(nav.label) }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
+        <q-scroll-area
+          :visible="false"
+          :bar-style="barStyle"
+          style="height: 100%; "
+        >
+          <q-list dark padding>
+            <q-item
+              v-for="nav in navs"
+              :key="nav.label"
+              :to="nav.to"
+              class="text-blue-grey-3"
+              exact
+              clickable
+            >
+              <q-item-section avatar>
+                <q-icon :name="nav.icon" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  {{ $t(nav.label) }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
 
-          <q-item
-            v-if="$q.platform.is.electron"
-            @click="quitApp"
-            class="text-grey-4 absolute-bottom"
-            clickable
-          >
-            <q-item-section avatar>
-              <q-icon name="power_settings_new" />
-            </q-item-section>
-            <q-item-section>
-              <q-item-label>Quit</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
+            <q-item
+              v-if="$q.platform.is.electron"
+              @click="quitApp"
+              class="text-grey-4 absolute-bottom"
+              clickable
+            >
+              <q-item-section avatar>
+                <q-icon name="power_settings_new" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Quit</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-scroll-area>
       </div>
     </q-drawer>
 
@@ -157,7 +162,14 @@ export default {
           icon: 'settings',
           to: '/settings'
         }
-      ]
+      ],
+      barStyle: {
+        right: '2px',
+        borderRadius: '9px',
+        backgroundColor: '#027be3',
+        width: '9px',
+        opacity: 0.2
+      }
     };
   },
   components: {
