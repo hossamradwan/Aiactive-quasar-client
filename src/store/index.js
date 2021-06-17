@@ -11,7 +11,6 @@ import averageSpeedResult from './store-averageSpeedResult';
 import reporting from './store-reporting';
 import facial from './store-facial';
 import shinobi from './store-shinobi';
-import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
 
@@ -34,7 +33,6 @@ export default function(/* { ssrContext } */) {
       facial,
       shinobi
     },
-    plugins: [createPersistedState()],
 
     // enable strict mode (adds overhead!)
     // for dev mode only
