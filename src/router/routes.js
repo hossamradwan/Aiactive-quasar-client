@@ -15,6 +15,7 @@ const routes = [
         path: '/auth',
         name: 'pathAuth',
         component: () => import('pages/PageAuth.vue'),
+        beforeEnter: routerGuard.loginAuthConfig
       },
       {
         path: '/userProfile',
