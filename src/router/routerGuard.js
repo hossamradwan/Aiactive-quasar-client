@@ -3,7 +3,7 @@ import { LocalStorage } from 'quasar'
 const isLoggedIn = function (from, to, next) {
     var token = LocalStorage.getItem('loggedInUserToken')
     if(!token) {
-        next({name:'pathAuth'})
+        next({name:'pathAuth', query: { redirect: from.path }})
     }
     else {
         next();
@@ -12,9 +12,8 @@ const isLoggedIn = function (from, to, next) {
 
 const loginAuthConfig = function (from, to, next) {
     var token = LocalStorage.getItem('loggedInUserToken')
-    if(token){
+    if(token)
         next(to.path);
-    }
     else 
         next();
 

@@ -73,7 +73,7 @@ const actions = {
       LocalStorage.set('loggedInUser', userAuthData.user);
       LocalStorage.set('loggedInUserToken', userAuthData.token);
 
-      this.$router.push('/');
+      this.$router.push(this.$router.currentRoute.query.redirect || '/');
     } else {
       commit('setLoggedIn', false);
       commit('setUserData', false);
