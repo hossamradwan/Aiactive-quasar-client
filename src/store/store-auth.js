@@ -46,7 +46,7 @@ const actions = {
               showErrorMessage('Server Offline');
               return;
             }
-
+            
             if (error.response.status === 401) {
               showErrorMessage(error.response.data.message);
               return;
@@ -68,12 +68,11 @@ const actions = {
     if (userAuthData.auth) {
       commit('setLoggedIn', true);
       commit('setUserData', userAuthData.user);
-
       LocalStorage.set('loggedIn', true);
       LocalStorage.set('loggedInUser', userAuthData.user);
       LocalStorage.set('loggedInUserToken', userAuthData.token);
-
-      this.$router.push(this.$router.currentRoute.query.redirect || '/');
+      this.$router.push({ name: this.$router.currentRoute.query.redirect || 'homePage' })
+      
     } else {
       commit('setLoggedIn', false);
       commit('setUserData', false);
@@ -99,7 +98,11 @@ const actions = {
   }
 };
 
-const getters = {};
+const getters = {
+  loggedInStatus(state) {
+    return state.loggedIn
+  },
+};
 
 export default {
   namespaced: true,

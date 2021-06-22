@@ -1,16 +1,11 @@
 import { LocalStorage } from "quasar";
 import { showErrorMessage } from "src/functions/function-show-error-message";
-
+import store from "./../store/store-auth.js"
+var loggedIn = store.getters.loggedInStatus;
 export default async ({ router, store }) => {
-  let loggedIn = LocalStorage.getItem("loggedIn");
   let loggedInUser = LocalStorage.getItem("loggedInUser");
-
   // try using token only to retrieve user session
-
   router.beforeEach((to, form, next) => {
-    // let loggedIn = store.state.auth.loggedIn
-    // let loggedInUser = store.state.auth.userData
-
     if (!loggedIn && to.path !== "/auth") {
       next("/auth");
     } else {

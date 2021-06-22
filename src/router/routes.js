@@ -19,46 +19,55 @@ const routes = [
       },
       {
         path: '/userProfile',
+        name: 'userProfile',
         component: () => import('pages/PageUserProfile.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/settings',
+        name: 'settings',
         component: () => import('pages/PageSettings.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/freeFlowLprModule',
+        name: 'freeFlowLprModule',
         component: () => import('pages/PageFreeFlowLprModule.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/averageSpeedModule',
+        name: 'averageSpeedModule',
         component: () => import('pages/PageAverageSpeedModule.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/tollGatesModule',
+        name: 'tollGatesModule',
         component: () => import('pages/PageTollGatesModule.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/gatesModule',
+        name: 'gatesModule',
         component: () => import('pages/PageTollGatesModule.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/reportingModule',
+        name: 'reportingModule',
         component: () => import('pages/PageReportingModule.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/facial',
+        name: 'facial',
         component: () => import('src/pages/PageFacial.vue'),
         beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/VMS',
+        name: 'VMS',
         component: () => import('src/pages/PageVms.vue'),
         beforeEnter: routerGuard.isLoggedIn
       }
