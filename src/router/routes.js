@@ -1,3 +1,5 @@
+import routerGuard from "./routerGuard.js"
+
 const routes = [
   {
     path: '/',
@@ -5,47 +7,59 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/PageDashboard.vue')
+        name: 'homePage',
+        component: () => import('pages/PageDashboard.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/auth',
-        component: () => import('pages/PageAuth.vue')
+        name: 'pathAuth',
+        component: () => import('pages/PageAuth.vue'),
       },
       {
         path: '/userProfile',
-        component: () => import('pages/PageUserProfile.vue')
+        component: () => import('pages/PageUserProfile.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/settings',
-        component: () => import('pages/PageSettings.vue')
+        component: () => import('pages/PageSettings.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/freeFlowLprModule',
-        component: () => import('pages/PageFreeFlowLprModule.vue')
+        component: () => import('pages/PageFreeFlowLprModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/averageSpeedModule',
-        component: () => import('pages/PageAverageSpeedModule.vue')
+        component: () => import('pages/PageAverageSpeedModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/tollGatesModule',
-        component: () => import('pages/PageTollGatesModule.vue')
+        component: () => import('pages/PageTollGatesModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/gatesModule',
-        component: () => import('pages/PageTollGatesModule.vue')
+        component: () => import('pages/PageTollGatesModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/reportingModule',
-        component: () => import('pages/PageReportingModule.vue')
+        component: () => import('pages/PageReportingModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/facial',
-        component: () => import('src/pages/PageFacial.vue')
+        component: () => import('src/pages/PageFacial.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/VMS',
-        component: () => import('src/pages/PageVms.vue')
+        component: () => import('src/pages/PageVms.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       }
     ]
   },
