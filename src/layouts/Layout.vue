@@ -64,6 +64,7 @@
           <q-list dark padding>
             <q-item
               v-for="nav in navs"
+              v-if="nav.status"
               :key="nav.label"
               :to="nav.to"
               class="text-blue-grey-3"

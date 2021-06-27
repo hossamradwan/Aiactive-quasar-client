@@ -12,6 +12,15 @@ const state = {
 
 const mutations = {
   setNavs(state, value) {
+    const settings = {
+      label: "Settings",
+      icon: "settings",
+      to: "/settings",
+      status: true
+    };
+    if (value.find(v => v.label == "Settings") == undefined) {
+      value.push(settings);
+    }
     state.navs = value;
   },
   setLoggedIn(state, value) {

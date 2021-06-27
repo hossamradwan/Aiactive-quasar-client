@@ -39,17 +39,18 @@ export default [
     label: 'Facial',
     icon: 'photo_camera_front',
     to: '/facial',
-    status: true
+    status: false
   },
   {
     label: 'VMS',
     icon: 'switch_video',
     to: '/VMS',
-    status: true
+    status: false
   },
   {
     label: 'Settings',
     icon: 'settings',
-    to: '/settings'
+    to: '/settings',
+    status: true
   }
 ];
