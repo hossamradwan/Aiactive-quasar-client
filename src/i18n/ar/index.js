@@ -23,7 +23,7 @@ export default {
   Brand: 'ماركة',
   Model: 'موديل',
   Color: 'لون',
-  Class: 'CLASS',
+  Class: 'الفئة',
   ConfirmationData: 'تاريخ التأكيد',
   //TollGates
   ID: 'كود',
@@ -59,5 +59,8 @@ export default {
   Apply: 'تم',
   Lists:'ادارة القوائم',
   CarPlates:'لواحات السيارات',
-  Faces:'وجوه اشخاص'
+  Faces:'وجوه اشخاص',
+  DateCreated:'تاريخ الانشاء',
+  DriverName:'اسم السائق',
+  AddLpr:'اضافة لوحة'
 };

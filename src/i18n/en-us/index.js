@@ -62,5 +62,8 @@ export default {
   Apply: 'Apply',
   Lists:'List Management',
   CarPlates:'Car Plates',
-  Faces:'Faces'
+  Faces:'Faces',
+  DateCreated:'Date Created',
+  DriverName:'Driver Name',
+  AddLpr:'Add LPR'
 };
