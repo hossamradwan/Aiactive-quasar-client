@@ -60,5 +60,7 @@ export default {
   Confirmed: 'Confirmed',
   Pagination: 'Pagination',
   Apply: 'Apply',
-  Lists:'List Management'
+  Lists:'List Management',
+  CarPlates:'Car Plates',
+  Faces:'Faces'
 };

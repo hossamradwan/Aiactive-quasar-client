@@ -57,5 +57,7 @@ export default {
   Confirmed: 'تم التأكيد',
   Pagination: 'ترقيم الصفحات',
   Apply: 'تم',
-  Lists:'ادارة القوائم'
+  Lists:'ادارة القوائم',
+  CarPlates:'لواحات السيارات',
+  Faces:'وجوه اشخاص'
 };

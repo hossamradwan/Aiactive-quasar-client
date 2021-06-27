@@ -22,11 +22,7 @@
           :label="$t('Devices')"
         />
 
-        <q-tab
-          name="list-management"
-          icon="checklist"
-          :label="$t('Lists')"
-        />
+        <q-tab name="list-management" icon="checklist" :label="$t('Lists')" />
 
         <q-tab
           name="average-speed-settings"
@@ -64,6 +60,10 @@
           <devices-settings />
         </q-tab-panel>
 
+        <q-tab-panel name="list-management">
+          <list-management />
+        </q-tab-panel>
+
         <q-tab-panel name="average-speed-settings">
           <average-speed-settings />
         </q-tab-panel>
@@ -92,6 +92,8 @@ export default {
     "average-speed-settings": require("components/Settings/AverageSpeedSettings/AverageSpeedSettings")
       .default,
     "general-settings": require("components/Settings/GeneralSettings/GeneralSettings")
+      .default,
+    "list-management": require("components/Settings/ListManagement/ListManagement")
       .default
   }
 };
