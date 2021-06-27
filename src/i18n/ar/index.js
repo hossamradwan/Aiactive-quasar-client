@@ -56,5 +56,6 @@ export default {
   Sorters: 'ترتيب حسب',
   Confirmed: 'تم التأكيد',
   Pagination: 'ترقيم الصفحات',
-  Apply: 'تم'
+  Apply: 'تم',
+  Lists:'ادارة القوائم'
 };

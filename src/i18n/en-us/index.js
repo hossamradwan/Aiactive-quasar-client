@@ -59,5 +59,6 @@ export default {
   Sorters: 'Sorters',
   Confirmed: 'Confirmed',
   Pagination: 'Pagination',
-  Apply: 'Apply'
+  Apply: 'Apply',
+  Lists:'List Management'
 };

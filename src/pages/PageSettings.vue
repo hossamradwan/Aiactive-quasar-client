@@ -23,6 +23,12 @@
         />
 
         <q-tab
+          name="list-management"
+          icon="checklist"
+          :label="$t('Lists')"
+        />
+
+        <q-tab
           name="average-speed-settings"
           icon="speed"
           :label="$t('AverageSpeed')"
