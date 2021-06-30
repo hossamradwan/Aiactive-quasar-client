@@ -1,16 +1,10 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      title="Lpr"
-      row-key="id"
-      class="lpr-table"
-      :data="data"
+      class="my-sticky-header-table"
+      :data="rows"
       :columns="columns"
-      :filter="filter"
-      :loading="loading"
-      :pagination="pagination"
-      bordered
-      flat
+      row-key="id"
     >
       <template v-slot:top>
         <q-btn
@@ -19,7 +13,7 @@
           :label="$t('AddLpr')"
           :disable="loading"
           icon="add"
-          @click="addUserModal = true"
+          @click="addLprModal = true"
         />
 
         <q-space />
@@ -38,73 +32,45 @@
         </q-input>
       </template>
 
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td key="id" :props="props">
-            {{ props.row.id }}
-          </q-td>
-          <q-td key="plateNo" :props="props">
-            {{ props.row.plateNo }}
-          </q-td>
-          <q-td key="dateCreated" :props="props">
-            {{ props.row.dateCreated }}
-          </q-td>
-          <q-td key="carBrand" :props="props">
-            {{ props.row.carBrand }}
-          </q-td>
-          <q-td key="carModel" :props="props">
-            {{ props.row.carModel }}
-          </q-td>
-          <q-td key="carColor" :props="props">
-            {{ props.row.carColor }}
-          </q-td>
-          <q-td key="carClass" :props="props">
-            {{ props.row.carClass }}
-          </q-td>
-          <q-td key="driverName" :props="props">
-            {{ props.row.driverName }}
-          </q-td>
+      <template v-slot:body-cell="props">
+        <q-td :props="props" v-if="props.col.name != 'actions'">
+          {{ props.value }}
+        </q-td>
 
-          <q-td auto-width>
-            <q-btn
-              class="q-ma-sm"
-              flat
-              size="sm"
-              color="primary"
-              round
-              dense
-              @click="editUser(props.row.id)"
-              icon="edit"
-            />
-            <q-btn
-              class="q-ma-sm"
-              size="sm"
-              color="accent"
-              round
-              dense
-              @click="removeUser(props.row.id)"
-              icon="remove"
-            />
-          </q-td>
-        </q-tr>
+        <!-- Actions -->
+        <q-td :props="props" v-if="props.col.name == 'actions'">
+          <q-btn
+            class="q-ma-sm"
+            flat
+            size="sm"
+            color="primary"
+            round
+            dense
+            @click="editUser(props.row.id)"
+            icon="edit"
+          />
+          <q-btn
+            class="q-ma-sm"
+            size="sm"
+            color="accent"
+            round
+            dense
+            @click="removeUser(props.row.id)"
+            icon="remove"
+          />
+        </q-td>
       </template>
     </q-table>
+    <q-dialog v-model="addLprModal">
+      <add-lpr @close="addUserModal = false" />
+    </q-dialog>
   </div>
 </template>
-
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
-
 export default {
   data() {
     return {
-      loading: false,
-      filter: "",
-      pagination: {
-        sortBy: "desc",
-        descending: false,
-        rowsPerPage: 5
-      },
+      addLprModal: false,
       columns: [
         {
           name: "id",
@@ -162,7 +128,7 @@ export default {
         },
         { name: "actions", align: "center", label: this.$t("Actions") }
       ],
-      data: [
+      rows: [
         {
           id: 1,
           plateNo: 123,
@@ -176,7 +142,6 @@ export default {
       ]
     };
   },
-  components: {},
   methods: {
     removeUser(userId) {
       this.$q
@@ -189,12 +154,10 @@ export default {
           //   this.deleteUser(userId);
         });
     }
+  },
+  components: {
+    "add-lpr": require("components/Settings/ListManagement/Modules/Shared/Modal")
+      .default
   }
 };
 </script>
-<style lang="scss">
-.lpr-table thead,
-tr {
-  background-color: #adadad2b;
-}
-</style>
