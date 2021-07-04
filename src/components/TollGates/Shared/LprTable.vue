@@ -68,6 +68,16 @@
             >
               <img :src="props.row.path + '/' + props.row.source2"/>
             </q-avatar>
+
+            <!-- car Image -->
+            <q-avatar
+              v-if="col.name == 'Vehicle_Image'"
+              size="70px"
+              square
+              class="shadow-10 plate-image"
+            >
+              <img :src="props.row.path + '/' + props.row.source1"/>
+            </q-avatar>
           </q-td>
         </q-tr>
       </template>
@@ -129,6 +139,12 @@ export default {
           name: 'Plate_Image',
           label: this.$t('PlateImage'),
           field: 'plate_image',
+          style: 'width: 5px'
+        },
+        {
+          name: 'Vehicle_Image',
+          label: this.$t('vehicleImage'),
+          field: 'vehicle_image',
           style: 'width: 5px'
         },
         {

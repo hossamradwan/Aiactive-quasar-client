@@ -29,6 +29,7 @@ export default {
   ID: 'كود',
   PlateNo: 'رقم اللوحة',
   PlateImage: 'صورة اللوحة',
+  vehicleImage: 'صورة المركبة',
   Date: 'تاريخ',
   Image: 'صورة',
   ExportCSV: 'استخراج تقرير',

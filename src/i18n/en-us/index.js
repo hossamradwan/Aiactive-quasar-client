@@ -32,6 +32,7 @@ export default {
   ID: 'ID',
   PlateNo: 'Plate No.',
   PlateImage: 'Plate Image',
+  vehicleImage: 'Vehicle Image',
   Date: 'Date',
   Image: 'Image',
   ExportCSV: 'Export to csv',
