@@ -113,8 +113,8 @@ export default {
       this.moduleName == 'toll-gates-module'
     ) {
       this.sourceData.path = this.lprImages.path;
-      this.sourceData.source1 = this.lprImages.source1;
-      this.sourceData.source2 = this.lprImages.source2;
+      this.sourceData.source1 = this.lprImages.source2;
+      this.sourceData.source2 = this.lprImages.source1;
       this.sourceData.source3 = this.lprImages.source3;
       this.sourceData.source4 = this.lprImages.source4;
       this.sourceData.source5 = this.lprImages.source5;

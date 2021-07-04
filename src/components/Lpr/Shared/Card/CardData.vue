@@ -1,37 +1,40 @@
 <template>
   <q-card-section class="lpr-info text-center">
-    <!-- device name -->
-    <q-chip dense icon="bookmark">{{ cardData.device_name }}</q-chip>
+    
 
     <!-- For Normal LPR -->
-    <div v-if="lprType == 'lpr'" class="q-pa-sm">
+    <div v-if="lprType == 'lpr'" class="">
+
+      <!-- device name -->
+      <q-chip square size="sm" icon="bookmark">{{ cardData.device_name }}</q-chip>
+
       <!-- Speed -->
-      <q-chip square size="md" class="q-pt-lg q-pb-lg">
+      <q-chip square size="sm" icon="speed" class="">
         <div class="coulmn">
           <div class="text-bold">
-            {{ $t("Speed") }}
+            {{ $t("Speed") }} <span> {{cardData.speed | speedFilter}} </span>
           </div>
 
-          <q-separator class="q-mt-xs q-mb-xs" />
+          <!-- <q-separator class="q-mt-xs q-mb-xs" /> -->
 
-          <div class="text-bold">
+          <!-- <div class="text-bold">
             {{ cardData.speed | speedFilter }}
-          </div>
+          </div> -->
         </div>
       </q-chip>
 
       <!-- confidence number -->
-      <q-chip square size="md" class="q-pt-lg q-pb-lg">
+      <q-chip square size="sm" icon="check" class="">
         <div class="coulmn">
           <div class="text-bold">
-            {{ $t("Confidence") }}
+            {{ $t("Confidence") }} <span>{{ cardData.confidence_number | confidenceFilter }}</span>
           </div>
 
-          <q-separator class="q-mt-xs q-mb-xs" />
+          <!-- <q-separator class="q-mt-xs q-mb-xs" />
 
           <div class="text-bold">
             {{ cardData.confidence_number | confidenceFilter }}
-          </div>
+          </div> -->
         </div>
       </q-chip>
     </div>
@@ -56,7 +59,14 @@
 
     <!-- Date Time -->
     <div class="">
-      <q-badge align="middle">{{ cardData.date_time }}</q-badge>
+      <q-chip square size="sm">
+        <div class="coulmn">
+          <div class="text-bold">
+            {{ cardData.date_time }}
+          </div>
+        </div>
+      </q-chip>
+      <!-- <q-badge square color="secondary" align="middle"></q-badge> -->
     </div>
   </q-card-section>
 </template>
@@ -134,5 +144,8 @@ export default {
       font-size: 15px;
     }
   }
+}
+.q-card__section--vert{
+  padding-top: 8px;
 }
 </style>
