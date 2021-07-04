@@ -62,10 +62,11 @@
             <!-- Plate Image -->
             <q-avatar
               v-if="col.name == 'Plate_Image'"
-              size="50px"
-              class="shadow-10"
+              size="70px"
+              square
+              class="shadow-10 plate-image"
             >
-              <img :src="props.row.path + '/' + props.row.source1" />
+              <img :src="props.row.path + '/' + props.row.source2"/>
             </q-avatar>
           </q-td>
         </q-tr>
@@ -232,3 +233,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .plate-image{
+    height: 40px;
+  }
+</style>
