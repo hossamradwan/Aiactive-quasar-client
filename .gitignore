@@ -2,6 +2,6 @@
 .thumbs.db
 .vscode
 .quasar
-dist
+# dist
 node_modules
 public/ftp
