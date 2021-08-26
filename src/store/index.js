@@ -1,14 +1,16 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-import server from "./store-server";
-import auth from "./store-auth";
-import lpr from "./store-lpr";
-import users from "./store-users";
-import devices from "./store-devices";
-import averageSpeed from "./store-averageSpeed";
-import averageSpeedResult from "./store-averageSpeedResult";
-import reporting from "./store-reporting";
+import server from './store-server';
+import auth from './store-auth';
+import lpr from './store-lpr';
+import users from './store-users';
+import devices from './store-devices';
+import averageSpeed from './store-averageSpeed';
+import averageSpeedResult from './store-averageSpeedResult';
+import reporting from './store-reporting';
+import facial from './store-facial';
+import shinobi from './store-shinobi';
 
 Vue.use(Vuex);
 
@@ -27,7 +29,9 @@ export default function(/* { ssrContext } */) {
       devices,
       averageSpeed,
       averageSpeedResult,
-      reporting
+      reporting,
+      facial,
+      shinobi
     },
 
     // enable strict mode (adds overhead!)

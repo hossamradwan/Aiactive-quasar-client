@@ -3,33 +3,41 @@
     <template class="absolute-left">
       <toggel-update
         v-if="toggelUpdate.includes(moduleName)"
-        :moduleName='moduleName' />
+        :moduleName="moduleName"
+      />
     </template>
 
     <template class="align-center">
+      <facial-options
+        v-if="facial.includes(moduleName)"
+        :moduleName="moduleName"
+      />
       <q-space />
+      <gates-button v-if="$route.path == '/gatesModule'" />
 
       <reporting-module-print
         v-if="selectReportingModule.includes(moduleName)"
-        :moduleName='moduleName' />
+        :moduleName="moduleName"
+      />
 
       <reporting-module-select
         v-if="selectReportingModule.includes(moduleName)"
-        :moduleName='moduleName' />
+        :moduleName="moduleName"
+      />
 
       <date-time
         v-if="dateTime.includes(moduleName)"
-        :moduleName='moduleName' />
-      
-      <search
-        v-if="search.includes(moduleName)"
-       :moduleName='moduleName' />
+        :moduleName="moduleName"
+      />
+
+      <search v-if="search.includes(moduleName)" :moduleName="moduleName" />
     </template>
 
     <filters-dropdown
       v-if="filters.includes(moduleName)"
-      :moduleName='moduleName'
-      class="absolute-right" />
+      :moduleName="moduleName"
+      class="absolute-right"
+    />
   </q-toolbar>
 </template>
 <script>
@@ -44,9 +52,7 @@ export default {
         'toll-gates-module'
       ],
 
-      selectReportingModule: [
-        'reporting-module'
-      ],
+      selectReportingModule: ['reporting-module'],
 
       dateTime: [
         'generic-lpr-module',
@@ -64,17 +70,25 @@ export default {
       filters: [
         'generic-lpr-module',
         'average-speed-module',
-        'toll-gates-module'
+        'toll-gates-module',
+
+        'facial-module',
+        'Vms-module'
       ],
+
+      facial: ['facial-module', 'Vms-module']
     };
   },
-  components: {    
-    'toggel-update': require("./Shared/ToggelUpdate").default,
-    'reporting-module-select': require("./Shared/SelectReportingModule").default,
-    'reporting-module-print': require("./Shared/PrintReportingModule").default,
-    'search': require("./Shared/Search").default,
-    'date-time': require("./Shared/DateTime").default,
-    'filters-dropdown': require("./Shared/FiltersDropdown").default,
+  components: {
+    'toggel-update': require('./Shared/ToggelUpdate').default,
+    'reporting-module-select': require('./Shared/SelectReportingModule')
+      .default,
+    'reporting-module-print': require('./Shared/PrintReportingModule').default,
+    search: require('./Shared/Search').default,
+    'date-time': require('./Shared/DateTime').default,
+    'filters-dropdown': require('./Shared/FiltersDropdown').default,
+    'facial-options': require('./Shared/FacialOptions').default,
+    'gates-button': require('./Shared/GatesButton').default
   }
 };
 </script>

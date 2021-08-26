@@ -17,7 +17,7 @@ import iconSet from 'quasar/icon-set/material-icons'
 
 import Vue from 'vue'
 
-import {Quasar,LocalStorage,Loading,Dialog,Notify} from 'quasar'
+import {Quasar,LocalStorage,Loading,Dialog,Notify,AppFullscreen} from 'quasar'
 
 
-Vue.use(Quasar, { config: {},lang: lang,iconSet: iconSet,plugins: {LocalStorage,Loading,Dialog,Notify} })
+Vue.use(Quasar, { config: {},lang: lang,iconSet: iconSet,plugins: {LocalStorage,Loading,Dialog,Notify,AppFullscreen} })

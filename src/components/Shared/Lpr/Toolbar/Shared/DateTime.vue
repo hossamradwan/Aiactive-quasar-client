@@ -1,10 +1,6 @@
 <template>
   <div class="q-pa-sm" style="max-width: 300px">
-    <q-input
-      outlined
-      dense
-      v-model="date"
-      :bg-color="error ? 'negative' : ''">
+    <q-input outlined dense v-model="date" :bg-color="error ? 'negative' : ''">
       <template v-slot:prepend>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy transition-show="scale" transition-hide="scale">
@@ -12,7 +8,8 @@
               v-model="date"
               :events="eventsDates"
               event-color="teal"
-              mask="YYYY-MM-DD HH:mm">
+              mask="YYYY-MM-DD HH:mm"
+            >
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -42,20 +39,17 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
   props: ['moduleName'],
-  data () {
+  data() {
     return {
-      lprModules: [
-        'generic-lpr-module',
-        'toll-gates-module'
-      ],
+      lprModules: ['generic-lpr-module', 'toll-gates-module'],
       dateTimeFormat: 'YYYY-MM-DD HH:mm',
       date: '2019-02-01 12:44',
-      events: [ '2019/07/01' ],
+      events: ['2019/07/01'],
       error: false
-    }
+    };
   },
   watch: {
-    'date': function(newVal, oldVal) {
+    date: function(newVal, oldVal) {
       this.validateDateTime(newVal);
     }
   },
@@ -77,13 +71,13 @@ export default {
 
       const isValid = dateTimeRegex.test(value);
 
-      if(!isValid) {
+      if (!isValid) {
         this.error = true;
-        return
+        return;
       }
       let startDate = value;
       let endDate = date.addToDate(value, { days: 1, month: 0 });
-          endDate = date.formatDate(endDate, this.dateTimeFormat);
+      endDate = date.formatDate(endDate, this.dateTimeFormat);
 
       let data = {
         startDate,
@@ -92,13 +86,11 @@ export default {
 
       this.error = false;
 
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == 'average-speed-module')
         this.setAverageSpeedActiveDateTime(data);
-
-      else if(this.lprModules.includes(this.moduleName))
+      else if (this.lprModules.includes(this.moduleName))
         this.setActiveDateTime(data);
-
-      else if(this.moduleName == 'reporting-module')
+      else if (this.moduleName == 'reporting-module')
         this.setReportingDateTime(data);
     }
   },
@@ -118,15 +110,13 @@ export default {
     }),
 
     eventsDates() {
-      if(this.moduleName == 'average-speed-module')
+      if (this.moduleName == 'average-speed-module')
         return this.distinctAverageSpeedDates;
-
-      else if(this.lprModules.includes(this.moduleName))
-        return this.distinctDates
-
-      else if(this.moduleName == 'reporting-module')
-        return this.distinctReportingDates
+      else if (this.lprModules.includes(this.moduleName))
+        return this.distinctDates;
+      else if (this.moduleName == 'reporting-module')
+        return this.distinctReportingDates;
     }
   }
-}
+};
 </script>

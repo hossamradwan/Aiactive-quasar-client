@@ -3,7 +3,8 @@
     <q-card-actions class="no-wrap">
       <!-- Confirm Button -->
       <q-btn
-        flat
+        outline
+        size="sm"
         color="primary"
         :label="lprData.confirmed ? this.$t('Unconfirm') : this.$t('Confirm')"
         @click="confirmLprTransit"
@@ -12,6 +13,7 @@
       <!-- Edit Button  -->
       <q-btn
         flat
+        size="sm"
         color="dark"
         :label="$t('Edit')"
         v-if="showModuleName"
@@ -21,6 +23,7 @@
       <q-space />
 
       <q-btn
+        size="sm"
         color="grey"
         round
         flat
@@ -55,7 +58,7 @@
       </div>
     </q-slide-transition>
 
-    <div class="q-pa-md">
+    <div class="">
       <q-dialog v-model="showEditPlateNumberDialog">
         <q-card style="min-width: 350px">
           <q-card-section>

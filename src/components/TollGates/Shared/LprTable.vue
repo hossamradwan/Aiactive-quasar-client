@@ -1,9 +1,12 @@
 <template>
   <div class="q-pa-md">
+    <!-- Hide Images Column if path = /gatesModule -->
     <q-table
       :data="lprData"
       :pagination.sync="paginationRename"
-      :columns="columns"
+      :columns="
+        $route.path != '/gatesModule' ? columns.concat(imageCol) : columns
+      "
       row-key="name"
       @request="onRequest"
     >
@@ -59,8 +62,19 @@
             <!-- Plate Image -->
             <q-avatar
               v-if="col.name == 'Plate_Image'"
-              size="50px"
-              class="shadow-10"
+              size="70px"
+              square
+              class="shadow-10 plate-image"
+            >
+              <img :src="props.row.path + '/' + props.row.source2" />
+            </q-avatar>
+
+            <!-- car Image -->
+            <q-avatar
+              v-if="col.name == 'Vehicle_Image'"
+              size="70px"
+              square
+              class="shadow-10 plate-image"
             >
               <img :src="props.row.path + '/' + props.row.source1" />
             </q-avatar>
@@ -117,7 +131,15 @@ export default {
           label: this.$t("PlateNo"),
           field: row => row.plate_number,
           align: "center",
-          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
+          format: val => {
+            // todo: Fix AIActive LPR UNICODE chars of empty plate
+            if (val == "‭‬" || val == null) {
+              return "N/A";
+            } else {
+              return val.split("").join(" ");
+            }
+          },
+
           sortable: true,
           style: "background-color:#ddd ; font-weight: bold;"
         },
@@ -125,6 +147,12 @@ export default {
           name: "Plate_Image",
           label: this.$t("PlateImage"),
           field: "plate_image",
+          style: "width: 5px"
+        },
+        {
+          name: "Vehicle_Image",
+          label: this.$t("vehicleImage"),
+          field: "vehicle_image",
           style: "width: 5px"
         },
         {
@@ -154,8 +182,9 @@ export default {
           field: row => row.color,
           align: "center",
           sortable: true
-        },
-
+        }
+      ],
+      imageCol: [
         {
           name: "Image",
           label: this.$t("Image"),
@@ -228,3 +257,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.plate-image {
+  height: 40px;
+}
+</style>

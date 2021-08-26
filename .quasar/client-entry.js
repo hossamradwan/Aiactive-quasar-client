@@ -58,6 +58,8 @@ import qboot_Bootapex from 'boot/apex'
 
 import qboot_Booti18n from 'boot/i18n'
 
+import qboot_Bootshinobi from 'boot/shinobi'
+
 
 
 
@@ -95,7 +97,7 @@ async function start () {
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootaxios,qboot_Bootrouterauth,qboot_Bootwebsocketclient,qboot_Bootapex,qboot_Booti18n]
+  const bootFiles = [qboot_Bootaxios,qboot_Bootrouterauth,qboot_Bootwebsocketclient,qboot_Bootapex,qboot_Booti18n,qboot_Bootshinobi]
 
   for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     if (typeof bootFiles[i] !== 'function') {

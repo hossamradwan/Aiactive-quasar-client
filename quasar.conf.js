@@ -18,7 +18,14 @@ module.exports = function(/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
-    boot: ["axios", "router-auth", "websocket-client", "apex", "i18n"],
+    boot: [
+      "axios",
+      "router-auth",
+      "websocket-client",
+      "apex",
+      "i18n",
+      "shinobi"
+    ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ["app.sass"],
@@ -86,7 +93,7 @@ module.exports = function(/* ctx */) {
       importStrategy: "auto",
 
       // Quasar plugins
-      plugins: ["LocalStorage", "Loading", "Dialog", "Notify"]
+      plugins: ["LocalStorage", "Loading", "Dialog", "Notify", "AppFullscreen"]
     },
 
     // animations: 'all', // --- includes all animations
@@ -180,7 +187,15 @@ module.exports = function(/* ctx */) {
 
       // More info: https://quasar.dev/quasar-cli/developing-electron-apps/node-integration
       nodeIntegration: true,
-
+      chainWebpack: config => {
+        config.module
+          .rule("vue")
+          .use("vue-svg-inline-loader")
+          .loader("vue-svg-inline-loader")
+          .options({
+            /* ... */
+          });
+      },
       extendWebpack(/* cfg */) {
         // do something with Electron main process Webpack cfg
         // chainWebpack also available besides this extendWebpack

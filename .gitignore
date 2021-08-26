@@ -1,4 +1,7 @@
 .DS_Store
 .thumbs.db
 .vscode
+.quasar
+dist
 node_modules
+public/ftp

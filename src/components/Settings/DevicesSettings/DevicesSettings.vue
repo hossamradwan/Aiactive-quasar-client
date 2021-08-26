@@ -11,8 +11,8 @@
       :pagination="pagination"
       bordered
       flat
-      hide-bottom
     >
+      <!-- Button Add Device -->
       <template v-slot:top>
         <q-btn
           outline
@@ -25,6 +25,7 @@
 
         <q-space />
 
+        <!-- Search Bar -->
         <q-input
           bordered
           dense
@@ -52,6 +53,9 @@
           </q-td>
           <q-td key="deviceZone" :props="props">
             {{ props.row.deviceZone }}
+          </q-td>
+          <q-td key="deviceUrl" :props="props">
+            {{ props.row.device_streamUrl }}
           </q-td>
           <q-td key="device_ip" :props="props">
             {{ props.row.device_ip }}
@@ -81,12 +85,12 @@
       </template>
     </q-table>
 
-    <!-- Add User Modal -->
+    <!-- Add Device Modal -->
     <q-dialog v-model="addDeviceModal">
       <add-device @close="addDeviceModal = false" />
     </q-dialog>
 
-    <!-- Edit User Modal -->
+    <!-- Edit Device Modal -->
     <q-dialog v-model="editDeviceModal" @hide="closeEditDevice">
       <edit-device
         @close="closeEditDevice"
@@ -97,7 +101,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -106,71 +110,78 @@ export default {
         editDeviceData: {}
       },
       loading: false,
-      filter: "",
+      filter: '',
       pagination: {
-        sortBy: "desc",
+        sortBy: 'desc',
         descending: false,
-        //page: 2,
-        rowsPerPage: 0
+        // page: 2,
+        rowsPerPage: 5
         // rowsNumber: xx if getting data from a server
       },
       columns: [
         {
-          name: "id",
+          name: 'id',
           required: true,
-          label: "ID",
-          align: "left",
+          label: 'ID',
+          align: 'left',
           field: row => row.id,
           sortable: true
         },
         {
-          name: "deviceName",
-          align: "center",
-          label: this.$t("DeviceName"),
-          field: "deviceName",
+          name: 'deviceName',
+          align: 'center',
+          label: this.$t('DeviceName'),
+          field: 'deviceName',
           sortable: true
         },
         {
-          name: "deviceType",
-          align: "center",
-          label: this.$t("Type"),
-          field: "deviceType",
+          name: 'deviceType',
+          align: 'center',
+          label: this.$t('Type'),
+          field: 'deviceType',
           sortable: true
         },
         {
-          name: "deviceZone",
-          align: "center",
-          label: this.$t("Zone"),
-          field: "deviceZone"
+          name: 'deviceZone',
+          align: 'center',
+          label: this.$t('Zone'),
+          field: 'deviceZone'
         },
-        { name: "device_ip", align: "center", label: "IP", field: "device_ip" },
-        { name: "actions", align: "center", label: this.$t("Actions") }
+        {
+          name: 'deviceUrl',
+          align: 'center',
+          label: this.$t('Url'),
+          field: 'deviceUrl'
+        },
+        { name: 'device_ip', align: 'center', label: 'IP', field: 'device_ip' },
+        { name: 'actions', align: 'center', label: this.$t('Actions') }
       ],
       data: [
         {
           id: 1,
-          DeviceName: "Baher Elnaggar",
-          Type: "Tattile",
-          Zone: "street",
-          IP: "192.168.1.100"
+          DeviceName: 'Baher Elnaggar',
+          Type: 'Tattile',
+          Zone: 'street',
+          IP: '192.168.1.100'
         }
       ]
     };
   },
   components: {
-    "add-device": require("components/Settings/DevicesSettings/Modals/AddDevice")
+    'add-device': require('components/Settings/DevicesSettings/Modals/AddDevice')
       .default,
-    "edit-device": require("components/Settings/DevicesSettings/Modals/EditDevice")
+    'edit-device': require('components/Settings/DevicesSettings/Modals/EditDevice')
       .default
   },
 
   methods: {
-    ...mapActions("devices", [
-      "getDevices",
-      "deleteDevice",
-      "setAddDeviceModal",
-      "setEditDeviceModal"
+    ...mapActions('devices', [
+      'getDevices',
+      'deleteDevice',
+      'setAddDeviceModal',
+      'setEditDeviceModal'
     ]),
+    ...mapActions('shinobi', ['deleteMonitor']),
     editDevice(deviceId) {
       let selectedDevice = this.devicesList.find(x => x.id === deviceId);
       this.modals.editDeviceData = Object.assign({}, selectedDevice);
@@ -182,13 +193,13 @@ export default {
     removeDevice(deviceId) {
       this.$q
         .dialog({
-          title: "Confirm",
-          message: "Would you like to Delete this Device?",
+          title: 'Confirm',
+          message: 'Would you like to Delete this Device?',
           cancel: true
           //persistent: true
         })
         .onOk(() => {
-          this.deleteDevice(deviceId);
+          this.deleteMonitor(deviceId).then(() => this.deleteDevice(deviceId));
         });
     },
 
@@ -204,8 +215,8 @@ export default {
   },
 
   computed: {
-    ...mapState("devices", ["devicesList"]),
-    ...mapGetters("devices", ["showAddDeviceModal", "showEditDeviceModal"]),
+    ...mapState('devices', ['devicesList']),
+    ...mapGetters('devices', ['showAddDeviceModal', 'showEditDeviceModal']),
     addDeviceModal: {
       get() {
         return this.showAddDeviceModal;

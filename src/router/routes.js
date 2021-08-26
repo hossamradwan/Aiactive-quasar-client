@@ -1,3 +1,4 @@
+import routerGuard from "./routerGuard.js"
 
 const routes = [
   {
@@ -5,36 +6,70 @@ const routes = [
     component: () => import('layouts/Layout.vue'),
     children: [
       {
-        path: '', 
-        component: () => import('pages/PageDashboard.vue') 
+        path: '',
+        name: 'homePage',
+        component: () => import('pages/PageDashboard.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
         path: '/auth',
-        component: () => import('pages/PageAuth.vue')
+        name: 'pathAuth',
+        component: () => import('pages/PageAuth.vue'),
+        beforeEnter: routerGuard.loginAuthConfig
       },
       {
-        path: '/userProfile', 
-        component: () => import('pages/PageUserProfile.vue') 
+        path: '/userProfile',
+        name: 'userProfile',
+        component: () => import('pages/PageUserProfile.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
-        path: '/settings', 
-        component: () => import('pages/PageSettings.vue') 
+        path: '/settings',
+        name: 'settings',
+        component: () => import('pages/PageSettings.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
-        path: '/freeFlowLprModule', 
-        component: () => import('pages/PageFreeFlowLprModule.vue') 
+        path: '/freeFlowLprModule',
+        name: 'freeFlowLprModule',
+        component: () => import('pages/PageFreeFlowLprModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
-        path: '/averageSpeedModule', 
-        component: () => import('pages/PageAverageSpeedModule.vue') 
+        path: '/averageSpeedModule',
+        name: 'averageSpeedModule',
+        component: () => import('pages/PageAverageSpeedModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
-        path: '/tollGatesModule', 
-        component: () => import('pages/PageTollGatesModule.vue') 
+        path: '/tollGatesModule',
+        name: 'tollGatesModule',
+        component: () => import('pages/PageTollGatesModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       },
       {
-        path: '/reportingModule', 
-        component: () => import('pages/PageReportingModule.vue') 
+        path: '/gatesModule',
+        name: 'gatesModule',
+        component: () => import('pages/PageTollGatesModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
+      },
+      {
+        path: '/reportingModule',
+        name: 'reportingModule',
+        component: () => import('pages/PageReportingModule.vue'),
+        beforeEnter: routerGuard.isLoggedIn
+      },
+      {
+        path: '/facial',
+        name: 'facial',
+        component: () => import('src/pages/PageFacial.vue'),
+        beforeEnter: routerGuard.isLoggedIn
+      },
+      {
+        path: '/VMS',
+        name: 'VMS',
+        component: () => import('src/pages/PageVms.vue'),
+        beforeEnter: routerGuard.isLoggedIn
       }
     ]
   },
@@ -45,6 +80,6 @@ const routes = [
     path: '*',
     component: () => import('pages/Error404.vue')
   }
-]
+];
 
-export default routes
+export default routes;

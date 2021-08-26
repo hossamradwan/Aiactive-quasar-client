@@ -1,156 +1,311 @@
 <template>
-    <div :key="renderComponent" class="q-mt-lg">
-        <q-list
-          bordered
-          v-for="lpr in reportingData"
-          :key="lpr.id"
-          class="q-ma-md card-style">
-            <q-item class="card-style">
-                <q-item-section avatar>
-                    <q-icon name="speed" color="teal" size="34px" />
-                </q-item-section>
+  <div :key="renderComponent" class="q-mt-lg">
+    <q-table
+      :data="reportingData"
+      :columns="columns"
+      selection="multiple"
+      :selected.sync="selection"
+    >
+      <template v-slot:header-cell="props">
+        <q-th :props="props">
+          <!-- Header Print Button -->
+          <q-btn
+            v-if="props.col.name == 'actionButtons' && selection.length > 1"
+            class=""
+            size="12px"
+            flat
+            dense
+            round
+            icon="print"
+            @click="PDF('MultiplePages', false, true)"
+          />
 
-                <q-item-section>
-                    <q-item-label lines="1" class="text-weight-bold">
-                        <span class="q-pa-lg">{{ lpr.id }}</span>
-                        <span class="q-pa-lg">{{ lpr.plate_number }}</span>
-                        <span class="q-pa-lg">{{ lpr.country }}</span>
-                        <span class="q-pa-lg">{{ lpr.date_time }}</span>
-                        <span class="q-pa-lg"> {{ lpr.speed /100 }} KM/h </span>
-                    </q-item-label>
-                </q-item-section>
+          <!-- Header Download Button -->
+          <q-btn
+            v-if="props.col.name == 'actionButtons' && selection.length > 1"
+            class=""
+            size="12px"
+            flat
+            dense
+            round
+            icon="get_app"
+            @click="PDF('MultiplePages', true, false)"
+          />
+          {{ props.col.label }}
+        </q-th>
+      </template>
+      <!-- Table Body -->
+      <template v-slot:body="props">
+        <q-tr :props="props" class="cursor-pointer">
+          <q-td style="font-size:15px">
+            <q-checkbox dense v-model="props.selected" />
+          </q-td>
+          <!-- Assigne the value of each record if it matches the column name -->
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+            style="font-size:15px"
+          >
+            <span v-if="col.name != 'actionButtons' && col.name != 'Color'">
+              {{ col.value }}</span
+            >
 
-                <q-item-section side>
-                    <q-item-label lines="1" class="text-weight-bold text-teal">
-                        <span class="q-pa-lg">Speed Violation</span>                      
-                    </q-item-label>
-                </q-item-section>
+            <q-badge
+              v-if="col.name == 'Color' && col.value != '$color$'"
+              :color="col.value != 'white' ? col.value : 'black'"
+            >
+              {{ col.value }}
+            </q-badge>
 
-                <!-- Action Buttons -->
-                <q-item-section top side>
-                    <div class="text-grey-8 q-gutter-xs">
-                      <!-- Print Button -->
-                        <q-btn
-                          class=""
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          icon="print"
-                          @click="printViolation(lpr.id)" />
+            <!-- Single Action Buttons -->
+            <!-- Single Print Button -->
+            <q-btn
+              v-if="col.name == 'actionButtons'"
+              class=""
+              size="12px"
+              flat
+              dense
+              round
+              icon="print"
+              @click="PDF(props.row, false, true)"
+            />
 
-                      <!-- Select Button -->
-                        <q-btn
-                          class=""
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          :color="selectedData_id.includes(lpr.id) ? 'teal' : ''"
-                          icon="done"
-                          @click="select(lpr.id)" />
+            <!-- Single Download Button -->
+            <q-btn
+              v-if="col.name == 'actionButtons'"
+              class=""
+              size="12px"
+              flat
+              dense
+              round
+              icon="get_app"
+              @click="PDF(props.row, true, false)"
+            />
+          </q-td>
+        </q-tr>
+      </template>
+    </q-table>
 
-                      <!-- Unconfirm Button -->
-                        <q-btn
-                          class=""
-                          size="12px"
-                          flat
-                          dense
-                          round
-                          icon="undo" />
-                    </div>
-                </q-item-section>
-            </q-item>
-        </q-list>
-
-        <PrintPortal
-          v-model="printViolationDialog"
-          @close="closePortal">
-
-          <print-violation />
-
-        </PrintPortal>
+    <!-- PDF Modal -->
+    <vue-html2pdf
+      :float-layout="controlValue.floatLayout"
+      :preview-modal="controlValue.previewModal"
+      :show-layout="controlValue.showLayout"
+      :enable-download="controlValue.enableDownload"
+      :filename="controlValue.filename"
+      :paginate-elements-by-height="controlValue.paginateElementsByHeight"
+      :pdf-quality="controlValue.pdfQuality"
+      :pdf-format="controlValue.pdfFormat"
+      :pdf-orientation="controlValue.pdfOrientation"
+      :pdf-content-width="controlValue.pdfContentWidth"
+      :manual-pagination="controlValue.manualPagination"
+      @progress="onProgress($event)"
+      @startPagination="startPagination()"
+      @hasPaginated="hasPaginated()"
+      @beforeDownload="beforeDownload($event)"
+      @hasDownloaded="hasDownloaded($event)"
+      ref="html2Pdf"
+    >
+      <!-- Printed Section -->
+      <PrintModal slot="pdf-content" />
+    </vue-html2pdf>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+import VueHtml2pdf from "vue-html2pdf";
 export default {
   data() {
     return {
-      //selected: [],
-      //showPrintViolationDialog: false,
+      selection: [],
       renderComponent: 0,
-      lprData: [
-                  {
-                    id: 249,
-                    device_name: "10417",
-                    plate_number: "‭١٤٩‬‭ص‌ر‌م‬",
-                    country: "EGY",
-                    date_time: "2019-07-30, 13:56:31",
-                    speed: "1192"
-                  }
-                ]
+      columns: [
+        {
+          name: "ID",
+          required: true,
+          label: this.$t("ID"),
+          field: row => row.id,
+          align: "left",
+          format: val => `${val}`,
+          sortable: true
+        },
+        {
+          name: "Plate No.",
+          required: true,
+          label: this.$t("PlateNo"),
+          field: row => row.plate_number,
+          align: "center",
+          format: val => `${val.match(/.([٠-٩])+|([أ-ى-آ])/g).join(" ")}`,
+          sortable: true
+        },
+        {
+          name: "Country",
+          label: this.$t("Country"),
+          field: row => row.country,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Date_Time",
+          label: this.$t("Time"),
+          field: row => row.date_time.split(",")[1],
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Speed",
+          label: this.$t("Speed"),
+          field: row => row.speed / 100,
+          format: val => (val ? val + " km/h" : null),
+          align: "center",
+          sortable: true
+        },
+
+        {
+          name: "Brand",
+          label: this.$t("Brand"),
+          field: row => row.brand,
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Model",
+          label: this.$t("Model"),
+          field: row => row.model,
+          format: val => (val != "MODEL" ? val : null),
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "Color",
+          label: this.$t("Color"),
+          field: row => row.color.toLowerCase(),
+          align: "center",
+          sortable: true
+        },
+        {
+          name: "actionButtons",
+          align: "center"
+        }
+      ],
+      progress: 0,
+      generatingPdf: false,
+      pdfDownloaded: false,
+
+      controlValue: {
+        floatLayout: true,
+        floatLayoutt: false,
+        previewModal: false,
+        previewModall: false,
+        showLayout: false,
+        enableDownload: false,
+        paginateElementsByHeight: 1100,
+        manualPagination: false,
+        filename: "IndexFile",
+        pdfQuality: 2,
+        pdfFormat: "a4",
+        pdfOrientation: "portrait",
+        pdfContentWidth: "800px"
+      }
     };
   },
 
   components: {
-    'print-violation': require("components/Reporting/Modals/PrintViolation").default,
-    'PrintPortal': require("components/Reporting/PrintPortal/WindowPortal").default
+    PrintModal: require("components/Reporting/Modals/Shared/ModalViolationContent")
+      .default,
+    VueHtml2pdf
   },
 
   methods: {
-    ...mapActions('reporting', ['setSelectedData', 'setViolationToPrint', 'setPrintViolationDialog']),
+    getSelectedString() {
+      return this.selection.length === 0
+        ? ""
+        : `${this.selection.length} record${
+            this.selection.length > 1 ? "s" : ""
+          } selected of ${this.data.length}`;
+    },
+    ...mapActions("reporting", [
+      "setSelectedData",
+      "setViolationToPrint",
+      "setPrintViolationDialog",
+      "clearViolationToPrint"
+    ]),
 
-    closePortal() {
-      // re render component to fix issue of remove q-list element
-      /**
-       * The horrible way: reloading the entire page
-        The terrible way: using the v-if hack
-        The better way: using Vue’s built-in forceUpdate method
-        The best way: key-changing on your component
-       */
-
-      this.printViolationDialog = false;
-      this.renderComponent += 1;
-
-      // Clear All Selected Data
-      this.setSelectedData({
-        action: 'removeAll',
-      });
-    }, 
-
-    select(reportId) {
-      let action = this.selectedData_id.includes(reportId) ? 'remove' : 'add';
-
-      this.setSelectedData({
-        action,
-        id: reportId
-      });
+    // PDF Options (Download Or View)
+    PDF_Options(download = false, view = true) {
+      this.controlValue.previewModal = view;
+      this.controlValue.enableDownload = download;
     },
 
-    printViolation(reportId) {
-      //this.printViolationDialog = true;
-      this.setViolationToPrint(reportId);
+    // PDF Viewer/Downloader
+    async PDF(report, download = false, view = true) {
+      await this.PDF_Options(download, view);
+      if (report == "MultiplePages") {
+        console.log("multiii");
+        // Add Selected Reports to State
+        this.selection.map(selected => {
+          this.setViolationToPrint(selected.id);
+        });
+
+        // PDF View
+        this.controlValue.filename = "MultiplePages";
+      } else {
+        console.log("report.id:", report.id);
+        this.controlValue.filename =
+          report.date_time + report.id + report.plate_number;
+        this.setViolationToPrint(report.id);
+      }
+      await this.$refs.html2Pdf.generatePdf();
+      // this.setSelectedData({ action: "removeAll" });
+    },
+
+    /* Printing Actions */
+    onProgress(progress) {
+      this.progress = progress;
+      // console.log(`PDF generation progress: ${progress}%`);
+    },
+    startPagination() {
+      // console.log(`PDF has started pagination`);
+    },
+    hasPaginated() {
+      // console.log(`PDF has been paginated`);
+    },
+    async beforeDownload() {
+      // console.log(`On Before PDF Generation`);
+    },
+    hasDownloaded(blobPdf) {
+      // console.log(`PDF has downloaded`);
+      this.pdfDownloaded = true;
+
+      // console.log(blobPdf);
+      // todo: find suitable place
+      this.clearViolationToPrint();
+      this.PDF_Options(false, false);
     }
   },
+  watch: {
+    // selection: function() {
+    //   this.setSelectedData({ action: "removeAll" });
+    //   this.selection.map(selected => {
+    //     this.select(selected.id);
+    //   });
+    // },
+    // selectedData: function() {
+    //   if (this.selectedData.length == 0 && this.selection.length > 0) {
+    //     this.selection = [];
+    //   }
+    // }
+  },
   computed: {
-    ...mapState('reporting', ['reportingData', 'selectedData', 'showPrintViolationDialog', 'violationToPrint']),
-    ...mapGetters('reporting', ['selectedData_id']),
-
-    printViolationDialog: {
-      get() {
-        return this.showPrintViolationDialog;
-      },
-      set(value) {
-        return this.setPrintViolationDialog(value);
-      }
-    }
+    ...mapState("reporting", [
+      "reportingData",
+      // "selectedData",
+      "violationToPrint",
+      "downloadAll"
+    ]),
+    ...mapGetters("reporting", ["selectedData_id"])
   }
 };
 </script>
-<style lang="scss" scoped>
-.card-style {
-  background-color: #adadad2b !important;
-}
-</style>

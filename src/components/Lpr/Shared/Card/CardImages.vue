@@ -113,8 +113,8 @@ export default {
       this.moduleName == 'toll-gates-module'
     ) {
       this.sourceData.path = this.lprImages.path;
-      this.sourceData.source1 = this.lprImages.source1;
-      this.sourceData.source2 = this.lprImages.source2;
+      this.sourceData.source1 = this.lprImages.source2;
+      this.sourceData.source2 = this.lprImages.source1;
       this.sourceData.source3 = this.lprImages.source3;
       this.sourceData.source4 = this.lprImages.source4;
       this.sourceData.source5 = this.lprImages.source5;
@@ -158,7 +158,8 @@ export default {
         //this.$refs.videoRef.play();
       });
     } else {
-      //`./ftp/0c4aa695-4793-f015-8280-e0071b8a07c3_1.jpeg`
+      // `./ftp/0c4aa695-4793-f015-8280-e0071b8a07c3_1.jpeg`
+      // this.primarySource = `${this.sourceData.path}/${this.sourceData.source1}`;
       this.primarySource = `${this.sourceData.path}/${this.sourceData.source1}`;
     }
   },

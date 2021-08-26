@@ -37,8 +37,8 @@ export default {
     return {
       updateInterval: "",
       serverStatusModal: false,
-      serverIp: LocalStorage.getItem("serverUrl") || "http://192.168.1.100",
-      serverPortNumber: LocalStorage.getItem("serverPort") || "5000"
+      serverIp: LocalStorage.getItem("serverUrl") || "http://196.219.234.3",
+      serverPortNumber: LocalStorage.getItem("serverPort") || "3000"
     };
   },
   methods: {

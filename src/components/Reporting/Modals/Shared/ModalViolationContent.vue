@@ -1,271 +1,263 @@
 <template>
-    <div class="printed-form">
-        <table
-          style="page-break-after: always;"
-          v-for="violation in violationToPrint"
-          :key="violation.id"
-          :id="violation.id"
-          border="3"
-          cellpadding="1"
-          class="q-mt-lg A4">
-            <tbody>
+  <section slot="pdf-content">
+    <section
+      class="pdf-content"
+      id="loop"
+      v-for="violation in violationToPrint"
+      :key="violation.id"
+      dir="rtl"
+      style="max-height: 29.5cm;"
+    >
+      <div class="A4">
+        <!-- Header Right -->
+        <div class="logo">
+          <p class="titles">مديرية أمن الاسماعيلية</p>
+          <p class="titles">ادارة مرور الاسماعيلية</p>
+        </div>
+        <!-- Header Center -->
+        <div class="lable">
+          <p class="titles">نموذج ١٢٥ مرور</p>
+          <p class="titles">تقرير مخالفة مرور</p>
+        </div>
+        <div class="receipt-container textt">
+          <!-- Column Right -->
+          <div class="columnn 1">
+            <div>
+              <p>
+                <span> :بتاريخ </span>
+                <span> {{ violation.date_time.split(",")[0] }} </span>
+                &emsp;
+                <span> :الساعة </span>
+                <span> {{ violation.date_time.split(",")[1] }} </span>
+                &emsp;
+                <span> :بجهة </span>
+                <span>______</span>
+              </p>
+              <p>
+                <span> اسم المخالف </span>
+                <span>________________:</span>
+                &emsp;
+                <span> :عنوانه </span>
+                <span>_________</span>
+              </p>
+              <p>
+                <span> رقم رخصة القيادة </span>
+                <span>______:</span>
+                &emsp;
+                <span> نوعها و جهة صدورها </span>
+                <span>______:</span>
+              </p>
+              <p>
+                <span> رقم المركبة </span>
+                <span> : </span>
+                <span> {{ violation.plate_number }} </span>
+              </p>
+              <p
+                style="text-align: center;
+                            
+                            margin-left: auto;
+                            margin-right: auto;"
+              >
+                وصف الاتهام
+              </p>
+              <p
+                style="text-align: center;
+                            
+                            margin-left: auto;
+                            margin-right: auto;"
+              >
+                ________________
+              </p>
+              <p>
+                <span> تم سحب رخصة القيادة </span>
+                <span>(_________) </span>
+                <span>&emsp;التسيير</span>
+                <span>(_________) </span>
+              </p>
+              <p>
+                <span>مدة الايقاف </span>
+                <span>(____________)</span>
+                <span>&emsp; الغاء </span>
+                <span>(____________)</span>
+                <span> م </span>
+              </p>
+              <p>
+                <span>تم التصالح بالايصال رقم</span>
+                <span>________________:</span>
+              </p>
+              <p>
+                <span>اسم و رتبة شاهد المخالفة</span>
+                <span>_____________:</span>
+                &emsp;
+                <span>التوقيع</span>
+                <span>_____:</span>
+              </p>
+            </div>
+          </div>
 
-                <!-- Ticket Header Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" colspan="4" width="720">
-                        <p style="text-align: center;">&nbsp;مخالفة سرعه </p>
-                    </td>
-                </tr>
+          <!-- Column Left -->
+          <div class="columnn 2">
+            <div>
+              <p
+                style="text-align: center;
+                            float: inline-end;
+                            margin-left: auto;
+                            margin-right: auto;"
+              >
+                بيانات خاصة بنيابة المرور
+              </p>
+              <p>
+                <span>:بتاريخ</span>
+                <span></span>
+              </p>
+              <p>
+                <span>:نحن</span>
+                <span>________________________________</span>
+                &emsp;
+                <span>نحن</span>
+              </p>
+              <p>
+                <span>القائم بأعمال نيابة المرور </span>
+                <span> ___________ </span>
 
-                <!-- Images Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" colspan="4" width="720">
-                        <figure class="figure" style="width:141px;height:114px;padding:5px;">
-                                <img class="img-fluid figure-img" :src="violation.path + '/' + violation.source1">
-                        </figure>
-                        <figure class="figure" style="width:141px;height:114px;padding:5px;">
-                                <img class="img-fluid figure-img" :src="violation.path + '/' + violation.source2">
-                        </figure>
-                    </td>
-                </tr>
+                <span>نأمر بتغريم المخالف</span>
+              </p>
+              <p>
+                <span>:مبلغ</span>
+                <span> ________________________________</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>قرش</span>
+              </p>
+              <p>
+                <span>كود المخالفة </span>
+                <span>________________:</span>
+              </p>
+              <p>
+                <span>رقم القضية </span>
+                <span>_________________:</span>
+              </p>
+              <p style="float:left">
+                <span style=" align-self: center;">وكيل النيابة</span>
 
-                <!-- PlateNumber and Driver Face Header Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" colspan="2" width="371">
-                        <p style="text-align: center;">وﺟه اﻟﺳﺎﺋﻖ</p>
-                    </td>
-                    <td style="height: 35px;" colspan="2" width="349">
-                        <p style="text-align: center;"> رﻗم اﻟﻠوﺣه </p>
-                    </td>
-                </tr>
-                <!-- PlateNumber and Driver Face Data Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" colspan="2" width="371">
-                        <p>&nbsp;</p>
-                    </td>
-                    <td style="height: 35px; text-align: center;" colspan="2" width="349">
-                        &nbsp; {{ violation.plate_number }} </td>
-                </tr>
+                <br />
+                <span>__________</span>
+              </p>
 
-                <!-- Ticket Number and Date Time Header Row -->
-                <tr style="height: 59px;">
-                    <td style="height: 59px;" width="264">
-                        <p style="text-align: center;">&nbsp; {{ violation.date_time }} </p>
-                    </td>
-                    <td style="height: 59px;" width="107">
-                        <p>&nbsp;</p>
-                        <p style="text-align: right;">اﻟﺗوﻗﯾت</p>
-                    </td>
-                    <td style="height: 59px;" colspan="2" width="349">
-                        <p>&nbsp;</p>
-                        <p style="text-align: right;">ﻧﻣوذج رﻗم 125 ﻣرور</p>
-                    </td>
-                </tr>
+              <br />
+              <p>
+                <img
+                  :src="violation.path + '/' + violation.source1"
+                  style="height:150px; width:300px;  float:left;"
+                  onError="removeElement(this);"
+                />
+              </p>
+            </div>
+          </div>
+        </div>
+        <br />
+        <!-- Half Page Bottom Parent -->
+        <div class=" row  justify-center  content-center ">
+          <!-- Child Row 1 -->
 
-                <!-- Radar Number and Violation Speed Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;">ﻛم<em>/</em>ﺳﺎعه  {{ violationToPrint.speed / 100 }}  </p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">اﻟﺳرﻋه اﻟﻣﺧﺎﻟفه </p>
-                    </td>
-                    <td style="height: 70px;" colspan="2" rowspan="2" width="349">
-                        <p style="text-align: right;">وﺣدة اﻟرادار</p>
-                    </td>
-                </tr>
-
-
-                <!-- Caugth Date Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;"></p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">ﺗﺎرﯾﺦ اﻟﺿﺑط</p>
-                    </td>
-                </tr>
-
-                <!-- Device Number and Road Name Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;">اﻟﻣﺣور</p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">اﻟطرﯾﻖ</p>
-                    </td>
-                    <td style="height: 105px;" colspan="2" rowspan="3" width="349">
-                        <p>&nbsp;</p>
-                        <p
-                        style="text-align: right;">جهاز
-                        رقم
-                        &nbsp;&nbsp;
-                        {{
-                        violation.device_name
-                        }}</p>
-                        <p>&nbsp;</p>
-                    </td>
-                </tr>
-
-                <!-- Radar Device Number Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;"></p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">&nbsp;&nbsp;&nbsp; رﻗم ﺟﮭﺎز اﻟرادار</p>
-                    </td>
-                </tr>
-
-                <!-- Caught Place Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;">&nbsp;طريق&nbsp;</p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">ﻣﻛﺎن اﻟﺿﺑط</p>
-                    </td>
-                </tr>
-
-                <!-- Legal Speed Limit with traffic violation header -->
-                <tr style="height: 35px;">
-                    <td style="height: 70px;" rowspan="2" width="264">
-                        <p style="text-align: center;">90 ﻛم<em>/</em>ﺳﺎﻋه </p>
-                    </td>
-                    <td style="height: 70px;" rowspan="2" width="107">
-                        <p style="text-align: right;">الحد القانونى للسرعه</p>
-                    </td>
-                    <td style="height: 35px;" colspan="2" width="349">
-                        <p style="text-align: center;">ﺗﻘرﯾر ﻣﺧﺎﻟﻔﺔ ﻣرور</p>
-                    </td>
-                </tr>
-
-                <!-- Report Date Row -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="235">&nbsp; {{ violation.date_time }} </td>
-                    <td style="height: 35px;" width="114">
-                        <p style="text-align: right;">اﻟﺗﺎرﯾﺦ </p>
-                    </td>
-                </tr>
-
-                <!-- vehicle class with plate_number -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">&nbsp;</td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">ﺗﺻﻧﯾف اﻟﻣرﻛﺑﺔ</p>
-                    </td>
-                    <td style="height: 35px;" width="235">
-                        <p style="text-align: center;"> {{ violation.plate_number }} </p>
-                    </td>
-                    <td style="height: 35px;" width="114">
-                        <p style="text-align: right;">رﻗم اﻟﻣرﻛﺑه </p>
-                    </td>
-                </tr>
-
-                <!-- Lane number with charge description -->
-                <tr style="height: 35px;">
-                    <td style="height: 35px;" width="264">
-                        <p style="text-align: center;">ﺣﺎرة ۱ ﺷﻣﺎل</p>
-                    </td>
-                    <td style="height: 35px;" width="107">
-                        <p style="text-align: right;">ﺟﮭﺔ اﻟﺳﯾر</p>
-                    </td>
-                    <td style="height: 35px;" width="235">
-                        <p style="text-align: center;">ﺗﺟﺎوز اﻟﺳرﻋﺔ اﻟﻣﻘررة</p>
-                    </td>
-                    <td style="height: 35px;" width="114">
-                        <p style="text-align: right;">وﺻف اﻹﺗﮭﺎم</p>
-                    </td>
-                </tr>
-
-                <!-- Officer Name and signture -->
-                <tr style="height: 35px;">
-                    <td style="height: 94px;" colspan="2" rowspan="2" width="371">
-                        <p>&nbsp;</p>
-                    </td>
-                    <td style="height: 35px;" width="235">
-                        <p style="text-align: right;">&nbsp;</p>
-                    </td>
-                    <td style="height: 35px;" width="114">
-                        <p style="text-align: right;">إﺳم اﻟﺿﺎﺑط</p>
-                    </td>
-                </tr>
-                <tr style="height: 59px;">
-                    <td style="height: 59px;" width="235">
-                        <p>&nbsp;</p>
-                    </td>
-                    <td style="height: 59px;" width="114">
-                        <p>&nbsp;</p>
-                        <p style="text-align: right;">اﻟﺗوﻗﯾﻊ</p>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+          <div class="col-12 justify-center  pgbrk">
+            <img
+              :src="violation.path + '/' + violation.source2"
+              class="childImage"
+            />
+            <img
+              :src="violation.path + '/' + violation.source3"
+              class="childImage"
+            />
+            <img
+              :src="violation.path + '/' + violation.source4"
+              class="childImage"
+            />
+            <img
+              :src="violation.path + '/' + violation.source5"
+              class="childImage"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="html2pdf__page-break" />
+    </section>
+  </section>
 </template>
 
 <script>
-	export default {
-		props: ['doPrint', 'violationToPrint'],
+import { mapState } from "vuex";
+export default {
+  methods: {},
+  computed: {
+    ...mapState("reporting", ["violationToPrint"])
+  },
 
-		data() {
-			return {
-
-			}
-        },
-        
-        watch: {
-            'doPrint': function(newVal, oldVal) {
-                if(newVal)
-                    this.Print();
-            }
-        },
-
-        methods: {
-            Print() {
-                console.log('printing', this.violationToPrint);
-                window.print();
-            }
-        },
-		
-		mounted() {
-
-		}
-	}
+  mounted() {}
+};
 </script>
 <style lang="css">
-
 .A4 {
-  width: 21cm;
-  height: 29.7cm;
-  border-style: dashed;
-  padding: 10px;
+  /* width: 21cm;
+  max-height: 27.5cm; */
+  padding-right: 20px;
+  padding-left: 30px;
+  padding-top: 20px;
   font-family: "Times New Roman", Times, serif;
+  /* page-break-after: always; */
+}
+.A4:last-child {
+  page-break-after: avoid;
 }
 
-@media print {
-    .printed-form {
-        margin: 0 auto;
-    }
-   
+.logo {
+  text-align: left;
+  margin-left: 7%;
+  margin-top: 5px;
+}
+.lable {
+  text-align: center;
+}
+.titles {
+  font-size: 12pt;
+  font-weight: bold;
+  margin-bottom: 2pt;
+}
+.receipt-container {
+  display: flex;
+  width: 100%;
+}
+.columnn {
+  display: flex;
+  width: 100%;
+  border-style: solid;
+  border-width: 2px;
+  padding: 10px;
+}
+div {
+  margin-bottom: 0px;
+}
 
-    .A4 {
-        margin: 0 auto;
-        width: 19cm;
-        height: 24.7cm;
-        /* border-style: dashed; */
-        /* padding: 10px; */
-        font-family: "Times New Roman", Times, serif;
-    }
-
-    /* Don't forget to uninstall vut-html-to-paper package */
-
-     /* window.print()
-        @media print {
-            @page { margin: 0; }
-            p { page-break-after: always; }
-        }
-        <p>Paragraph 1</p>
-        <p>Paragraph 2</p> */
+.textt {
+  font-size: 12pt;
+  font-weight: normal;
+  margin: 1pt;
+  border: 4;
+}
+.center {
+  text-align: center;
+  float: inline-end;
+  margin-left: auto;
+  margin-right: auto;
+}
+.lefttt {
+  float: left;
+}
+.righttt {
+  text-align: right;
+  float: right;
+}
+img.childImage {
+  max-height: 4cm;
+  width: auto;
 }
 </style>
