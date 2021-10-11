@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       navs: Array.from(navs),
-      lang: localStorage.getItem('Language'),
+      lang: localStorage.getItem('Language') || 'ar',
       color: localStorage.getItem('ThemeColor') || '#005a7ee3',
       langOptions: [],
       submitResult: []
