@@ -1,10 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage("build jar") {
+        stage("Build app") {
             steps {
                 script {
-                    echo "building jar"
+                    echo "building the application..."
+                    sh 'npm install'
+                    sh 'quasar build'
                 }
             }
         }
